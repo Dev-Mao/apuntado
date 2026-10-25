@@ -1,0 +1,109 @@
+<mxfile host="app.diagrams.net" agent="generador-entregable-2" type="device">
+  <diagram id="clases-persistencia" name="clases-persistencia">
+    <mxGraphModel dx="1422" dy="800" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1050" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PKG_P" value="Capa de persistencia (infrastructure)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fillColor=none;strokeColor=#9AAFC4;dashed=1;fontStyle=1;fontColor=#33526E;fontSize=12;fillColor=#EEF4FA;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="900" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="PE" value="&lt;b&gt;PlayerEntity «@table jugador»&lt;/b&gt;&lt;hr&gt;+ id : UUID «PK»&lt;br&gt;+ correo : string?&lt;br&gt;+ apodo : string&lt;br&gt;+ tipo : PlayerKind&lt;br&gt;+ esInvitado() : boolean" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="90" width="260" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="GSE" value="&lt;b&gt;GameSessionEntity «@table partida»&lt;/b&gt;&lt;hr&gt;+ id : UUID «PK»&lt;br&gt;+ modo : GameMode&lt;br&gt;+ estado : GameStatus&lt;br&gt;+ umbralEliminacion : number&lt;br&gt;+ configReglas : RulesConfigJson&lt;br&gt;+ version : number&lt;br&gt;+ estaEnCurso() : boolean" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="90" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="PAE" value="&lt;b&gt;ParticipationEntity «@table participacion»&lt;/b&gt;&lt;hr&gt;+ id : UUID «PK»&lt;br&gt;+ partidaId : UUID «FK»&lt;br&gt;+ jugadorId : UUID? «FK»&lt;br&gt;+ posicion : number" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="250" width="260" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="RE" value="&lt;b&gt;RoundEntity «@table ronda»&lt;/b&gt;&lt;hr&gt;+ id : UUID «PK»&lt;br&gt;+ partidaId : UUID «FK»&lt;br&gt;+ numero : number&lt;br&gt;+ tipoCierre : ClosureType?&lt;br&gt;+ cerradaEn : Date?" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="280" width="300" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="HSE" value="&lt;b&gt;HandStateEntity «@table mano_jugador»&lt;/b&gt;&lt;hr&gt;+ id : UUID «PK»&lt;br&gt;+ rondaId : UUID «FK»&lt;br&gt;+ participacionId : UUID «FK»&lt;br&gt;+ cartas : CardCode[0..11]&lt;br&gt;+ tamano() : number" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="440" width="260" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="RSE" value="&lt;b&gt;RoundScoreEntity «@table puntaje_acumulado»&lt;/b&gt;&lt;hr&gt;+ id : UUID «PK»&lt;br&gt;+ participacionId : UUID «FK»&lt;br&gt;+ rondaId : UUID «FK»&lt;br&gt;+ puntosRonda : number&lt;br&gt;+ puntosAcumulados : number" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="440" width="300" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="PLE" value="&lt;b&gt;PlayLogEntity «@table turno_jugada»&lt;/b&gt;&lt;hr&gt;+ id : bigint «PK»&lt;br&gt;+ rondaId : UUID «FK»&lt;br&gt;+ numeroTurno : number&lt;br&gt;+ accion : PlayAction&lt;br&gt;+ cartaCodigo : CardCode?" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="70" y="600" width="260" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="CME" value="&lt;b&gt;ChipMovementEntity «@table movimiento_ficha»&lt;/b&gt;&lt;hr&gt;+ id : bigint «PK»&lt;br&gt;+ jugadorId : UUID «FK»&lt;br&gt;+ monto : number&lt;br&gt;+ motivo : MovementReason" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="380" y="600" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="PKG_D" value="Dominio (sin dependencias de persistencia)" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fillColor=none;strokeColor=#9AAFC4;dashed=1;fontStyle=1;fontColor=#33526E;fontSize=12;fillColor=#F3F8F1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="40" width="440" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="D_P" value="Partida «aggregate root»" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="90" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="D_R" value="Ronda" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="160" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="D_M" value="Mano" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="230" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="D_C" value="Carta «value object»" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="300" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="PKG_M" value="Traductores" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fillColor=none;strokeColor=#9AAFC4;dashed=1;fontStyle=1;fontColor=#33526E;fontSize=12;fillColor=#FFFDF5;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="440" width="440" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="GM" value="&lt;b&gt;GameMapper «mapper»&lt;/b&gt;&lt;hr&gt;+ aDominio(e : GameSessionEntity) : Partida&lt;br&gt;+ aEntidad(p : Partida) : GameSessionEntity" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="490" width="380" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="HM" value="&lt;b&gt;HandMapper «mapper»&lt;/b&gt;&lt;hr&gt;+ aDominio(e : HandStateEntity) : Mano&lt;br&gt;+ aEntidad(m : Mano) : HandStateEntity" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="580" width="380" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="c1" value="1..*" style="endArrow=diamondThin;endFill=1;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="GSE" target="RE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="2..4" style="endArrow=diamondThin;endFill=1;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="GSE" target="PAE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="2..4" style="endArrow=diamondThin;endFill=1;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="RE" target="HSE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="2..4" style="endArrow=diamondThin;endFill=1;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="RE" target="RSE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="0..*" style="endArrow=diamondThin;endFill=0;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="RE" target="PLE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="0..1" style="endArrow=open;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="PAE" target="PE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="0..*" style="endArrow=diamondThin;endFill=0;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="PE" target="CME">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="" style="endArrow=open;endFill=0;dashed=1;html=1;strokeColor=#5A6B7D;fontSize=9;" edge="1" parent="1" source="GM" target="GSE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" value="" style="endArrow=open;endFill=0;dashed=1;html=1;strokeColor=#5A6B7D;fontSize=9;" edge="1" parent="1" source="GM" target="D_P">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" value="" style="endArrow=open;endFill=0;dashed=1;html=1;strokeColor=#5A6B7D;fontSize=9;" edge="1" parent="1" source="HM" target="HSE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m4" value="" style="endArrow=open;endFill=0;dashed=1;html=1;strokeColor=#5A6B7D;fontSize=9;" edge="1" parent="1" source="HM" target="D_M">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d1" value="" style="endArrow=diamondThin;endFill=1;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_P" target="D_R">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d2" value="" style="endArrow=diamondThin;endFill=1;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_R" target="D_M">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d3" value="" style="endArrow=diamondThin;endFill=0;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_M" target="D_C">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="N1" value="&lt;b&gt;Los traductores son el único punto que conoce las dos formas.&lt;/b&gt;&lt;br&gt;El dominio nunca importa una clase de persistencia; lo verifica FF-02." style="shape=note;size=14;html=1;whiteSpace=wrap;fillColor=#FFF9E0;strokeColor=#B7A160;fontSize=10;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="710" width="440" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="N2" value="&lt;b&gt;cartas&lt;/b&gt; se almacena normalizado en la tabla puente mano_carta (1FN). El arreglo es la vista que expone la entidad, no la estructura almacenada." style="shape=note;size=14;html=1;whiteSpace=wrap;fillColor=#FFF9E0;strokeColor=#B7A160;fontSize=10;align=left;verticalAlign=top;" vertex="1" parent="PKG_P">
+          <mxGeometry x="70" y="740" width="610" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

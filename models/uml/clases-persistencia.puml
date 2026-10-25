@@ -1,0 +1,149 @@
+@startuml clases-persistencia
+' Entregable 2 · §2.3 — Clases de entidad (persistencia) y su mapeo al esquema relacional
+
+title Clases de persistencia y mapeo al modelo de dominio
+
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam defaultFontSize 11
+skinparam class {
+  BackgroundColor #F7F9FC
+  BorderColor #33526E
+}
+hide empty members
+
+package "Capa de persistencia (infrastructure)" #EEF4FA {
+
+  class PlayerEntity <<@table jugador>> {
+    + id : UUID <<PK>>
+    + correo : string?
+    + hashContrasena : string?
+    + apodo : string
+    + tipo : PlayerKind
+    + creadoEn : Date
+    --
+    + esInvitado() : boolean
+  }
+
+  class GameSessionEntity <<@table partida>> {
+    + id : UUID <<PK>>
+    + modo : GameMode
+    + estado : GameStatus
+    + umbralEliminacion : number
+    + configReglas : RulesConfigJson
+    + montoApuesta : number
+    + version : number
+    + iniciadaEn : Date
+    + finalizadaEn : Date?
+    --
+    + estaEnCurso() : boolean
+  }
+
+  class ParticipationEntity <<@table participacion>> {
+    + id : UUID <<PK>>
+    + partidaId : UUID <<FK>>
+    + jugadorId : UUID? <<FK>>
+    + apodoInvitado : string?
+    + posicion : number
+    + eliminadoEnRonda : number?
+  }
+
+  class RoundEntity <<@table ronda>> {
+    + id : UUID <<PK>>
+    + partidaId : UUID <<FK>>
+    + numero : number
+    + tipoCierre : ClosureType?
+    + ganadorParticipacionId : UUID? <<FK>>
+    + cerradaEn : Date?
+  }
+
+  class HandStateEntity <<@table mano_jugador>> {
+    + id : UUID <<PK>>
+    + rondaId : UUID <<FK>>
+    + participacionId : UUID <<FK>>
+    + cartas : CardCode[0..11]
+    --
+    + tamano() : number
+  }
+
+  class PlayLogEntity <<@table turno_jugada>> {
+    + id : bigint <<PK>>
+    + rondaId : UUID <<FK>>
+    + participacionId : UUID <<FK>>
+    + numeroTurno : number
+    + secuencia : number
+    + accion : PlayAction
+    + cartaCodigo : CardCode?
+    + registradoEn : Date
+  }
+
+  class RoundScoreEntity <<@table puntaje_acumulado>> {
+    + id : UUID <<PK>>
+    + participacionId : UUID <<FK>>
+    + rondaId : UUID <<FK>>
+    + puntosRonda : number
+    + puntosAcumulados : number
+  }
+
+  class ChipMovementEntity <<@table movimiento_ficha>> {
+    + id : bigint <<PK>>
+    + jugadorId : UUID <<FK>>
+    + monto : number
+    + motivo : MovementReason
+    + partidaId : UUID? <<FK>>
+    + creadoEn : Date
+  }
+}
+
+package "Dominio (sin dependencias de persistencia)" #F3F8F1 {
+  class Partida <<aggregate root>>
+  class Ronda
+  class Mano
+  class Jugador
+  class Carta <<value object>>
+}
+
+package "Traductores" #FFFDF5 {
+  class GameMapper <<mapper>> {
+    + aDominio(e : GameSessionEntity) : Partida
+    + aEntidad(p : Partida) : GameSessionEntity
+  }
+  class HandMapper <<mapper>> {
+    + aDominio(e : HandStateEntity) : Mano
+    + aEntidad(m : Mano) : HandStateEntity
+  }
+}
+
+GameSessionEntity "1" *-- "1..*" RoundEntity
+GameSessionEntity "1" *-- "2..4" ParticipationEntity
+RoundEntity "1" *-- "2..4" HandStateEntity
+RoundEntity "1" *-- "2..4" RoundScoreEntity
+RoundEntity "1" o-- "0..*" PlayLogEntity
+ParticipationEntity "0..*" --> "0..1" PlayerEntity
+ParticipationEntity "1" -- "0..*" RoundScoreEntity
+PlayerEntity "1" o-- "0..*" ChipMovementEntity
+
+GameMapper ..> GameSessionEntity
+GameMapper ..> Partida
+HandMapper ..> HandStateEntity
+HandMapper ..> Mano
+
+Partida *-- Ronda
+Ronda *-- Mano
+Mano o-- Carta
+
+note right of GameMapper
+  Los **traductores** son el único punto
+  que conoce las dos formas. El dominio
+  nunca importa una clase de persistencia
+  (verificado por FF-02).
+end note
+
+note bottom of HandStateEntity
+  **cartas** se persiste normalizado en la
+  tabla puente *mano_carta* (1FN). El arreglo
+  es la vista que expone la entidad, no la
+  estructura almacenada.
+end note
+
+@enduml

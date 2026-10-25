@@ -1,0 +1,150 @@
+@startuml modelo-er
+' Entregable 2 · §2.2 — Modelo Entidad-Relación (notación Barker / pata de gallo)
+' Línea continua = relación obligatoria · línea punteada = opcional
+' PK = clave primaria · FK = clave foránea · U = restricción de unicidad
+
+title Modelo Entidad-Relación — Apuntado (PostgreSQL, 3FN)
+
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam class {
+  BackgroundColor #F7F9FC
+  BorderColor #33526E
+}
+hide circle
+hide empty methods
+
+entity "valor_carta" as valor <<catálogo>> {
+  * valor : CHAR(2) <<PK>>
+  --
+  * puntos : SMALLINT
+  * orden : SMALLINT
+}
+
+entity "carta" as carta <<catálogo>> {
+  * codigo : CHAR(3) <<PK>>
+  --
+  * valor : CHAR(2) <<FK>>
+  * palo : CHAR(1)
+}
+
+entity "jugador" as jugador {
+  * id : UUID <<PK>>
+  --
+  o correo : VARCHAR(255) <<U>>
+  o hash_contrasena : TEXT
+  * apodo : VARCHAR(40)
+  * tipo : player_kind
+  * creado_en : TIMESTAMPTZ
+}
+
+entity "partida" as partida {
+  * id : UUID <<PK>>
+  --
+  * modo : game_mode
+  * estado : game_status
+  * umbral_eliminacion : SMALLINT
+  * config_reglas : JSONB
+  * monto_apuesta : INTEGER
+  * version : INTEGER
+  * iniciada_en : TIMESTAMPTZ
+  o finalizada_en : TIMESTAMPTZ
+  o ganador_id : UUID <<FK>>
+}
+
+entity "participacion" as part {
+  * id : UUID <<PK>>
+  --
+  * partida_id : UUID <<FK, U>>
+  o jugador_id : UUID <<FK>>
+  o apodo_invitado : VARCHAR(40)
+  * posicion : SMALLINT <<U>>
+  o eliminado_en_ronda : SMALLINT
+}
+
+entity "ronda" as ronda {
+  * id : UUID <<PK>>
+  --
+  * partida_id : UUID <<FK, U>>
+  * numero : SMALLINT <<U>>
+  o tipo_cierre : closure_type
+  o ganador_participacion_id : UUID <<FK>>
+  * iniciada_en : TIMESTAMPTZ
+  o cerrada_en : TIMESTAMPTZ
+}
+
+entity "mano_jugador" as mano {
+  * id : UUID <<PK>>
+  --
+  * ronda_id : UUID <<FK, U>>
+  * participacion_id : UUID <<FK, U>>
+}
+
+entity "mano_carta" as manocarta {
+  * mano_id : UUID <<PK, FK>>
+  * carta_codigo : CHAR(3) <<PK, FK>>
+  --
+  * posicion : SMALLINT
+}
+
+entity "turno_jugada" as jugada <<bitácora>> {
+  * id : BIGSERIAL <<PK>>
+  --
+  * ronda_id : UUID <<FK, U>>
+  * participacion_id : UUID <<FK>>
+  * numero_turno : SMALLINT <<U>>
+  * secuencia : SMALLINT <<U>>
+  * accion : play_action
+  o carta_codigo : CHAR(3) <<FK>>
+  * registrado_en : TIMESTAMPTZ
+}
+
+entity "puntaje_acumulado" as puntaje {
+  * id : UUID <<PK>>
+  --
+  * participacion_id : UUID <<FK, U>>
+  * ronda_id : UUID <<FK, U>>
+  * puntos_ronda : SMALLINT
+  * puntos_acumulados : SMALLINT
+}
+
+entity "movimiento_ficha" as mov <<append-only>> {
+  * id : BIGSERIAL <<PK>>
+  --
+  * jugador_id : UUID <<FK>>
+  * monto : INTEGER
+  * motivo : movement_reason
+  o partida_id : UUID <<FK>>
+  * creado_en : TIMESTAMPTZ
+}
+
+valor ||--|{ carta
+jugador ||..o{ part
+jugador ||..o{ mov
+partida ||--|{ part
+partida ||--|{ ronda
+partida ||..o{ mov
+part ||--|{ puntaje
+part ||--|| mano
+part ||..o{ jugada
+ronda ||--|{ mano
+ronda ||--|| puntaje
+ronda ||..o{ jugada
+mano ||--|{ manocarta
+carta ||--o{ manocarta
+carta ||..o{ jugada
+
+note bottom of partida
+  **config_reglas** se desnormaliza a propósito (JSONB):
+  el catálogo de puntos de variación crece con cada regla
+  nueva y normalizarlo exigiría una migración por regla,
+  justo lo contrario de lo que promete el ADR-03.
+end note
+
+note bottom of valor
+  Separar **valor_carta** de **carta** elimina la
+  dependencia transitiva codigo → valor → puntos
+  y deja el esquema en 3FN.
+end note
+
+@enduml
