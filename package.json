@@ -1,0 +1,24 @@
+{
+  "name": "apuntado",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Sistema Digital de Juego de Cartas \"Apuntado\" — Fundamentos de Arquitectura de Software",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:arch": "vitest run tests/architecture",
+    "lint": "eslint src tests",
+    "arch:deps": "depcruise src --config .dependency-cruiser.cjs",
+    "arch:graph": "depcruise src --config .dependency-cruiser.cjs --output-type dot",
+    "gobernanza": "npm run lint && npm run arch:deps && npm run test:arch"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "dependency-cruiser": "^16.5.0",
+    "eslint": "^9.13.0",
+    "tsarch": "^5.4.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.11.0",
+    "vitest": "^2.1.0"
+  }
+}

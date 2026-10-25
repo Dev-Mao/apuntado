@@ -1,0 +1,146 @@
+@startuml componentes
+' Diagrama UML de Componentes Lógicos — Apuntado
+' Entregable 1, sección 4.3
+' Particionamiento por dominio (ADR-01).
+' Interfaz provista  = lollipop (componente —○ interfaz).
+' Interfaz requerida = dependencia punteada hacia la interfaz.
+
+title Componentes lógicos — Particionamiento por dominio
+
+left to right direction
+skinparam componentStyle uml2
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultFontSize 12
+skinparam nodesep 25
+skinparam ranksep 60
+skinparam component {
+  BackgroundColor #F7F9FC
+  BorderColor #33526E
+}
+skinparam interface {
+  BackgroundColor #FFFFFF
+  BorderColor #33526E
+}
+
+component "Interfaz Web" as UI <<externo>>
+
+package "Dominio: Juego" #F3F8F1 {
+
+  package "Mesa" {
+    component "CreadorDeSalas" as CS
+    interface "CreacionDeSala" as I_CS
+    component "ControlDeAdmision" as CA
+    interface "Admision" as I_AD
+    interface "GarantiaDeApuesta" as I_GA
+    component "OrquestadorDeTurnos" as OT
+    interface "AccionesDeJuego" as I_AJ
+    interface "EventosDePartida" as I_EP
+    interface "ControlDeTurno" as I_CT
+    component "VigilanteDeTurno" as VT
+    component "RepartidorDeBaraja" as RB
+    interface "Reparto" as I_RB
+    component "ProyectorDeVista" as PV
+    interface "ProyeccionDeVista" as I_PV
+  }
+
+  package "Reglas" {
+    component "ResolutorDeReglas" as RR
+    interface "ValidacionDeCierre" as I_VC
+    component "EvaluadorDeMano" as EM
+    interface "EvaluacionDeMano" as I_EM
+    component "CalculadorDePuntaje" as CP
+    interface "CalculoDePuntaje" as I_CP
+  }
+
+  package "Liquidación" {
+    component "LiquidadorDeRonda" as LR
+    interface "Liquidacion" as I_LQ
+    component "EvaluadorDeUmbral" as EU
+    interface "EvaluacionDeUmbral" as I_EU
+  }
+
+  package "Oponente Virtual" {
+    component "DecisorDelOponenteVirtual" as DO
+  }
+}
+
+package "Dominio: Identidad" #FBF6EE {
+  component "AutenticadorDeSesion" as AU
+  interface "Identidad" as I_ID
+  component "RegistradorDeCuentas" as RC
+  interface "RegistroDeCuentas" as I_RC
+  interface "EventosDeCuenta" as I_EC
+}
+
+package "Dominio: Economía" #F6F1FA {
+  component "CustodioDeApuestas" as CU
+  component "LibroDeFichas" as LF
+  interface "Movimientos" as I_MV
+}
+
+package "Dominio: Historial" #EEF4FA {
+  component "ArchivadorDeHistorial" as AH
+  interface "ConsultaDeHistorial" as I_CH
+}
+
+' ---------------- Interfaces provistas (lollipop) ----------------
+CS - I_CS
+CA - I_AD
+OT - I_AJ
+OT - I_EP
+OT - I_CT
+RB - I_RB
+PV - I_PV
+RR - I_VC
+EM - I_EM
+CP - I_CP
+LR - I_LQ
+EU - I_EU
+AU - I_ID
+RC - I_RC
+RC - I_EC
+LF - I_MV
+AH - I_CH
+CU - I_GA
+
+' ---------------- Interfaces requeridas ----------------
+UI ..> I_AJ
+UI ..> I_EP
+UI ..> I_CS
+UI ..> I_AD
+UI ..> I_RC
+UI ..> I_CH
+
+OT ..> I_RB
+OT ..> I_VC
+OT ..> I_LQ
+OT ..> I_PV
+VT ..> I_CT
+
+DO ..> I_AJ
+DO ..> I_PV
+DO ..> I_EM
+
+RR ..> I_EM
+RR ..> I_CP
+LR ..> I_EM
+LR ..> I_CP
+LR ..> I_EU
+
+CA ..> I_ID
+CA ..> I_GA
+CS ..> I_ID
+
+CU ..> I_MV
+CU ..> I_EP
+LF ..> I_EC
+AH ..> I_EP
+
+note bottom of I_GA
+  Declarada por **Juego**,
+  implementada por **Economía**
+  (inversión de dependencias).
+end note
+
+@enduml

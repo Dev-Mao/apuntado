@@ -1,0 +1,120 @@
+@startuml casos-de-uso
+' Diagrama UML de Casos de Uso — Sistema Digital de Juego de Cartas "Apuntado"
+' Entregable 1, sección 2.2
+
+top to bottom direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor #F7F9FC
+  BorderColor #33526E
+}
+skinparam actor {
+  BackgroundColor #FFF6E8
+  BorderColor #8A5A20
+}
+
+actor "Jugador" as J
+actor "Jugador Registrado" as JR
+actor "Jugador Invitado" as JI
+actor "Administrador de Sala" as ADM
+actor "Oponente Virtual" as OV
+actor "Temporizador" as TMP
+actor "Pasarela de Recarga" as PAG
+
+JR --|> J
+JI --|> J
+ADM --|> J
+
+rectangle "Sistema Digital de Juego de Cartas — Apuntado" {
+
+  package "Identidad y acceso" {
+    usecase "Registrarse" as UC01
+    usecase "Iniciar sesión" as UC02
+    usecase "Entrar como invitado" as UC03
+    usecase "Reanudar sesión tras desconexión" as UC04
+  }
+
+  package "Sala y partida" {
+    usecase "Crear sala privada" as UC05
+    usecase "Configurar reglas de la partida" as UC06
+    usecase "Unirse a sala con código" as UC07
+    usecase "Iniciar partida" as UC08
+    usecase "Jugar contra la máquina" as UC09
+  }
+
+  package "Ciclo de turno" {
+    usecase "Robar carta" as UC10
+    usecase "Descartar carta" as UC11
+    usecase "Validar legalidad de la acción" as UC12
+    usecase "Resolver turno vencido" as UC13
+  }
+
+  package "Cierre y puntaje" {
+    usecase "Declarar cierre clásico (4-3-3)" as UC14
+    usecase "Declarar cierre por apuntado" as UC15
+    usecase "Validar combinación de mano" as UC16
+    usecase "Liquidar puntos de ronda" as UC17
+    usecase "Finalizar partida" as UC18
+  }
+
+  package "Economía de fichas" {
+    usecase "Consultar saldo de fichas" as UC19
+    usecase "Verificar saldo suficiente" as UC20
+    usecase "Retener apuesta" as UC21
+    usecase "Acreditar bote al ganador" as UC22
+    usecase "Acreditar recarga externa" as UC23
+  }
+
+  package "Historial" {
+    usecase "Consultar historial de partidas" as UC24
+  }
+}
+
+' --- Asociaciones ---
+JR --> UC01
+JR --> UC02
+JI --> UC03
+J  --> UC04
+J  --> UC07
+J  --> UC09
+J  --> UC10
+J  --> UC11
+J  --> UC14
+J  --> UC15
+JR --> UC19
+JR --> UC24
+
+ADM --> UC05
+ADM --> UC08
+
+OV --> UC10
+OV --> UC11
+OV --> UC14
+
+TMP --> UC13
+PAG --> UC23
+
+' --- Relaciones <<include>> ---
+UC05 ..> UC06 : <<include>>
+UC07 ..> UC20 : <<include>>
+UC10 ..> UC12 : <<include>>
+UC11 ..> UC12 : <<include>>
+UC14 ..> UC16 : <<include>>
+UC15 ..> UC16 : <<include>>
+UC14 ..> UC17 : <<include>>
+UC15 ..> UC17 : <<include>>
+
+' --- Relaciones <<extend>> ---
+UC18 ..> UC17 : <<extend>>\n(alcanza 101 pts)
+UC21 ..> UC08 : <<extend>>\n(la sala tiene apuesta)
+UC22 ..> UC18 : <<extend>>\n(la partida tenía apuesta)
+UC13 ..> UC11 : <<extend>>\n(vence el tiempo)
+
+note bottom of PAG
+  Actor externo diseñado
+  pero no implementado
+  en el MVP
+end note
+
+@enduml

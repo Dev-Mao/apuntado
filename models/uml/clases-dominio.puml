@@ -1,0 +1,246 @@
+@startuml clases-dominio
+' Diagrama UML de Clases del Dominio — Apuntado
+' Entregable 1, sección 4.4
+
+title Modelo de clases del dominio — Apuntado
+
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam defaultFontSize 12
+skinparam class {
+  BackgroundColor #F7F9FC
+  BorderColor #33526E
+}
+hide empty members
+
+' ======================= Enumeraciones =======================
+enum Palo {
+  CORAZONES
+  DIAMANTES
+  TREBOLES
+  PICAS
+}
+
+enum Valor {
+  AS
+  DOS
+  TRES
+  CUATRO
+  CINCO
+  SEIS
+  SIETE
+  OCHO
+  NUEVE
+  DIEZ
+  JOTA
+  REINA
+  REY
+  + puntos() : int
+  + orden() : int
+}
+
+enum TipoCierre {
+  CLASICO
+  APUNTADO
+}
+
+enum EstadoPartida {
+  EN_SALA
+  EN_CURSO
+  FINALIZADA
+}
+
+' ======================= Cartas y montones =======================
+class Carta <<value object>> {
+  - palo : Palo
+  - valor : Valor
+  + puntos() : int
+  + mismoValorQue(otra : Carta) : boolean
+  + esSiguienteDe(otra : Carta) : boolean
+}
+
+class Mano {
+  - cartas : List<Carta>
+  + recibir(carta : Carta) : void
+  + entregar(carta : Carta) : Carta
+  + contiene(carta : Carta) : boolean
+  + tamano() : int
+}
+
+class Mazo {
+  - cartas : Deque<Carta>
+  + barajar(fuente : FuenteAleatoria) : void
+  + robar() : Carta
+  + estaVacio() : boolean
+  + reponer(cartas : List<Carta>) : void
+}
+
+class PozoDescarte {
+  - cartas : Deque<Carta>
+  + depositar(carta : Carta) : void
+  + verSuperior() : Carta
+  + tomarSuperior() : Carta
+  + retirarExceptoSuperior() : List<Carta>
+}
+
+interface FuenteAleatoria <<interface>> {
+  + mezclar(cartas : List<Carta>) : List<Carta>
+}
+
+' ======================= Partida =======================
+class Jugador {
+  - id : IdJugador
+  - apodo : String
+  - puntajeAcumulado : int
+  - eliminado : boolean
+  + sumarPuntos(puntos : int) : void
+  + eliminar() : void
+  + estaActivo() : boolean
+}
+
+class ConfiguracionDeReglas <<value object>> {
+  - modalidades : Set<TipoCierre>
+  - umbralEliminacion : int = 101
+  - segundosPorTurno : int = 60
+  - montoApuesta : int = 0
+  - multiplicadorApuntado : int = 1
+  + admite(tipo : TipoCierre) : boolean
+}
+
+class Partida {
+  - id : IdPartida
+  - estado : EstadoPartida
+  - turnoActual : IdJugador
+  + manoDe(jugador : IdJugador) : Mano
+  + jugadoresActivos() : List<Jugador>
+  + esTurnoDe(jugador : IdJugador) : boolean
+  + avanzarTurno() : void
+  + iniciarRonda() : Ronda
+}
+
+class Ronda {
+  - numero : int
+  - tipoCierre : TipoCierre [0..1]
+  - ganador : IdJugador [0..1]
+  + cerrar(ganador : IdJugador, tipo : TipoCierre) : void
+  + estaCerrada() : boolean
+}
+
+' ======================= Combinaciones =======================
+abstract class Combinacion {
+  # cartas : List<Carta>
+  + cartas() : List<Carta>
+  + {abstract} esValida() : boolean
+}
+
+class Terna {
+  + esValida() : boolean
+}
+
+class Cuarta {
+  + esValida() : boolean
+  - esPorValor() : boolean
+  - esPorSecuencia() : boolean
+}
+
+class DeclaracionDeCierre {
+  - tipo : TipoCierre
+  - combinaciones : List<Combinacion>
+  - sueltas : List<Carta>
+  - descarte : Carta [0..1]
+  + todasLasCartas() : List<Carta>
+}
+
+' ======================= Reglas (polimorfismo) =======================
+interface ReglaJuego <<interface>> {
+  + tipo() : TipoCierre
+  + validar(declaracion : DeclaracionDeCierre, mano : Mano) : ResultadoValidacion
+}
+
+class ReglaClasicaCuartaTerna {
+  + tipo() : TipoCierre
+  + validar(declaracion : DeclaracionDeCierre, mano : Mano) : ResultadoValidacion
+}
+
+class ReglaApuntado101 {
+  - limiteSobrantes : int = 5
+  + tipo() : TipoCierre
+  + validar(declaracion : DeclaracionDeCierre, mano : Mano) : ResultadoValidacion
+}
+
+class ReglaConComodin <<variación futura>> #FFFFFF;line.dashed {
+  + validar(declaracion : DeclaracionDeCierre, mano : Mano) : ResultadoValidacion
+}
+
+class ResultadoValidacion <<value object>> {
+  - valido : boolean
+  - motivo : String
+  - puntosSobrantes : int
+  + esValido() : boolean
+  + motivo() : String
+}
+
+interface PoliticaDeEliminacion <<interface>> {
+  + evaluar(jugadores : List<Jugador>, config : ConfiguracionDeReglas) : List<Jugador>
+}
+
+class PoliticaUmbralFijo {
+  + evaluar(jugadores : List<Jugador>, config : ConfiguracionDeReglas) : List<Jugador>
+}
+
+class PoliticaConReingreso <<variación futura>> #FFFFFF;line.dashed {
+  + evaluar(jugadores : List<Jugador>, config : ConfiguracionDeReglas) : List<Jugador>
+}
+
+' ======================= Relaciones =======================
+Carta --> "1" Palo
+Carta --> "1" Valor
+
+Partida *-- "1" ConfiguracionDeReglas
+Partida *-- "1..*" Ronda : rondas
+Partida o-- "2..4" Jugador : participantes
+Partida --> "1..2" ReglaJuego : reglas habilitadas
+Partida --> "1" PoliticaDeEliminacion
+Partida --> "1" EstadoPartida
+
+Ronda *-- "1" Mazo
+Ronda *-- "1" PozoDescarte
+Ronda *-- "2..4" Mano
+Ronda --> "0..1" TipoCierre
+
+Mano --> "1" Jugador : pertenece a
+Mano o-- "10..11" Carta
+Mazo o-- "0..*" Carta
+PozoDescarte o-- "0..*" Carta
+Mazo ..> FuenteAleatoria : usa
+
+Combinacion <|-- Terna
+Combinacion <|-- Cuarta
+Combinacion o-- "3..4" Carta
+
+DeclaracionDeCierre o-- "2..3" Combinacion
+DeclaracionDeCierre --> "1" TipoCierre
+
+ReglaJuego <|.. ReglaClasicaCuartaTerna
+ReglaJuego <|.. ReglaApuntado101
+ReglaJuego <|.. ReglaConComodin
+ReglaJuego ..> DeclaracionDeCierre : evalúa
+ReglaJuego ..> ResultadoValidacion : produce
+
+PoliticaDeEliminacion <|.. PoliticaUmbralFijo
+PoliticaDeEliminacion <|.. PoliticaConReingreso
+
+note right of ReglaJuego
+  Punto de extensión del ADR-02.
+  Una regla nueva es una clase nueva:
+  la Partida y el flujo de turnos
+  no se modifican.
+end note
+
+note bottom of ReglaApuntado101
+  Se conserva el nombre de la guía,
+  pero el umbral de 101 NO está en esta
+  clase: vive en ConfiguracionDeReglas.
+end note
+
+@enduml

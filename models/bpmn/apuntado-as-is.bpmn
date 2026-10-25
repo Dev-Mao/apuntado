@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_AsIs" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_AsIs">
+    <bpmn:participant id="Participant_Mesa" name="Mesa de juego presencial" processRef="Process_AsIs" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_AsIs" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_AsIs">
+      <bpmn:lane id="Lane_A" name="Jugador en turno">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Barajar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Repartir</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Voltear</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Tomar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Evaluar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Cierre</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Declarar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Descartar</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_B" name="Demás jugadores">
+        <bpmn:flowNodeRef>T_Verificar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Acepta</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Contar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Discutir</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_C" name="Anotador">
+        <bpmn:flowNodeRef>T_Anotar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Sumar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_101</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>T_Eliminar</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gw_Fin</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Start_1" name="Los jugadores se reúnen">
+      <bpmn:outgoing>af1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:manualTask id="T_Barajar" name="Barajar manualmente">
+      <bpmn:incoming>af1</bpmn:incoming>
+      <bpmn:incoming>af22</bpmn:incoming>
+      <bpmn:outgoing>af2</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="T_Repartir" name="Repartir 10 cartas a cada jugador">
+      <bpmn:incoming>af2</bpmn:incoming>
+      <bpmn:outgoing>af3</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="T_Voltear" name="Voltear una carta al pozo">
+      <bpmn:incoming>af3</bpmn:incoming>
+      <bpmn:outgoing>af4</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="T_Tomar" name="Tomar carta del mazo o del pozo">
+      <bpmn:incoming>af4</bpmn:incoming>
+      <bpmn:incoming>af9</bpmn:incoming>
+      <bpmn:incoming>af14</bpmn:incoming>
+      <bpmn:outgoing>af5</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="T_Evaluar" name="Evaluar mentalmente la mano">
+      <bpmn:incoming>af5</bpmn:incoming>
+      <bpmn:outgoing>af6</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="Gw_Cierre" name="¿Cree tener un cierre?">
+      <bpmn:incoming>af6</bpmn:incoming>
+      <bpmn:outgoing>af7</bpmn:outgoing>
+      <bpmn:outgoing>af8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:manualTask id="T_Declarar" name="Declarar cierre en voz alta">
+      <bpmn:incoming>af7</bpmn:incoming>
+      <bpmn:outgoing>af10</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="T_Descartar" name="Descartar una carta">
+      <bpmn:incoming>af8</bpmn:incoming>
+      <bpmn:outgoing>af9</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="T_Verificar" name="Verificar visualmente las combinaciones">
+      <bpmn:incoming>af10</bpmn:incoming>
+      <bpmn:outgoing>af11</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="Gw_Acepta" name="¿La mesa acepta el cierre?">
+      <bpmn:incoming>af11</bpmn:incoming>
+      <bpmn:outgoing>af12</bpmn:outgoing>
+      <bpmn:outgoing>af13</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:manualTask id="T_Contar" name="Contar el valor de sus cartas sueltas">
+      <bpmn:incoming>af12</bpmn:incoming>
+      <bpmn:outgoing>af15</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="T_Discutir" name="Discutir la jugada y reanudar el turno">
+      <bpmn:incoming>af13</bpmn:incoming>
+      <bpmn:outgoing>af14</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="T_Anotar" name="Registrar los puntajes en papel">
+      <bpmn:incoming>af15</bpmn:incoming>
+      <bpmn:outgoing>af16</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:manualTask id="T_Sumar" name="Sumar los acumulados">
+      <bpmn:incoming>af16</bpmn:incoming>
+      <bpmn:outgoing>af17</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="Gw_101" name="¿Alguien alcanzó 101 puntos?">
+      <bpmn:incoming>af17</bpmn:incoming>
+      <bpmn:outgoing>af18</bpmn:outgoing>
+      <bpmn:outgoing>af19</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:manualTask id="T_Eliminar" name="Declarar eliminado al jugador">
+      <bpmn:incoming>af18</bpmn:incoming>
+      <bpmn:outgoing>af20</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="Gw_Fin" name="¿Queda un solo jugador?">
+      <bpmn:incoming>af19</bpmn:incoming>
+      <bpmn:incoming>af20</bpmn:incoming>
+      <bpmn:outgoing>af21</bpmn:outgoing>
+      <bpmn:outgoing>af22</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_1" name="Fin de la partida">
+      <bpmn:incoming>af21</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="af1" sourceRef="Start_1" targetRef="T_Barajar" />
+    <bpmn:sequenceFlow id="af2" sourceRef="T_Barajar" targetRef="T_Repartir" />
+    <bpmn:sequenceFlow id="af3" sourceRef="T_Repartir" targetRef="T_Voltear" />
+    <bpmn:sequenceFlow id="af4" sourceRef="T_Voltear" targetRef="T_Tomar" />
+    <bpmn:sequenceFlow id="af5" sourceRef="T_Tomar" targetRef="T_Evaluar" />
+    <bpmn:sequenceFlow id="af6" sourceRef="T_Evaluar" targetRef="Gw_Cierre" />
+    <bpmn:sequenceFlow id="af7" name="Sí" sourceRef="Gw_Cierre" targetRef="T_Declarar" />
+    <bpmn:sequenceFlow id="af8" name="No" sourceRef="Gw_Cierre" targetRef="T_Descartar" />
+    <bpmn:sequenceFlow id="af9" name="Turno del siguiente jugador" sourceRef="T_Descartar" targetRef="T_Tomar" />
+    <bpmn:sequenceFlow id="af10" sourceRef="T_Declarar" targetRef="T_Verificar" />
+    <bpmn:sequenceFlow id="af11" sourceRef="T_Verificar" targetRef="Gw_Acepta" />
+    <bpmn:sequenceFlow id="af12" name="Sí" sourceRef="Gw_Acepta" targetRef="T_Contar" />
+    <bpmn:sequenceFlow id="af13" name="No" sourceRef="Gw_Acepta" targetRef="T_Discutir" />
+    <bpmn:sequenceFlow id="af14" name="Se reanuda el turno" sourceRef="T_Discutir" targetRef="T_Tomar" />
+    <bpmn:sequenceFlow id="af15" sourceRef="T_Contar" targetRef="T_Anotar" />
+    <bpmn:sequenceFlow id="af16" sourceRef="T_Anotar" targetRef="T_Sumar" />
+    <bpmn:sequenceFlow id="af17" sourceRef="T_Sumar" targetRef="Gw_101" />
+    <bpmn:sequenceFlow id="af18" name="Sí" sourceRef="Gw_101" targetRef="T_Eliminar" />
+    <bpmn:sequenceFlow id="af19" name="No" sourceRef="Gw_101" targetRef="Gw_Fin" />
+    <bpmn:sequenceFlow id="af20" sourceRef="T_Eliminar" targetRef="Gw_Fin" />
+    <bpmn:sequenceFlow id="af21" name="Sí" sourceRef="Gw_Fin" targetRef="End_1" />
+    <bpmn:sequenceFlow id="af22" name="No: se juega otra ronda" sourceRef="Gw_Fin" targetRef="T_Barajar" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_AsIs">
+    <bpmndi:BPMNPlane id="BPMNPlane_AsIs" bpmnElement="Collaboration_AsIs">
+      <bpmndi:BPMNShape id="Participant_Mesa_di" bpmnElement="Participant_Mesa" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="2060" height="660" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_A_di" bpmnElement="Lane_A" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="2030" height="220" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_B_di" bpmnElement="Lane_B" isHorizontal="true">
+        <dc:Bounds x="190" y="300" width="2030" height="220" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_C_di" bpmnElement="Lane_C" isHorizontal="true">
+        <dc:Bounds x="190" y="520" width="2030" height="220" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="232" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="207" y="173" width="86" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Barajar_di" bpmnElement="T_Barajar">
+        <dc:Bounds x="310" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Repartir_di" bpmnElement="T_Repartir">
+        <dc:Bounds x="460" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Voltear_di" bpmnElement="T_Voltear">
+        <dc:Bounds x="610" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Tomar_di" bpmnElement="T_Tomar">
+        <dc:Bounds x="760" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Evaluar_di" bpmnElement="T_Evaluar">
+        <dc:Bounds x="910" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Cierre_di" bpmnElement="Gw_Cierre">
+        <dc:Bounds x="1070" y="125" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1045" y="180" width="100" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Declarar_di" bpmnElement="T_Declarar">
+        <dc:Bounds x="1170" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Descartar_di" bpmnElement="T_Descartar">
+        <dc:Bounds x="1045" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Verificar_di" bpmnElement="T_Verificar">
+        <dc:Bounds x="1170" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Acepta_di" bpmnElement="Gw_Acepta">
+        <dc:Bounds x="1330" y="345" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1305" y="400" width="100" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Contar_di" bpmnElement="T_Contar">
+        <dc:Bounds x="1430" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Discutir_di" bpmnElement="T_Discutir">
+        <dc:Bounds x="1305" y="430" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Anotar_di" bpmnElement="T_Anotar">
+        <dc:Bounds x="1430" y="560" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Sumar_di" bpmnElement="T_Sumar">
+        <dc:Bounds x="1580" y="560" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_101_di" bpmnElement="Gw_101">
+        <dc:Bounds x="1740" y="575" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1715" y="630" width="100" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="T_Eliminar_di" bpmnElement="T_Eliminar">
+        <dc:Bounds x="1840" y="560" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gw_Fin_di" bpmnElement="Gw_Fin">
+        <dc:Bounds x="2000" y="575" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1975" y="630" width="100" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_1_di" bpmnElement="End_1">
+        <dc:Bounds x="2110" y="582" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="2085" y="623" width="86" height="27" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="af1_di" bpmnElement="af1">
+        <di:waypoint x="268" y="150" />
+        <di:waypoint x="310" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af2_di" bpmnElement="af2">
+        <di:waypoint x="410" y="150" />
+        <di:waypoint x="460" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af3_di" bpmnElement="af3">
+        <di:waypoint x="560" y="150" />
+        <di:waypoint x="610" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af4_di" bpmnElement="af4">
+        <di:waypoint x="710" y="150" />
+        <di:waypoint x="760" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af5_di" bpmnElement="af5">
+        <di:waypoint x="860" y="150" />
+        <di:waypoint x="910" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af6_di" bpmnElement="af6">
+        <di:waypoint x="1010" y="150" />
+        <di:waypoint x="1070" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af7_di" bpmnElement="af7">
+        <di:waypoint x="1120" y="150" />
+        <di:waypoint x="1170" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af8_di" bpmnElement="af8">
+        <di:waypoint x="1095" y="175" />
+        <di:waypoint x="1095" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af9_di" bpmnElement="af9">
+        <di:waypoint x="1045" y="250" />
+        <di:waypoint x="810" y="250" />
+        <di:waypoint x="810" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af10_di" bpmnElement="af10">
+        <di:waypoint x="1220" y="190" />
+        <di:waypoint x="1220" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af11_di" bpmnElement="af11">
+        <di:waypoint x="1270" y="370" />
+        <di:waypoint x="1330" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af12_di" bpmnElement="af12">
+        <di:waypoint x="1380" y="370" />
+        <di:waypoint x="1430" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af13_di" bpmnElement="af13">
+        <di:waypoint x="1355" y="395" />
+        <di:waypoint x="1355" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af14_di" bpmnElement="af14">
+        <di:waypoint x="1305" y="470" />
+        <di:waypoint x="790" y="470" />
+        <di:waypoint x="790" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af15_di" bpmnElement="af15">
+        <di:waypoint x="1480" y="410" />
+        <di:waypoint x="1480" y="560" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af16_di" bpmnElement="af16">
+        <di:waypoint x="1530" y="600" />
+        <di:waypoint x="1580" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af17_di" bpmnElement="af17">
+        <di:waypoint x="1680" y="600" />
+        <di:waypoint x="1740" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af18_di" bpmnElement="af18">
+        <di:waypoint x="1790" y="600" />
+        <di:waypoint x="1840" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af19_di" bpmnElement="af19">
+        <di:waypoint x="1765" y="625" />
+        <di:waypoint x="1765" y="690" />
+        <di:waypoint x="2025" y="690" />
+        <di:waypoint x="2025" y="625" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af20_di" bpmnElement="af20">
+        <di:waypoint x="1940" y="600" />
+        <di:waypoint x="2000" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af21_di" bpmnElement="af21">
+        <di:waypoint x="2050" y="600" />
+        <di:waypoint x="2110" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="af22_di" bpmnElement="af22">
+        <di:waypoint x="2025" y="575" />
+        <di:waypoint x="2025" y="540" />
+        <di:waypoint x="360" y="540" />
+        <di:waypoint x="360" y="190" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
