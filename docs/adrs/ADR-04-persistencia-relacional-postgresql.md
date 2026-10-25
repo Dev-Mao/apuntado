@@ -32,7 +32,7 @@ la suma de sus rondas.
 |---|---|---|
 | A | **PostgreSQL, esquema relacional normalizado** | Transacciones ACID, restricciones declarativas, consultas agregadas naturales |
 | B | MongoDB, documento agregado por partida | La mesa completa en un documento; consistencia garantizada solo dentro del documento |
-| C | SQLite embebida | Cero operación, pero un solo escritor y sin despliegue en la nube |
+| C | SQLite embebida | Cero operación, pero tipado dinámico, sin ENUM ni JSONB, y un solo escritor a la vez |
 
 ---
 

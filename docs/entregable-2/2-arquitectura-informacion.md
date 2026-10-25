@@ -11,7 +11,7 @@ cuatro módulos, con separación lógica por tablas y no por instancias. Formali
 | Topología | Consistencia | Simplicidad | Valoración |
 |---|---|---|---|
 | **Monolítica centralizada (PostgreSQL)** | Transacciones ACID entre todos los módulos | Un solo motor que operar | **Adoptada** |
-| Embebida (SQLite) | ACID, pero un solo escritor | Máxima: sin servidor | Descartada: el servidor es multiusuario y necesita despliegue en la nube |
+| Embebida (SQLite) | ACID, pero con un solo escritor a la vez | Máxima: sin servidor que operar | Descartada: ver la justificación debajo de la tabla |
 | Documental (MongoDB) | Garantizada dentro de un documento | Alta para agregados | Descartada: ver §2.2 |
 | Una base por módulo | Sin transacciones entre módulos | Baja: cuatro motores | Descartada: innecesaria con un solo quantum |
 
@@ -19,6 +19,17 @@ El trade-off a resolver es consistencia contra simplicidad, y en este caso no es
 El sistema tiene un solo quantum arquitectónico (ADR-03): un desplegable con una base de datos.
 Separar la base por módulo introduciría consistencia eventual entre Juego y Economía sin ninguna
 ganancia, porque no hay equipos ni despliegues independientes que lo justifiquen.
+
+**Por qué se descarta SQLite.** No es por el despliegue: una base embebida también vive en la nube,
+como un archivo en el disco del servidor. El motivo es que **el esquema diseñado en §2.2 se apoya en
+capacidades que SQLite no tiene**. Usa tipos enumerados para los estados y las acciones, `JSONB`
+para la configuración de reglas, `UUID` y `TIMESTAMPTZ`. SQLite tiene tipado dinámico por afinidad,
+de modo que buena parte de esas restricciones habría que emularlas en el código de aplicación,
+justo lo contrario del criterio que sostiene toda esta sección: que las invariantes sean
+declarativas y las verifique el motor. A eso se suman dos limitaciones operativas: las escrituras
+se serializan a nivel de base y no de fila, y el archivo queda atado al ciclo de vida del sistema
+de archivos del proceso, de modo que un redespliegue sobre un contenedor efímero borraría los datos
+si no se monta un volumen persistente.
 
 Conviene precisar qué no se persiste. La partida en curso no vive en la base de datos: reside en
 memoria del servidor (trade-off T3 del Entregable 1), y la base guarda resultados, bitácora y
