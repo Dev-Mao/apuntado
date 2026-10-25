@@ -31,9 +31,23 @@ se serializan a nivel de base y no de fila, y el archivo queda atado al ciclo de
 de archivos del proceso, de modo que un redespliegue sobre un contenedor efímero borraría los datos
 si no se monta un volumen persistente.
 
-Conviene precisar qué no se persiste. La partida en curso no vive en la base de datos: reside en
-memoria del servidor (trade-off T3 del Entregable 1), y la base guarda resultados, bitácora y
-catálogos. Esa frontera es la que permite sostener el presupuesto de 100 ms por validación.
+Conviene precisar qué se persiste y qué no, porque no es todo o nada. El **estado de la partida en
+curso** (mazo, pozo, manos y turno) no vive en la base de datos: reside en memoria del servidor
+(trade-off T3 del Entregable 1). Lo que sí se persiste son tres cosas de naturaleza distinta:
+
+| Qué | Cuándo se escribe | Para qué sirve |
+|---|---|---|
+| Catálogos (`carta`, `valor_carta`) | Una vez, al instalar | Datos de referencia |
+| Resultado de cada ronda (`puntaje_acumulado`, `ronda`) | Al cerrar la ronda, dentro de la transacción (§2.4) | Es la fuente de verdad del marcador |
+| Bitácora de jugadas (`turno_jugada`) | En cada robo y cada descarte, **de forma asíncrona** | Trazabilidad y auditoría |
+
+La bitácora es la que cumple el requisito de trazabilidad de robos y descartes, y se escribe
+**fuera del camino crítico del turno** (ADR-05): la jugada se confirma al jugador sin esperar a la
+base de datos. Es un registro de auditoría, no de estado, de modo que la partida nunca se
+reconstruye a partir de ella.
+
+Esa separación entre el estado efímero y lo que se persiste es la que permite sostener el
+presupuesto de 100 ms por validación.
 
 ## 2.2 Especificación del esquema de datos (opción A: relacional E-R)
 
