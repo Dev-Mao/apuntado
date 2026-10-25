@@ -35,16 +35,19 @@
           <mxGeometry x="1000" y="40" width="440" height="360" as="geometry" />
         </mxCell>
         <mxCell id="D_P" value="Partida «aggregate root»" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;align=center;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="90" width="240" height="45" as="geometry" />
+          <mxGeometry x="1040" y="80" width="240" height="45" as="geometry" />
         </mxCell>
         <mxCell id="D_R" value="Ronda" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;align=center;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="160" width="240" height="45" as="geometry" />
+          <mxGeometry x="1040" y="145" width="240" height="45" as="geometry" />
         </mxCell>
         <mxCell id="D_M" value="Mano" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;align=center;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="230" width="240" height="45" as="geometry" />
+          <mxGeometry x="1040" y="210" width="240" height="45" as="geometry" />
         </mxCell>
         <mxCell id="D_C" value="Carta «value object»" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;align=center;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="300" width="240" height="45" as="geometry" />
+          <mxGeometry x="1040" y="275" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="D_J" value="Jugador" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;fillColor=#F7F9FC;strokeColor=#33526E;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="340" width="240" height="45" as="geometry" />
         </mxCell>
         <mxCell id="PKG_M" value="Traductores" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fillColor=none;strokeColor=#9AAFC4;dashed=1;fontStyle=1;fontColor=#33526E;fontSize=12;fillColor=#FFFDF5;" vertex="1" parent="1">
           <mxGeometry x="1000" y="440" width="440" height="240" as="geometry" />
@@ -88,13 +91,19 @@
         <mxCell id="m4" value="" style="endArrow=open;endFill=0;dashed=1;html=1;strokeColor=#5A6B7D;fontSize=9;" edge="1" parent="1" source="HM" target="D_M">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="d1" value="" style="endArrow=diamondThin;endFill=1;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_P" target="D_R">
+        <mxCell id="d1" value="1..*" style="endArrow=diamondThin;endFill=1;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_P" target="D_R">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="d2" value="" style="endArrow=diamondThin;endFill=1;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_R" target="D_M">
+        <mxCell id="d2" value="2..4" style="endArrow=diamondThin;endFill=1;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_R" target="D_M">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="d3" value="" style="endArrow=diamondThin;endFill=0;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_M" target="D_C">
+        <mxCell id="d3" value="10..11" style="endArrow=diamondThin;endFill=0;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_M" target="D_C">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d4" value="2..4" style="endArrow=diamondThin;endFill=0;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_P" target="D_J">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d5" value="pertenece a" style="endArrow=open;html=1;strokeColor=#33526E;fontSize=9;" edge="1" parent="1" source="D_M" target="D_J">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="N1" value="&lt;b&gt;Los traductores son el único punto que conoce las dos formas.&lt;/b&gt;&lt;br&gt;El dominio nunca importa una clase de persistencia; lo verifica FF-02." style="shape=note;size=14;html=1;whiteSpace=wrap;fillColor=#FFF9E0;strokeColor=#B7A160;fontSize=10;align=left;verticalAlign=top;" vertex="1" parent="1">

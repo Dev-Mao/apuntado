@@ -128,9 +128,11 @@ GameMapper ..> Partida
 HandMapper ..> HandStateEntity
 HandMapper ..> Mano
 
-Partida *-- Ronda
-Ronda *-- Mano
-Mano o-- Carta
+Partida *-- "1..*" Ronda
+Partida o-- "2..4" Jugador
+Ronda *-- "2..4" Mano
+Mano --> "1" Jugador : pertenece a
+Mano o-- "10..11" Carta
 
 note right of GameMapper
   Los **traductores** son el único punto
