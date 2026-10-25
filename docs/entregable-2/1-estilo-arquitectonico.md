@@ -1,12 +1,12 @@
-# Entregable 2 — Sección 1: Selección y Justificación del Estilo Arquitectónico
+# Entregable 2. Sección 1: Selección y justificación del estilo arquitectónico
 **Peso en la rúbrica: 20%**
 
 Las notas entre corchetes `[así]` son indicaciones para el equipo y **no van en el PDF**.
 
-## 1.1 Evaluación Comparativa de Estilos Candidatos
+## 1.1 Evaluación comparativa de estilos candidatos
 
 Se contrastan tres estilos frente a las **características motoras** identificadas en el Entregable 1
-—Extensibility, Testability y Responsiveness—, más dos criterios de contexto. La escala va de 1 a 5
+(Extensibility, Testability y Responsiveness), más dos criterios de contexto. La escala va de 1 a 5
 y el peso refleja la prioridad de cada característica: **3 para las tres motoras**, 2 para la
 viabilidad y 1 para los criterios secundarios.
 
@@ -24,40 +24,41 @@ viabilidad y 1 para los criterios secundarios.
 
 ### Justificación de cada calificación
 
-**Extensibilidad de reglas.** El microkernel obtiene 5 porque permite incorporar un plug-in **sin
-volver a desplegar**. El monolito modular obtiene 4 y no 5 por una única razón: con Strategy, una
-regla nueva es una clase nueva que **no modifica el núcleo**, pero sí exige un nuevo despliegue.
-Service-Based obtiene 3 porque, además del despliegue, obliga a versionar el contrato de red.
+En **extensibilidad de reglas** el microkernel obtiene 5 porque permite incorporar un plug-in sin
+volver a desplegar. El monolito modular se queda en 4: con Strategy una regla nueva es una clase
+nueva que no modifica el núcleo, pero sí exige un nuevo despliegue. Service-Based baja a 3 porque,
+además del despliegue, obliga a versionar el contrato de red.
 
-**Testabilidad aislada.** El monolito modular obtiene 5: los componentes del núcleo de reglas
-tienen acoplamiento eferente cero y se ejecutan sin red, interfaz ni base de datos. El microkernel
-obtiene 4 porque el registro de plug-ins y su ciclo de vida introducen infraestructura que también
-hay que probar. Service-Based obtiene 3 porque probar un flujo completo exige levantar varios
+En **testabilidad aislada** el monolito modular obtiene 5, porque los componentes del núcleo de
+reglas tienen acoplamiento eferente cero y se ejecutan sin red, sin interfaz y sin base de datos.
+Al microkernel le resta un punto el registro de plug-ins, que es infraestructura adicional y
+también hay que probarla. Service-Based obtiene 3 porque probar un flujo completo exige levantar
+varios servicios.
+
+En **responsiveness** el monolito modular vuelve a obtener 5: todas las llamadas son en memoria y
+la partida vive en el mismo proceso. El microkernel pierde un punto por la indirección del
+registro, que es pequeña pero existe. Service-Based obtiene 2 porque cada validación cruzaría la
+red, algo incompatible con el presupuesto de 100 ms para evaluar una mano.
+
+La **viabilidad en un semestre** es donde más se separan. El monolito modular obtiene 5 por ser el
+de menor costo de montaje. El microkernel cae a 2, porque el descubrimiento, el registro y la
+carga dinámica de plug-ins son código de infraestructura que compite con el tiempo de estabilizar
+el ciclo de turnos. Service-Based obtiene 1 por sumar despliegue, observabilidad y contratos entre
 servicios.
 
-**Responsiveness.** El monolito modular obtiene 5: todas las llamadas son en memoria y la partida
-vive en el mismo proceso. El microkernel obtiene 4 por la indirección del registro, que es menor
-pero existe. Service-Based obtiene 2 porque cada validación cruzaría la red, lo que es
-incompatible con el presupuesto de 100 ms para evaluar una mano.
-
-**Viabilidad en un semestre.** El monolito modular obtiene 5 por ser el de menor costo de montaje.
-El microkernel obtiene 2: el descubrimiento, el registro y la carga dinámica de plug-ins son
-código de infraestructura que compite con el tiempo de estabilizar el ciclo de turnos.
-Service-Based obtiene 1 por sumar despliegue, observabilidad y contratos entre servicios.
-
-**Gobernabilidad automatizada.** El monolito modular obtiene 5 porque las fronteras son rutas del
-sistema de archivos y se verifican con análisis estático. El microkernel obtiene 3: si los
+En **gobernabilidad automatizada** el monolito modular obtiene 5 porque sus fronteras son rutas
+del sistema de archivos y se verifican con análisis estático. El microkernel obtiene 3: si los
 plug-ins se cargan en tiempo de ejecución, el análisis estático deja de ver parte del grafo.
 
-**Despliegue independiente de reglas.** Es el único criterio donde el monolito modular obtiene 1.
-Se incluye a propósito para no inflar el resultado: el estilo elegido **pierde claramente** en esa
-dimensión.
+El **despliegue independiente de reglas** es el único criterio donde el monolito modular obtiene 1.
+Se incluyó a propósito: sin él la comparación quedaría inflada a favor del estilo que ya
+veníamos usando.
 
-> El resultado no es una goleada: 58 contra 51. El microkernel es una alternativa legítima y gana
-> en extensibilidad pura. La diferencia la hacen la viabilidad y la gobernabilidad, dos criterios
-> de contexto —un equipo de tres personas, un semestre— y no de superioridad técnica abstracta.
+La diferencia final es de 58 contra 51. El microkernel es una alternativa legítima y gana en
+extensibilidad pura; lo que inclina la balanza son la viabilidad y la gobernabilidad, que dependen
+del contexto del equipo y no de una superioridad técnica abstracta.
 
-## 1.2 Descripción del Estilo Seleccionado y Topología
+## 1.2 Descripción del estilo seleccionado y topología
 
 Se adopta **Monolito Modular** (Richards y Ford, 2025, cap. 11) con **particionamiento por
 dominio** y el patrón **Strategy** como mecanismo de variabilidad. Formalizado en el **ADR-03**.
@@ -73,7 +74,7 @@ dominio** y el patrón **Strategy** como mecanismo de variabilidad. Formalizado 
 
 Cada módulo contiene sus propias capas (`interfaces`, `application`, `domain`, `infrastructure`),
 de modo que un cambio de reglas queda contenido en `game`. El espacio `shared` solo aloja
-utilidades técnicas —reloj y fuente de aleatoriedad—, nunca lógica de negocio.
+utilidades técnicas (reloj y fuente de aleatoriedad), nunca lógica de negocio.
 
 ```
 src/modules/game/domain/rules/     ← punto de extensión (Strategy)
@@ -92,26 +93,26 @@ mecanismos, según la naturaleza de la interacción (ADR-05):
 | Consulta previa que condiciona una acción | Interfaz invertida, síncrona | `GarantiaDeApuesta`: la declara Juego, la implementa Economía |
 | Efecto posterior a un hecho consumado | Evento local, asíncrono | `RondaCerrada`: lo escuchan Economía e Historial |
 
-En ambos casos **la dependencia de código apunta hacia Juego**, que no importa nada de los otros
-módulos. Es inversión de dependencias, y lo verifica la fitness function FF-01.
+En los dos casos la dependencia de código apunta hacia Juego, que no importa nada de los otros
+módulos. Esa inversión de dependencias la verifica la fitness function FF-01.
 
 ### Núcleo y puntos de extensión
 
 | Elemento | Implementación |
 |---|---|
-| Núcleo estable | `MaquinaDeEstados` y `OrquestadorDeTurnos`: el ciclo robar–descartar–evaluar |
+| Núcleo estable | `MaquinaDeEstados` y `OrquestadorDeTurnos`: el ciclo de robar, descartar y evaluar |
 | Contrato | Interfaz `ReglaJuego`: `validate(declaracion) → ResultadoValidacion` |
 | Extensiones | `ReglaClasica`, `ReglaApuntado` y, previstas, `ReglaConComodin` y `ReglaContinental` |
 | Registro | `ResolutorDeReglas`, que asocia cada modalidad con su implementación |
 
-**Agregar la variante Continental** consiste en escribir una clase que implemente `ReglaJuego`,
+Para agregar la variante Continental basta con escribir una clase que implemente `ReglaJuego`,
 registrarla y habilitarla en la configuración de la partida. No se modifica el orquestador, ni la
 máquina de estados, ni el modelo de datos, ni la interfaz. Lo verifica FF-06.
 
 **Quantum arquitectónico: 1.** Un solo desplegable con una base de datos, lo que mantiene la
 partida en curso dentro de un proceso y sostiene el presupuesto de latencia.
 
-## 1.3 Diagrama UML de Componentes Detallado
+## 1.3 Diagrama UML de componentes detallado
 
 {{IMG:componentes-detallado}}
 

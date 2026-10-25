@@ -1,12 +1,12 @@
-# Entregable 2 — Sección 5: Gobernanza y Funciones de Idoneidad
+# Entregable 2. Sección 5: Gobernanza y funciones de idoneidad
 **Peso en la rúbrica: 15%**
 
 Las notas entre corchetes `[así]` son indicaciones para el equipo y **no van en el PDF**.
 
-## 5.1 Reglas de Gobernanza Estructural y Modularidad
+## 5.1 Reglas de gobernanza estructural y modularidad
 
-Las decisiones de los ADR no se sostienen con disciplina sino con pruebas que **fallan la
-construcción**. Se definen ocho reglas formales, cada una ligada a la decisión que protege.
+Las decisiones de los ADR no se sostienen con disciplina, sino con pruebas que fallan la
+construcción. Se definen ocho reglas formales, cada una ligada a la decisión que protege.
 
 | # | Regla de gobernanza | Protege | Herramienta |
 |---|---|---|---|
@@ -23,12 +23,12 @@ Las tres reglas que la guía exige explícitamente están cubiertas: **aislamien
 FF-05), **independencia de las reglas de juego y ausencia de ciclos** (FF-03 y FF-04) y **límite de
 complejidad ciclomática** (FF-08).
 
-**FF-06 merece una nota.** No estaba en el Entregable 1: nació de la retroalimentación del
-profesor, que advirtió que durante la codificación es tentador resolver problemas de integración
-agregando validaciones al orquestador. Convertir esa advertencia en una prueba automática es lo
-que impide que el riesgo R-04 dependa de la memoria del equipo.
+FF-06 no estaba en el Entregable 1. Surgió de la retroalimentación del profesor, que advirtió que
+durante la codificación es tentador resolver problemas de integración agregando validaciones al
+orquestador. Convertirla en una prueba automática es lo que impide que el riesgo R-04 dependa de
+la memoria del equipo.
 
-## 5.2 Código Fuente de las Fitness Functions
+## 5.2 Código fuente de las fitness functions
 
 Implementadas con **TSArch** sobre **Vitest**, conforme al stack TypeScript del proyecto. Código
 completo en `tests/architecture/modularity.arch.test.ts`.
@@ -119,8 +119,8 @@ module.exports = {
 
 ### Validación de las reglas mediante control negativo
 
-**Una prueba de arquitectura que nunca ha fallado no demuestra nada.** Antes de darlas por buenas,
-se introdujeron violaciones deliberadas en el código y se verificó que las reglas las detectaran:
+Una prueba de arquitectura que nunca ha fallado no demuestra nada. Antes de darlas por buenas se
+introdujeron violaciones deliberadas en el código y se verificó que las reglas las detectaran:
 
 | Violación introducida | Regla que debía detectarla | Resultado |
 |---|---|---|
@@ -128,16 +128,16 @@ se introdujeron violaciones deliberadas en el código y se verificó que las reg
 | Un archivo de `game/` importa `economy/domain/chip-ledger.ts` | FF-01 | Detectada |
 | `interfaces/http/` importa un repositorio de `infrastructure/` | FF-05 | Detectada |
 
-**El ejercicio reveló un defecto real en la primera versión de las pruebas.** El atajo
-`inFolder(x)` de TSArch genera el patrón `.*/x/.*`, que exige una barra antes del primer segmento,
-mientras que TSArch expone **rutas relativas** del tipo `src/modules/game/...`. Las reglas FF-01 y
-FF-05 **pasaban aunque estuvieran violadas**. Se reescribieron con `matchingPattern` explícito y
-desde entonces detectan las tres violaciones.
+El ejercicio reveló un defecto en la primera versión de las pruebas. El atajo `inFolder(x)` de
+TSArch genera un patrón que exige una barra antes del primer segmento, mientras que TSArch expone
+rutas relativas del tipo `src/modules/game/...`. Por eso las reglas FF-01 y FF-05 pasaban aunque
+estuvieran violadas. Se reescribieron con `matchingPattern` explícito y desde entonces detectan
+las tres violaciones.
 
-Es el resultado más valioso de esta sección: sin el control negativo, el proyecto habría entregado
-tres reglas de gobernanza de las cuales dos no gobernaban nada.
+Sin el control negativo, el proyecto habría entregado tres reglas de gobernanza de las cuales dos
+no verificaban nada.
 
-## 5.3 Límites de Complejidad Ciclomática y Reglas de Dependencias
+## 5.3 Límites de complejidad ciclomática y reglas de dependencias
 
 La complejidad ciclomática se controla con la regla `complexity` de **ESLint**, integrada al
 pipeline (`eslint.config.js`):
@@ -153,9 +153,10 @@ rules: {
 
 El límite apunta sobre todo a `EvaluadorDeMano`, donde se concentra la lógica combinatoria y el
 riesgo R-01. Funciones como `isRun`, `isSet` e `isQuad` se mantienen por debajo del umbral
-precisamente porque cada una verifica **una sola** estructura; una única función
+precisamente porque cada una verifica una sola estructura. Una única función
 `validarCombinacion` con ramas para terna, cuarta y secuencia superaría el límite y la regla la
-rechazaría. **El límite empuja hacia el mismo diseño que pide la responsabilidad atómica.**
+rechazaría, de modo que el umbral empuja hacia el mismo diseño que pide la responsabilidad
+atómica.
 
 ### Pipeline de gobernanza
 

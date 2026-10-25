@@ -1,4 +1,4 @@
-# Entregable 2 — Sección 3: Registro Formal de Decisiones Arquitectónicas (ADRs)
+# Entregable 2. Sección 3: Registro formal de decisiones arquitectónicas (ADR)
 **Peso en la rúbrica: 15%**
 
 Las notas entre corchetes `[así]` son indicaciones para el equipo y **no van en el PDF**.

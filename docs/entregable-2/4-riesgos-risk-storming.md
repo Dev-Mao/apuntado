@@ -1,9 +1,9 @@
-# Entregable 2 — Sección 4: Análisis de Riesgo Arquitectónico y Risk Storming
+# Entregable 2. Sección 4: Análisis de riesgo arquitectónico y Risk Storming
 **Peso en la rúbrica: 20%**
 
 Las notas entre corchetes `[así]` son indicaciones para el equipo y **no van en el PDF**.
 
-## 4.1 Matriz de Riesgo 3×3
+## 4.1 Matriz de riesgo 3×3
 
 Siguiendo a Richards y Ford (2025, cap. 22), el riesgo se calcula como **impacto × probabilidad**,
 ambos en escala 1 (bajo) a 3 (alto), lo que produce puntuaciones de 1 a 9.
@@ -16,16 +16,16 @@ ambos en escala 1 (bajo) a 3 (alto), lo que produce puntuaciones de 1 a 9.
 
 | Puntuación | Clasificación | Acción requerida |
 |---|---|---|
-| 1 – 2 | Bajo (verde) | Se acepta y se documenta |
-| 3 – 4 | Medio (amarillo) | Se vigila; mitigación si el costo es bajo |
-| 6 – 9 | **Alto (rojo)** | **Exige un cambio arquitectónico concreto** |
+| 1 a 2 | Bajo (verde) | Se acepta y se documenta |
+| 3 a 4 | Medio (amarillo) | Se vigila; mitigación si el costo es bajo |
+| 6 a 9 | **Alto (rojo)** | **Exige un cambio arquitectónico concreto** |
 
-**Un matiz que conviene explicitar:** la puntuación 6 se alcanza por dos caminos distintos —impacto
-alto con probabilidad media, o impacto medio con probabilidad alta— y **no se mitigan igual**. En
+La puntuación 6 se alcanza por dos caminos distintos: impacto alto con probabilidad media,
+o impacto medio con probabilidad alta. **No se mitigan igual**. En
 el primer caso se reduce el impacto; en el segundo, la probabilidad. Esa distinción guía el plan
 de mitigación de §4.3.
 
-## 4.2 Reporte de la Sesión de Risk Storming
+## 4.2 Reporte de la sesión de Risk Storming
 
 **Participantes:** Mariana Agudelo Ospina (Arquitecta Tecnológica / Solución), Juan José Chaves
 Alvear (Arquitecto de Negocio) y Joaquín Andrés Escalante (Arquitecto de Aplicaciones y Datos).
@@ -66,24 +66,23 @@ análisis:
 
 | ID | Área / Componente evaluado | Impacto | Probabilidad | Total | Clasificación y criterio |
 |---|---|---|---|---|---|
-| R-01 | `EvaluadorDeMano` (algoritmo 4-3-3) | 3 (Alto) | 2 (Med) | **6** | **Alto** — falla combinatoria silenciosa |
-| R-02 | `PartidasEnMemoria` (estado volátil) | 3 (Alto) | 2 (Med) | **6** | **Alto** — pérdida de partidas en curso |
-| R-03 | `puntaje_acumulado` (umbral 101) | 3 (Alto) | 2 (Med) | **6** | **Alto** — inconsistencia en la acumulación |
-| R-04 | `OrquestadorDeTurnos` (erosión estructural) | 2 (Med) | 3 (Alta) | **6** | **Alto** — degradación gradual del diseño |
-| R-05 | Reglas de dominio ambiguas | 2 (Med) | 2 (Med) | 4 | Medio — retrabajo acotado |
-| R-06 | `EmisorWebSocket` (sincronización) | 2 (Med) | 2 (Med) | 4 | Medio — degrada la experiencia |
-| R-07 | `VigilanteDeTurno` (abandono de turno) | 2 (Med) | 2 (Med) | 4 | Medio — mesa bloqueada |
-| R-09 | Alcance del MVP frente al calendario | 2 (Med) | 3 (Alta) | **6** | **Alto** — riesgo de proyecto |
-| R-08 | `BitacoraAsincrona` (pérdida de entradas) | 1 (Bajo) | 2 (Med) | 2 | Bajo — degrada auditoría, no el juego |
-| R-10 | Renderizado de cartas | 1 (Bajo) | 1 (Baja) | 1 | Bajo — estilo visual |
+| R-01 | `EvaluadorDeMano` (algoritmo 4-3-3) | 3 (Alto) | 2 (Med) | **6** | **Alto**: falla combinatoria silenciosa |
+| R-02 | `PartidasEnMemoria` (estado volátil) | 3 (Alto) | 2 (Med) | **6** | **Alto**: pérdida de partidas en curso |
+| R-03 | `puntaje_acumulado` (umbral 101) | 3 (Alto) | 2 (Med) | **6** | **Alto**: inconsistencia en la acumulación |
+| R-04 | `OrquestadorDeTurnos` (erosión estructural) | 2 (Med) | 3 (Alta) | **6** | **Alto**: degradación gradual del diseño |
+| R-05 | Reglas de dominio ambiguas | 2 (Med) | 2 (Med) | 4 | Medio: retrabajo acotado |
+| R-06 | `EmisorWebSocket` (sincronización) | 2 (Med) | 2 (Med) | 4 | Medio: degrada la experiencia |
+| R-07 | `VigilanteDeTurno` (abandono de turno) | 2 (Med) | 2 (Med) | 4 | Medio: mesa bloqueada |
+| R-09 | Alcance del MVP frente al calendario | 2 (Med) | 3 (Alta) | **6** | **Alto**: riesgo de proyecto |
+| R-08 | `BitacoraAsincrona` (pérdida de entradas) | 1 (Bajo) | 2 (Med) | 2 | Bajo: degrada auditoría, no el juego |
+| R-10 | Renderizado de cartas | 1 (Bajo) | 1 (Baja) | 1 | Bajo: estilo visual |
 
-**Cinco riesgos en zona roja.** Obsérvese que llegan por caminos distintos: R-01, R-02 y R-03 por
-impacto alto con probabilidad media; R-04 y R-09 por impacto medio con probabilidad alta.
+Quedan cinco riesgos en zona roja, y llegan por caminos distintos: R-01, R-02 y R-03 por impacto
+alto con probabilidad media; R-04 y R-09 por impacto medio con probabilidad alta.
 
 ### Fase 3 · Mitigación
 
-La sesión concluyó con cambios arquitectónicos concretos sobre el diseño, no con buenas
-intenciones. Se detallan en §4.3.
+La sesión concluyó con cambios concretos sobre el diseño, detallados en §4.3.
 
 > [**Importante:** la guía pide una simulación de la sesión en equipo. Las valoraciones de arriba
 > son una propuesta razonada que ustedes deben **revisar y ajustar** antes de entregar. Las tres
@@ -91,7 +90,7 @@ intenciones. Se detallan en §4.3.
 > la sesión surgen otras, reemplácenlas. Un reporte de Risk Storming sin discrepancias es
 > sospechoso: si tres personas coinciden en todo, probablemente no analizaron por separado.]
 
-## 4.3 Plan de Mitigación de Riesgos Críticos
+## 4.3 Plan de mitigación de riesgos críticos
 
 | Riesgo | Cambio arquitectónico concreto | Efecto buscado | Riesgo residual |
 |---|---|---|---|
@@ -103,7 +102,7 @@ intenciones. Se detallan en §4.3.
 
 ### Impacto del plan sobre el diseño
 
-Tres de las cinco mitigaciones **modificaron el diseño**, que es el objetivo del ejercicio:
+Tres de las cinco mitigaciones modificaron el diseño, que es el objetivo del ejercicio:
 
 1. **R-02 introdujo la instantánea por ronda**, que no estaba contemplada en el Entregable 1.
    Matiza el trade-off T3 sin abandonarlo: la partida sigue viviendo en memoria, pero deja de ser
@@ -113,7 +112,7 @@ Tres de las cinco mitigaciones **modificaron el diseño**, que es el objetivo de
 3. **R-01 añadió la prueba de propiedad sobre la invariante de la baraja**, un tipo de prueba
    distinto de las unitarias que ya había.
 
-Tras la mitigación **ningún riesgo permanece en zona roja**: el máximo residual es 4 (amarillo).
+Tras la mitigación ningún riesgo permanece en zona roja: el máximo residual es 4, en amarillo.
 
 > [Nota de honestidad para la sustentación: los riesgos residuales se asumen, no desaparecen. En
 > particular, R-02 con residual 4 significa que **una caída del servidor sigue costando la ronda

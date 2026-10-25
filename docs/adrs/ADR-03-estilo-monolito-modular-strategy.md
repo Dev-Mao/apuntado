@@ -13,7 +13,7 @@
 
 El Entregable 1 decidió aislar las reglas de victoria mediante Strategy (ADR-02). Corresponde ahora
 elegir formalmente el **estilo arquitectónico** del sistema y demostrar cómo se incorpora una
-variante nueva —por ejemplo Continental o Póker— sin alterar el orquestador de turnos.
+variante nueva, por ejemplo Continental o Póker, sin alterar el orquestador de turnos.
 
 **Fuerzas en juego**
 
@@ -35,7 +35,7 @@ variante nueva —por ejemplo Continental o Póker— sin alterar el orquestador
 | B | Microkernel / Plug-in | Núcleo mínimo más plug-ins de reglas descubiertos y cargados en tiempo de ejecución, con registro y ciclo de vida propios |
 | C | Service-Based | Cada dominio como servicio desplegado por separado, comunicados por red |
 
-**Evaluación frente a las características motoras** (escala 1–5; el peso refleja que las tres
+**Evaluación frente a las características motoras** (escala de 1 a 5; el peso refleja que las tres
 primeras son las motoras del Entregable 1):
 
 | Criterio | Peso | A · Modular + Strategy | B · Microkernel | C · Service-Based |
@@ -61,7 +61,7 @@ tiempo de compilación:
 
 | Elemento del microkernel | Equivalente en esta arquitectura |
 |---|---|
-| Core System | `MaquinaDeEstados` + `OrquestadorDeTurnos`: el ciclo robar–descartar–evaluar, que no cambia |
+| Core System | `MaquinaDeEstados` + `OrquestadorDeTurnos`: el ciclo de robar, descartar y evaluar, que no cambia |
 | Contract | La interfaz `ReglaJuego`: `validate(declaracion) → ResultadoValidacion` |
 | Plug-in Components | `ReglaClasica`, `ReglaApuntado`, y las futuras `ReglaConComodin`, `ReglaContinental` |
 | Registry | `ResolutorDeReglas`, que asocia cada modalidad con su implementación |
@@ -72,13 +72,13 @@ modifica ninguna clase existente**: ni el orquestador, ni la máquina de estados
 datos, ni la interfaz de usuario. Lo verifica la fitness function FF-06.
 
 **Justificación.** La alternativa B obtiene mejor nota solo en extensibilidad y despliegue
-independiente, y paga por ello en viabilidad y gobernabilidad. Su ventaja real —incorporar una
-regla **sin volver a desplegar**— exige descubrimiento, carga dinámica y gestión del ciclo de vida
+independiente, y paga por ello en viabilidad y gobernabilidad. Su ventaja real, incorporar una
+regla **sin volver a desplegar**, exige descubrimiento, carga dinámica y gestión del ciclo de vida
 de plug-ins, maquinaria que se justifica cuando los plug-ins los escriben terceros o se publican
 por separado. Ninguna de esas dos condiciones se cumple aquí.
 
-> **Se adopta la forma del microkernel —núcleo estable más puntos de extensión con contrato
-> explícito— sin su infraestructura de despliegue dinámico.**
+> **Se adopta la forma del microkernel, un núcleo estable con puntos de extensión y contrato
+> explícito, pero sin su infraestructura de despliegue dinámico.**
 
 La alternativa C queda descartada por un motivo estructural, no de costo: distribuir los módulos
 rompería la decisión de mantener la partida en curso dentro de un solo proceso, que es lo que
@@ -99,8 +99,8 @@ sostiene la característica de *responsiveness*.
 - **Incorporar una regla exige volver a desplegar.** Es el precio explícito de no construir carga
   dinámica, y se acepta porque el sistema se despliega como una sola unidad.
 - **Los puntos de extensión son una apuesta sobre dónde llegará el cambio.** Una variante que no
-  encaje en `ReglaJuego`, `PoliticaDeEliminacion` ni `SistemaDeApuestas` —por ejemplo permitir
-  bajar combinaciones durante la ronda— **sí** obligará a modificar el núcleo.
+  encaje en `ReglaJuego`, `PoliticaDeEliminacion` ni `SistemaDeApuestas`, por ejemplo permitir
+  bajar combinaciones durante la ronda, **sí** obligará a modificar el núcleo.
 - **Riesgo de erosión del orquestador.** Al coordinar varios componentes, es tentador resolver
   problemas de integración agregándole validaciones. Mitigado con FF-06 (ver §4 del documento).
 - **Escala solo verticalmente.** Un único desplegable con estado en memoria no admite varias
@@ -108,7 +108,7 @@ sostiene la característica de *responsiveness*.
 
 ---
 
-## Cumplimiento (Compliance)
+## Cumplimiento
 
 | # | Verificación | Tipo |
 |---|---|---|

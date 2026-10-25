@@ -13,11 +13,11 @@
 
 Dentro del proceso conviven dos tipos de interacción muy distintos y conviene no resolverlos igual:
 
-- **El ciclo del turno** —validar una jugada, aplicarla, calcular el puntaje— es **síncrono por
+- **El ciclo del turno** (validar una jugada, aplicarla, calcular el puntaje) es **síncrono por
   naturaleza**: el jugador espera una respuesta inmediata, y si la jugada es inválida no debe
   alterarse el estado.
-- **Los efectos posteriores a un hecho del juego** —acreditar el bote, archivar el resultado,
-  registrar la bitácora de jugadas— **no bloquean al jugador** y pertenecen a otros módulos.
+- **Los efectos posteriores a un hecho del juego** (acreditar el bote, archivar el resultado,
+  registrar la bitácora de jugadas) **no bloquean al jugador** y pertenecen a otros módulos.
 
 **Fuerzas en juego**
 
@@ -53,10 +53,10 @@ entrada en `turno_jugada` a través del puerto `BitacoraDeJugadas`, **fuera del 
 turno**. Así se cumple la trazabilidad que exige el Entregable 2 sin meter una escritura a base de
 datos en la acción más frecuente del juego.
 
-**Consistencia de la bitácora, dicho sin adornos:** la bitácora es un registro de auditoría, **no
-una fuente de verdad**. Si el servidor cae puede perder las últimas entradas encoladas. El estado
-de la partida nunca se reconstruye a partir de ella; para eso está el estado en memoria y, al
-cerrar cada ronda, lo persistido en `puntaje_acumulado`.
+Sobre la consistencia de la bitácora conviene ser explícito: es un registro de auditoría y no una
+fuente de verdad. Si el servidor cae puede perder las últimas entradas encoladas. El estado de la
+partida nunca se reconstruye a partir de ella; para eso están el estado en memoria y, al cerrar
+cada ronda, lo persistido en `puntaje_acumulado`.
 
 **Comunicación con el cliente.** Hacia afuera del proceso, el servidor emite eventos por WebSocket
 con la **vista filtrada** de cada jugador. El cliente nunca recibe el estado completo.
@@ -85,7 +85,7 @@ con la **vista filtrada** de cada jugador. El cliente nunca recibe el estado com
 
 ---
 
-## Cumplimiento (Compliance)
+## Cumplimiento
 
 | # | Verificación | Tipo |
 |---|---|---|

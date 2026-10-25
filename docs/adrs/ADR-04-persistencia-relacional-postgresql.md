@@ -12,7 +12,7 @@
 ## Contexto
 
 El sistema debe registrar partidas, manos, la trazabilidad de robos y descartes, y el **marcador
-acumulativo hasta 101 puntos**. La modalidad clásica es atómica —una ronda se resuelve sola—,
+acumulativo hasta 101 puntos**. La modalidad clásica es atómica, porque una ronda se resuelve sola,
 mientras que el apuntado es **acumulativo multironda**: el estado relevante no es una partida sino
 la suma de sus rondas.
 
@@ -91,7 +91,7 @@ partida y solo se lee; no participa en ninguna consulta agregada.
 
 ---
 
-## Cumplimiento (Compliance)
+## Cumplimiento
 
 | # | Verificación | Tipo |
 |---|---|---|
@@ -106,5 +106,5 @@ partida y solo se lee; no participa en ninguna consulta agregada.
 
 - **Autor:** Joaquín Andrés Escalante (Arquitecto de Aplicaciones y Datos)
 - **Revisores:** Mariana Agudelo Ospina, Juan José Chaves Alvear
-- **Referencias:** Richards y Ford (2025), caps. 10, 11, 14 y 26 *Architectural Intersections —
+- **Referencias:** Richards y Ford (2025), caps. 10, 11, 14 y 26 *Architectural Intersections:
   Architecture and Data Topologies*.
