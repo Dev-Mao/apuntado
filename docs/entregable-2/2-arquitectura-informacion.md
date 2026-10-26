@@ -149,22 +149,14 @@ nivel de aislamiento `READ COMMITTED`:
 ```sql
 BEGIN;
   UPDATE partida SET version = version + 1
-   WHERE id = :partida AND version = :version_leida;   -- bloqueo optimista
-  -- si afecta 0 filas: otro proceso liquidó primero -> ROLLBACK y reintento
+   WHERE id = :partida AND version = :version_leida;  -- bloqueo optimista
+  -- si afecta 0 filas, otro proceso liquidó primero: ROLLBACK y reintento
 
-  UPDATE ronda SET cerrada_en = now(), tipo_cierre = :tipo,
-                   ganador_participacion_id = :ganador
-   WHERE id = :ronda AND cerrada_en IS NULL;
+  INSERT INTO puntaje_acumulado (...) VALUES ...;     -- una fila por participante
+  -- UNIQUE (participacion_id, ronda_id) impide liquidar dos veces la misma ronda
 
-  INSERT INTO puntaje_acumulado (id, participacion_id, ronda_id,
-                                 puntos_ronda, puntos_acumulados)
-  VALUES ...;                                           -- una fila por participante
-
-  UPDATE participacion SET eliminado_en_ronda = :numero
-   WHERE id = ANY(:eliminados);
-
-  UPDATE partida SET estado = 'FINALIZADA', finalizada_en = now(), ganador_id = :ganador
-   WHERE id = :partida AND :queda_un_jugador;
+  -- en la misma transacción: cerrar la ronda, marcar eliminados
+  -- y, si queda un solo jugador, finalizar la partida
 COMMIT;
 ```
 
