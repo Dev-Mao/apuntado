@@ -6,13 +6,22 @@ Las notas entre corchetes `[así]` son indicaciones para el equipo y **no van en
 ## 4.1 Matriz de riesgo 3×3
 
 Siguiendo a Richards y Ford (2025, cap. 22), el riesgo se calcula como **impacto × probabilidad**,
-ambos en escala 1 (bajo) a 3 (alto), lo que produce puntuaciones de 1 a 9.
+ambos en escala 1 (bajo) a 3 (alto), lo que produce puntuaciones de 1 a 9. La matriz siguiente
+ubica en su celda cada uno de los diez riesgos identificados en la sesión de Risk Storming; su
+identificación y valoración se detallan en §4.2.
 
 | | **Probabilidad 1 (baja)** | **Probabilidad 2 (media)** | **Probabilidad 3 (alta)** |
 |---|---|---|---|
-| **Impacto 3 (alto)** | 3 · Medio | **6 · Alto** | **9 · Alto** |
-| **Impacto 2 (medio)** | 2 · Bajo | 4 · Medio | **6 · Alto** |
-| **Impacto 1 (bajo)** | 1 · Bajo | 2 · Bajo | 3 · Medio |
+| **Impacto 3 (alto)** | 3 · Medio<br>— | **6 · Alto**<br>R-01, R-02, R-03 | **9 · Alto**<br>— |
+| **Impacto 2 (medio)** | 2 · Bajo<br>— | 4 · Medio<br>R-05, R-06, R-07 | **6 · Alto**<br>R-04, R-09 |
+| **Impacto 1 (bajo)** | 1 · Bajo<br>R-10 | 2 · Bajo<br>R-08 | 3 · Medio<br>— |
+
+Leyenda: R-01 evaluador de mano · R-02 estado en memoria · R-03 acumulación a 101 ·
+R-04 erosión del orquestador · R-05 reglas ambiguas · R-06 sincronización de clientes ·
+R-07 abandono de turno · R-08 bitácora incompleta · R-09 alcance del MVP · R-10 renderizado de cartas.
+
+Cinco riesgos caen en zona roja y ninguno alcanza la celda de 9, lo que indica que las
+valoraciones no se inflaron para dar apariencia de rigor.
 
 | Puntuación | Clasificación | Acción requerida |
 |---|---|---|
