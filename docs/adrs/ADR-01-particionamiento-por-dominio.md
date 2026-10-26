@@ -4,7 +4,7 @@
 |---|---|
 | **Estado** | Accepted |
 | **Fecha** | 21 de septiembre de 2026 |
-| **Decisores** | [Integrantes del equipo] |
+| **Decisores** | Mariana Agudelo Ospina · Juan José Chaves Alvear · Joaquín Andrés Escalante |
 | **Relacionado con** | ADR-02 |
 
 ---
@@ -134,7 +134,7 @@ dominios debe mantenerse en **cero** (§4.5).
 
 ## Notas
 
-- **Autor:** [Arquitecto Tecnológico / Solución]
-- **Revisores:** [Resto de integrantes]
+- **Autor:** Mariana Agudelo Ospina (Arquitecta Tecnológica / Solución)
+- **Revisores:** Juan José Chaves Alvear, Joaquín Andrés Escalante
 - **Fecha de aprobación:** 21 de septiembre de 2026
 - **Referencias:** Richards y Ford (2025), cap. 9 *Architecture Styles — Top-Level Partitioning*.

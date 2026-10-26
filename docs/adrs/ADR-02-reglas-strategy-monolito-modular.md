@@ -4,7 +4,7 @@
 |---|---|
 | **Estado** | Proposed |
 | **Fecha** | 21 de septiembre de 2026 |
-| **Decisores** | [Integrantes del equipo] |
+| **Decisores** | Mariana Agudelo Ospina · Juan José Chaves Alvear · Joaquín Andrés Escalante |
 | **Relacionado con** | ADR-01 |
 
 ---
@@ -127,8 +127,8 @@ decisión cumple lo que promete.
 
 ## Notas
 
-- **Autor:** [Arquitecto de Aplicaciones y Datos]
-- **Revisores:** [Resto de integrantes]
+- **Autor:** Joaquín Andrés Escalante (Arquitecto de Aplicaciones y Datos)
+- **Revisores:** Mariana Agudelo Ospina, Juan José Chaves Alvear
 - **Fecha de aprobación:** pendiente de aprobación por el equipo
 - **Referencias:** Richards y Ford (2025), cap. 13 *Microkernel Architecture Style*; Gamma et al.,
   patrón *Strategy*.
