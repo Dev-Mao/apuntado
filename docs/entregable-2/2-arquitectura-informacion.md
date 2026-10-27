@@ -1,8 +1,6 @@
 # Entregable 2. Sección 2: Arquitectura de información y topología de datos
 **Peso en la rúbrica: 25%**
 
-Las notas entre corchetes `[así]` son indicaciones para el equipo y **no van en el PDF**.
-
 ## 2.1 Justificación de la topología de base de datos
 
 Se adopta **PostgreSQL con topología monolítica centralizada**: una sola base de datos para los
@@ -105,9 +103,6 @@ Hay dos atributos que deliberadamente no existen:
   `saldo_jugador`). Un saldo almacenado puede quedar inconsistente con sus movimientos.
 - No hay columna `puntos` en `carta`: depende del valor, no de la carta, y almacenarla rompería la 3FN.
 
-> [El esquema ejecutable completo, con todas las restricciones, índices y vistas, está en
-> `models/er/schema.sql`. Si falta espacio en el PDF, basta con referenciarlo.]
-
 ## 2.3 Diagrama UML de clases de entidad y mapeo
 
 {{IMG:clases-persistencia}}
@@ -185,7 +180,3 @@ Entre el commit del cierre y la acreditación del bote queda una ventana de cons
 Se acepta porque los movimientos de fichas son reconstruibles a partir del resultado persistido de
 la partida, que en ese punto ya está confirmado.
 
-> [Nota para la sustentación: la pregunta previsible es «¿y si el servidor cae justo después del
-> COMMIT y antes de acreditar el bote?». La respuesta es que el resultado ya está persistido y la
-> acreditación puede reproducirse desde él; por eso el libro de fichas es un registro derivado y
-> append-only, y no un saldo que se sobrescribe.]

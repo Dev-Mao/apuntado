@@ -11,7 +11,7 @@
 
 ## Contexto
 
-El sistema debe organizarse en su nivel superior —el primer corte de su estructura— antes de
+El sistema debe organizarse en su nivel superior (el primer corte de su estructura) antes de
 detallar componentes. Richards y Ford (2025, cap. 9) plantean dos formas de hacerlo:
 **particionamiento técnico**, que agrupa el código por su función técnica (presentación, lógica,
 persistencia), y **particionamiento por dominio**, que lo agrupa por área de negocio.
@@ -20,7 +20,7 @@ persistencia), y **particionamiento por dominio**, que lo agrupa por área de ne
 
 1. **El cambio llega por las reglas.** El driver principal es *Configurability / Extensibility*
    (§3.2): el caso de estudio exige soportar modalidades alternativas y analizar la variabilidad
-   del motor. Casi todo cambio previsible —comodín, as alto, reingreso, penalización— es un cambio
+   del motor. Casi todo cambio previsible (comodín, as alto, reingreso, penalización) es un cambio
    de reglas de juego.
 2. **El sistema tiene cuatro áreas de negocio con ritmos de cambio muy distintos.** *Juego* cambia
    con cada variante; *Identidad* casi nunca; *Economía* e *Historial*, con poca frecuencia.
@@ -38,7 +38,7 @@ persistencia), y **particionamiento por dominio**, que lo agrupa por área de ne
 | B | **Particionamiento por dominio** | Módulos *Juego*, *Identidad*, *Economía* e *Historial* en el primer nivel, con sus capas técnicas dentro |
 | C | Dominio distribuido en servicios | Cada dominio como un servicio desplegado de forma independiente |
 
-**Impacto de un mismo cambio en cada alternativa** — *"habilitar el comodín"*:
+**Impacto de un mismo cambio en cada alternativa**, tomando como ejemplo *"habilitar el comodín"*:
 
 | Alternativa | Qué se modifica |
 |---|---|
@@ -51,7 +51,7 @@ persistencia), y **particionamiento por dominio**, que lo agrupa por área de ne
 ## Decisión
 
 **Se adopta particionamiento por dominio (alternativa B).** El primer nivel de la estructura está
-compuesto por cuatro módulos —*Juego*, *Identidad*, *Economía* e *Historial*— dentro de un único
+compuesto por cuatro módulos (*Juego*, *Identidad*, *Economía* e *Historial*) dentro de un único
 desplegable. Las capas técnicas existen, pero **dentro** de cada módulo.
 
 La comunicación entre módulos se rige por cuatro reglas:
@@ -69,8 +69,8 @@ La comunicación entre módulos se rige por cuatro reglas:
 si las reglas son el vector de cambio y las reglas pertenecen a un dominio, entonces un cambio de
 reglas debe quedar contenido en un solo módulo. La alternativa A obliga a que cada variante nueva
 atraviese la estructura completa, que es exactamente el costo que el driver de extensibilidad
-busca evitar. La alternativa C resuelve el aislamiento, pero introduce distribución —red entre
-módulos, despliegues coordinados, estado repartido— sin ninguna necesidad de escala o de equipos
+busca evitar. La alternativa C resuelve el aislamiento, pero introduce distribución (red entre
+módulos, despliegues coordinados, estado repartido) sin ninguna necesidad de escala o de equipos
 independientes que la justifique; además rompería la decisión de mantener la partida en curso
 dentro de un solo proceso (§3.3, T3).
 
@@ -98,13 +98,13 @@ entrelazada con todas las demás.
 - **Fronteras discutibles:** algunas responsabilidades admiten más de una ubicación. Por ejemplo,
   verificar el saldo al ingresar a una sala involucra a *Juego* y a *Economía*; se resolvió con la
   interfaz invertida, pero exige criterio en cada caso nuevo.
-- **Los aspectos transversales** —autenticación de conexiones, registro de eventos del sistema—
+- **Los aspectos transversales** (autenticación de conexiones, registro de eventos del sistema)
   no pertenecen a ningún dominio y deben manejarse con cuidado para que el espacio compartido no
   se convierta en un depósito de lógica.
 
 ---
 
-## Cumplimiento (Compliance)
+## Cumplimiento
 
 **Fitness functions automatizadas**, ejecutadas en la integración continua; cualquier violación
 detiene la construcción:
@@ -137,4 +137,4 @@ dominios debe mantenerse en **cero** (§4.5).
 - **Autor:** Mariana Agudelo Ospina (Arquitecta Tecnológica / Solución)
 - **Revisores:** Juan José Chaves Alvear, Joaquín Andrés Escalante
 - **Fecha de aprobación:** 21 de septiembre de 2026
-- **Referencias:** Richards y Ford (2025), cap. 9 *Architecture Styles — Top-Level Partitioning*.
+- **Referencias:** Richards y Ford (2025), cap. 9 *Architecture Styles: Top-Level Partitioning*.

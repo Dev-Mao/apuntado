@@ -1,8 +1,6 @@
 # Entregable 2. Sección 4: Análisis de riesgo arquitectónico y Risk Storming
 **Peso en la rúbrica: 20%**
 
-Las notas entre corchetes `[así]` son indicaciones para el equipo y **no van en el PDF**.
-
 ## 4.1 Matriz de riesgo 3×3
 
 Siguiendo a Richards y Ford (2025, cap. 22), el riesgo se calcula como **impacto × probabilidad**,
@@ -93,12 +91,6 @@ alto con probabilidad media; R-04 y R-09 por impacto medio con probabilidad alta
 
 La sesión concluyó con cambios concretos sobre el diseño, detallados en §4.3.
 
-> [**Importante:** la guía pide una simulación de la sesión en equipo. Las valoraciones de arriba
-> son una propuesta razonada que ustedes deben **revisar y ajustar** antes de entregar. Las tres
-> discrepancias documentadas son las que con más probabilidad aparecerían de verdad; si al correr
-> la sesión surgen otras, reemplácenlas. Un reporte de Risk Storming sin discrepancias es
-> sospechoso: si tres personas coinciden en todo, probablemente no analizaron por separado.]
-
 ## 4.3 Plan de mitigación de riesgos críticos
 
 | Riesgo | Cambio arquitectónico concreto | Efecto buscado | Riesgo residual |
@@ -123,6 +115,3 @@ Tres de las cinco mitigaciones modificaron el diseño, que es el objetivo del ej
 
 Tras la mitigación ningún riesgo permanece en zona roja: el máximo residual es 4, en amarillo.
 
-> [Nota de honestidad para la sustentación: los riesgos residuales se asumen, no desaparecen. En
-> particular, R-02 con residual 4 significa que **una caída del servidor sigue costando la ronda
-> en curso**. Esa es la frontera consciente de la V-0.0.0.0.]

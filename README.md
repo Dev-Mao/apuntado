@@ -45,11 +45,17 @@ src/modules/
 ```bash
 npm install
 npm test              # dominio + arquitectura
+npm run test:domain   # solo pruebas del dominio
 npm run test:arch     # solo fitness functions
+npm run typecheck     # TypeScript estricto
 npm run lint          # incluye el límite de complejidad ciclomática (CC ≤ 10)
 npm run arch:deps     # reglas de dependencia (dependency-cruiser)
-npm run gobernanza    # las tres anteriores: lo que corre el pipeline
+npm run verificar     # todo lo anterior: exactamente lo que corre el pipeline
 ```
+
+El flujo `.github/workflows/gobernanza.yml` ejecuta esas mismas etapas en cada subida a `main` y en
+cada solicitud de integración, y marca la construcción en rojo si alguna regla de arquitectura se
+rompe.
 
 ---
 

@@ -1,8 +1,6 @@
 # Entregable 2. Sección 3: Registro formal de decisiones arquitectónicas (ADR)
 **Peso en la rúbrica: 15%**
 
-Las notas entre corchetes `[así]` son indicaciones para el equipo y **no van en el PDF**.
-
 Las decisiones siguen el formato de Nygard ampliado por Richards y Ford (2025, cap. 21). Los tres
 ADR de esta fase se apoyan en los dos del Entregable 1 y operan en niveles distintos:
 
@@ -30,7 +28,3 @@ completos están en `docs/adrs/` del repositorio y se adjuntan a la entrega.
 
 `[Insertar aquí, textualmente, el contenido de docs/adrs/ADR-05-sincronizacion-llamadas-directas-y-eventos.md]`
 
-> [Los archivos de `docs/adrs/` son la fuente única: se adjuntan y se copian tal cual al PDF. Si
-> cambian algo, cámbienlo allá. **No recorten las consecuencias negativas ni el cumplimiento**: la
-> rúbrica los nombra explícitamente, y un ADR que solo enumera ventajas de su propia decisión no
-> es un ADR.]

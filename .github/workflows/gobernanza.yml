@@ -1,0 +1,46 @@
+name: Gobernanza arquitectónica
+
+# Las fitness functions corren en cada subida y en cada solicitud de integración.
+# Si alguna regla falla, la construcción se marca en rojo y no debería integrarse.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: gobernanza-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    name: Pruebas y reglas de arquitectura
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Obtener el código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Tipos (TypeScript estricto)
+        run: npm run typecheck
+
+      - name: Complejidad ciclomática y estilo (FF-08)
+        run: npm run lint
+
+      - name: Reglas de dependencia (dependency-cruiser, FF-01 a FF-05 y FF-07)
+        run: npm run arch:deps
+
+      - name: Fitness functions (TSArch, FF-01 a FF-06)
+        run: npm run test:arch
+
+      - name: Pruebas del dominio
+        run: npm run test:domain

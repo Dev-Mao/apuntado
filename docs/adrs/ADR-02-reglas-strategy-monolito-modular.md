@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |---|---|
-| **Estado** | Proposed |
+| **Estado** | Accepted |
 | **Fecha** | 21 de septiembre de 2026 |
 | **Decisores** | Mariana Agudelo Ospina · Juan José Chaves Alvear · Joaquín Andrés Escalante |
 | **Relacionado con** | ADR-01 |
@@ -11,9 +11,9 @@
 
 ## Contexto
 
-El sistema debe soportar dos modalidades de cierre con condiciones de victoria distintas —la
+El sistema debe soportar dos modalidades de cierre con condiciones de victoria distintas: la
 **clásica** (una cuarta, dos ternas y un descarte) y el **apuntado** (tres ternas y sobrante menor
-a cinco puntos)— y el caso de estudio pide analizar la variabilidad que debe soportar el motor de
+a cinco puntos). El caso de estudio pide analizar la variabilidad que debe soportar el motor de
 reglas. El análisis de dominio identificó además cuatro variaciones previsibles: **comodín**,
 **as alto**, **reingreso de eliminados** y **penalización aumentada por apuntado**.
 
@@ -61,7 +61,7 @@ extensión** definidos por interfaces:
 | `SistemaDeApuestas` | ¿cómo se reparten las fichas? | El inicio y el fin de la partida | Apuesta fija con bote al ganador | Apuestas variables |
 
 El `ResolutorDeReglas` selecciona las implementaciones según la `ConfiguracionDeReglas` de cada
-partida. El núcleo —la máquina de estados que coordina el `OrquestadorDeTurnos`— **conoce
+partida. El núcleo (la máquina de estados que coordina el `OrquestadorDeTurnos`) **conoce
 únicamente las interfaces**.
 
 **Justificación.** La alternativa A es la más simple con dos reglas, pero el caso de estudio no
@@ -71,7 +71,7 @@ multiplicaría los caminos que hay que probar, deteriorando a la vez los dos pri
 La alternativa C es la que la guía propone evaluar explícitamente, y el argumento para descartarla
 es preciso:
 
-> **Se adopta la forma del microkernel —un núcleo estable más puntos de extensión— sin su
+> **Se adopta la forma del microkernel, un núcleo estable con puntos de extensión, pero sin su
 > infraestructura de despliegue dinámico.** Un microkernel completo se justifica cuando los
 > plug-ins los desarrollan terceros, se despliegan por separado o deben incorporarse sin detener
 > el sistema. Ninguna de esas condiciones se cumple: las reglas las escribe el mismo equipo y se
@@ -91,7 +91,7 @@ propias reglas. Para un conjunto de variaciones conocido y acotado, es sobreinge
 - **Cada regla se prueba de forma aislada**, sin montar la partida completa.
 - **Las reglas son configurables por partida**, no globales: dos mesas pueden jugar con reglas
   distintas al mismo tiempo.
-- Las reglas reciben solo lo que necesitan —la declaración y la mano—, no la partida entera, lo que
+- Las reglas reciben solo lo que necesitan (la declaración y la mano), no la partida entera, lo que
   refuerza la Ley de Deméter (§4.5).
 - Si en el futuro aparecieran reglas de terceros, la migración a un microkernel completo parte de
   interfaces ya definidas.
@@ -100,7 +100,7 @@ propias reglas. Para un conjunto de variaciones conocido y acotado, es sobreinge
 - **Más indirección que un condicional.** Con solo dos modalidades, el diseño resulta más elaborado
   de lo estrictamente necesario.
 - **Los puntos de extensión son una apuesta sobre dónde llegará el cambio.** Una regla que no
-  encaje en ninguno de los tres —por ejemplo, permitir bajar combinaciones durante la ronda— **sí**
+  encaje en ninguno de los tres, por ejemplo permitir bajar combinaciones durante la ronda, **sí**
   obligará a modificar el núcleo. El diseño no promete extensibilidad universal.
 - **Incorporar una regla exige volver a desplegar.** No hay incorporación en caliente; se acepta
   porque el sistema no la necesita.
@@ -110,17 +110,17 @@ propias reglas. Para un conjunto de variaciones conocido y acotado, es sobreinge
 
 ---
 
-## Cumplimiento (Compliance)
+## Cumplimiento
 
 | # | Verificación | Tipo |
 |---|---|---|
-| FF-05 | **Pruebas de contrato compartidas:** toda implementación de `ReglaJuego` debe superar una misma batería de pruebas —una declaración inválida nunca altera el estado y siempre informa su motivo— | Automatizada |
+| FF-05 | **Pruebas de contrato compartidas:** toda implementación de `ReglaJuego` debe superar una misma batería de pruebas: una declaración inválida nunca altera el estado y siempre informa su motivo | Automatizada |
 | FF-06 | **Aislamiento del núcleo:** un cambio que agregue una regla en la subárea *Reglas* no puede modificar archivos de la máquina de estados. Se verifica sobre el conjunto de archivos modificados en cada solicitud de integración | Automatizada |
 | FF-07 | **Mínimo conocimiento:** ninguna implementación de regla importa `Partida` ni el `OrquestadorDeTurnos` | Automatizada |
 | FF-08 | **Costo de extensión:** al incorporar cada regla nueva se registra el tiempo empleado y el número de clases modificadas, con la meta de ≤ 4 horas, 1 clase nueva y 0 modificadas (§3.1) | Manual, métrica de seguimiento |
 
 FF-08 convierte el escenario de modificabilidad del driver número uno en una medición real: la
-primera variación que se implemente —probablemente el comodín— servirá como prueba de que la
+primera variación que se implemente, probablemente el comodín, servirá como prueba de que la
 decisión cumple lo que promete.
 
 ---
@@ -129,6 +129,6 @@ decisión cumple lo que promete.
 
 - **Autor:** Joaquín Andrés Escalante (Arquitecto de Aplicaciones y Datos)
 - **Revisores:** Mariana Agudelo Ospina, Juan José Chaves Alvear
-- **Fecha de aprobación:** pendiente de aprobación por el equipo
+- **Fecha de aprobación:** 27 de octubre de 2026
 - **Referencias:** Richards y Ford (2025), cap. 13 *Microkernel Architecture Style*; Gamma et al.,
   patrón *Strategy*.

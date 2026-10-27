@@ -1,8 +1,6 @@
 # Entregable 2. Sección 5: Gobernanza y funciones de idoneidad
 **Peso en la rúbrica: 15%**
 
-Las notas entre corchetes `[así]` son indicaciones para el equipo y **no van en el PDF**.
-
 ## 5.1 Reglas de gobernanza estructural y modularidad
 
 Las decisiones de los ADR no se sostienen con disciplina, sino con pruebas que fallan la
@@ -161,14 +159,22 @@ atómica.
 ### Pipeline de gobernanza
 
 ```bash
-npm run gobernanza   # = lint + arch:deps + test:arch
+npm run verificar   # = typecheck + lint + arch:deps + test:arch + test:domain
 ```
 
 | Etapa | Qué verifica | Falla si |
 |---|---|---|
+| `npm run typecheck` | Tipos de TypeScript en modo estricto | El código no compila |
 | `npm run lint` | FF-08, profundidad y tamaño de funciones | Alguna función supera CC = 10 |
 | `npm run arch:deps` | FF-01 a FF-05 y FF-07 sobre el grafo completo | Hay una dependencia prohibida o un ciclo |
 | `npm run test:arch` | FF-01 a FF-06 como pruebas | Alguna regla encuentra violaciones |
+| `npm run test:domain` | Pruebas unitarias del dominio | Alguna prueba falla |
+
+Estas cinco etapas se ejecutan de forma automática en cada subida y en cada solicitud de
+integración mediante un flujo de GitHub Actions (`.github/workflows/gobernanza.yml`), de modo que
+una violación de arquitectura marca la construcción en rojo desde la primera integración. Se
+comprobó que el flujo falla ante una violación deliberada: al importar `economy` desde `game`,
+`dependency-cruiser` reporta el error y el comando termina con código de salida 1.
 
 ### Estado actual de la verificación
 
@@ -178,6 +184,3 @@ typecheck limpio      ESLint limpio (CC ≤ 10)
 dependency-cruiser    0 errores · 17 módulos · 21 dependencias analizadas
 ```
 
-> [Las tres advertencias que reporta dependency-cruiser corresponden a archivos del esqueleto que
-> todavía nadie importa (`random.ts`, `player.ts`, `game-result.ts`). Están como *warning* y no
-> como *error* a propósito: señalan código aún no conectado, no una violación de arquitectura.]

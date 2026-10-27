@@ -1,8 +1,6 @@
 # Entregable 2. Sección 1: Selección y justificación del estilo arquitectónico
 **Peso en la rúbrica: 20%**
 
-Las notas entre corchetes `[así]` son indicaciones para el equipo y **no van en el PDF**.
-
 ## 1.1 Evaluación comparativa de estilos candidatos
 
 Se contrastan tres estilos frente a las **características motoras** identificadas en el Entregable 1
@@ -128,4 +126,3 @@ El diagrama muestra interfaces provistas (*lollipop*) y requeridas (*socket*). C
 4. **La bitácora está fuera del camino crítico.** `BitacoraAsincrona` encola y escribe por su
    cuenta; el turno no espera a la base de datos.
 
-> [Archivos editables: `models/uml/componentes-detallado.puml` y `.drawio`.]
