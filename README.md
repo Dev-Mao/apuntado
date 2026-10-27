@@ -47,6 +47,7 @@ npm install
 npm test              # dominio + arquitectura
 npm run test:domain   # solo pruebas del dominio
 npm run test:arch     # solo fitness functions
+npm run test:integration  # esquema SQL sobre PostgreSQL (PGlite, sin Docker)
 npm run typecheck     # TypeScript estricto
 npm run lint          # incluye el límite de complejidad ciclomática (CC ≤ 10)
 npm run arch:deps     # reglas de dependencia (dependency-cruiser)

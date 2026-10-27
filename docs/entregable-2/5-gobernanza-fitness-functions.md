@@ -159,7 +159,7 @@ atómica.
 ### Pipeline de gobernanza
 
 ```bash
-npm run verificar   # = typecheck + lint + arch:deps + test:arch + test:domain
+npm run verificar   # = typecheck + lint + arch:deps + test:arch + test:domain + test:integration
 ```
 
 | Etapa | Qué verifica | Falla si |
@@ -169,8 +169,9 @@ npm run verificar   # = typecheck + lint + arch:deps + test:arch + test:domain
 | `npm run arch:deps` | FF-01 a FF-05 y FF-07 sobre el grafo completo | Hay una dependencia prohibida o un ciclo |
 | `npm run test:arch` | FF-01 a FF-06 como pruebas | Alguna regla encuentra violaciones |
 | `npm run test:domain` | Pruebas unitarias del dominio | Alguna prueba falla |
+| `npm run test:integration` | El esquema SQL aplica sobre PostgreSQL y el motor rechaza los casos inválidos (C-03 y C-04 del ADR-04) | Una restricción deja de cumplirse |
 
-Estas cinco etapas se ejecutan de forma automática en cada subida y en cada solicitud de
+Estas seis etapas se ejecutan de forma automática en cada subida y en cada solicitud de
 integración mediante un flujo de GitHub Actions (`.github/workflows/gobernanza.yml`), de modo que
 una violación de arquitectura marca la construcción en rojo desde la primera integración. Se
 comprobó que el flujo falla ante una violación deliberada: al importar `economy` desde `game`,
