@@ -10,9 +10,9 @@ identificación y valoración se detallan en §4.2.
 
 | | **Probabilidad 1 (baja)** | **Probabilidad 2 (media)** | **Probabilidad 3 (alta)** |
 |---|---|---|---|
-| **Impacto 3 (alto)** | 3 · Medio<br>— | **6 · Alto**<br>R-01, R-02, R-03 | **9 · Alto**<br>— |
-| **Impacto 2 (medio)** | 2 · Bajo<br>— | 4 · Medio<br>R-05, R-06, R-07 | **6 · Alto**<br>R-04, R-09 |
-| **Impacto 1 (bajo)** | 1 · Bajo<br>R-10 | 2 · Bajo<br>R-08 | 3 · Medio<br>— |
+| **Impacto 3 (alto)** | 3 · Medio<br>sin riesgos | **6 · Alto**<br>R-01, R-02, R-03 | **9 · Alto**<br>sin riesgos |
+| **Impacto 2 (medio)** | 2 · Bajo<br>sin riesgos | 4 · Medio<br>R-05, R-06, R-07 | **6 · Alto**<br>R-04, R-09 |
+| **Impacto 1 (bajo)** | 1 · Bajo<br>R-10 | 2 · Bajo<br>R-08 | 3 · Medio<br>sin riesgos |
 
 Leyenda: R-01 evaluador de mano · R-02 estado en memoria · R-03 acumulación a 101 ·
 R-04 erosión del orquestador · R-05 reglas ambiguas · R-06 sincronización de clientes ·
