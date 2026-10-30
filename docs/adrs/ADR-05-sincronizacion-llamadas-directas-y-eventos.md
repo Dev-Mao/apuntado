@@ -52,6 +52,8 @@ regla clara de cuándo aplicarlo:
 entrada en `turno_jugada` a través del puerto `BitacoraDeJugadas`, **fuera del camino crítico del
 turno**. Así se cumple la trazabilidad que exige el Entregable 2 sin meter una escritura a base de
 datos en la acción más frecuente del juego.
+En esta fase la bitácora está definida como un puerto (`BitacoraDeJugadas`) con su contrato; la escritura
+asíncrona sobre PostgreSQL se construye en el MVP.
 
 Sobre la consistencia de la bitácora conviene ser explícito: es un registro de auditoría y no una
 fuente de verdad. Si el servidor cae puede perder las últimas entradas encoladas. El estado de la
@@ -91,8 +93,8 @@ con la **vista filtrada** de cada jugador. El cliente nunca recibe el estado com
 |---|---|---|
 | FF-01 | El módulo Juego no importa nada de Economía, Identidad ni Historial | Automatizada · TSArch + dependency-cruiser |
 | FF-04 | Sin dependencias cíclicas entre módulos | Automatizada · TSArch + dependency-cruiser |
-| C-06 | Una declaración de cierre inválida no publica ningún evento ni escribe en la bitácora | Automatizada · prueba del caso de uso con dobles |
-| C-07 | El tiempo de respuesta de `DeclararCierre` excluye la escritura de la bitácora | Automatizada · prueba de rendimiento con bitácora instrumentada |
+| C-06 | Una declaración de cierre inválida no publica ningún evento ni escribe en la bitácora | Automatizada · prueba del caso de uso con dobles (`declare-closure.test.ts`) |
+| C-07 | El tiempo de respuesta de `DeclararCierre` excluye la escritura de la bitácora | Planificada: se verificará cuando la escritura asíncrona de la bitácora se construya en el MVP |
 
 ---
 

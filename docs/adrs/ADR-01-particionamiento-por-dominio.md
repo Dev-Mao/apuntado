@@ -111,12 +111,14 @@ detiene la construcción:
 
 | # | Verificación | Tipo |
 |---|---|---|
-| FF-01 | Ningún módulo importa elementos internos de otro; solo su interfaz pública | Automatizada |
-| FF-02 | El módulo *Juego* no importa nada de *Identidad*, *Economía* ni *Historial* | Automatizada |
-| FF-03 | Dentro de cada módulo, la capa de dominio no importa las capas de infraestructura ni de interfaces | Automatizada |
-| FF-04 | El espacio compartido no contiene lógica de negocio | Manual, en revisión de código |
+| FF-01 | El módulo *Juego* no importa nada de *Identidad*, *Economía* ni *Historial* | Automatizada · TSArch + dependency-cruiser |
+| FF-02 | Dentro de cada módulo, la capa de dominio no importa las capas de infraestructura ni de interfaces | Automatizada · TSArch + dependency-cruiser |
+| FF-04 | No existen dependencias cíclicas en el código fuente | Automatizada · TSArch + dependency-cruiser |
+| FF-05 | La capa de interfaces no alcanza la infraestructura ni las entidades de dominio | Automatizada · TSArch + dependency-cruiser |
+| FF-07 | El espacio compartido no importa nada de los módulos de negocio | Automatizada · dependency-cruiser |
+| C-10 | Ningún módulo importa elementos internos de otro; solo su interfaz pública | Planificada: hoy se verifica únicamente para *Juego* (FF-01) |
 
-Ejemplo de regla para FF-02, expresada en la herramienta de análisis de dependencias del proyecto:
+Ejemplo de regla para FF-01, expresada en la herramienta de análisis de dependencias del proyecto:
 
 ```json
 {

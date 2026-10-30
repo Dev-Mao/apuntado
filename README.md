@@ -100,6 +100,6 @@ probados (`EvaluadorDeMano` y `CalculadorDePuntaje`), que es por donde recomiend
 retroalimentación del Entregable 1.
 
 ```
-19 pruebas  ·  13 de dominio + 6 de arquitectura
+44 pruebas  ·  28 de dominio + 6 de arquitectura + 10 de esquema
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```

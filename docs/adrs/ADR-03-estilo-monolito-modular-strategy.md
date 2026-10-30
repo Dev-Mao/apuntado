@@ -118,7 +118,8 @@ sostiene la característica de *responsiveness*.
 | C-01 | Toda implementación de `ReglaJuego` supera la misma batería de pruebas de contrato | Automatizada · Vitest |
 | C-02 | Al incorporar una regla se registra el tiempo y las clases modificadas; meta: ≤ 4 h, 1 clase nueva, 0 modificadas | Manual · métrica de seguimiento |
 
-El código de FF-03, FF-06 y FF-08 está en `tests/architecture/` y `eslint.config.js`.
+El código de FF-03, FF-06 y FF-08 está en `tests/architecture/` y `eslint.config.js`, y el de C-01 en
+`src/modules/game/domain/rules/rules.contract.test.ts`.
 
 ---
 

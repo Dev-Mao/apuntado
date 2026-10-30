@@ -114,12 +114,13 @@ propias reglas. Para un conjunto de variaciones conocido y acotado, es sobreinge
 
 | # | Verificación | Tipo |
 |---|---|---|
-| FF-05 | **Pruebas de contrato compartidas:** toda implementación de `ReglaJuego` debe superar una misma batería de pruebas: una declaración inválida nunca altera el estado y siempre informa su motivo | Automatizada |
-| FF-06 | **Aislamiento del núcleo:** un cambio que agregue una regla en la subárea *Reglas* no puede modificar archivos de la máquina de estados. Se verifica sobre el conjunto de archivos modificados en cada solicitud de integración | Automatizada |
-| FF-07 | **Mínimo conocimiento:** ninguna implementación de regla importa `Partida` ni el `OrquestadorDeTurnos` | Automatizada |
-| FF-08 | **Costo de extensión:** al incorporar cada regla nueva se registra el tiempo empleado y el número de clases modificadas, con la meta de ≤ 4 horas, 1 clase nueva y 0 modificadas (§3.1) | Manual, métrica de seguimiento |
+| C-01 | **Pruebas de contrato compartidas:** toda implementación de `ReglaJuego` debe superar una misma batería de pruebas: una declaración inválida nunca altera el estado y siempre informa su motivo | Automatizada · Vitest (`rules.contract.test.ts`) |
+| FF-06 | **Aislamiento del núcleo:** los casos de uso no dependen de implementaciones concretas de reglas, solo del contrato | Automatizada · TSArch |
+| C-08 | **Aislamiento sobre archivos modificados:** un cambio que agregue una regla no puede modificar archivos de la máquina de estados, verificado en cada solicitud de integración | Planificada |
+| C-09 | **Mínimo conocimiento:** ninguna implementación de regla importa `Partida` ni el `OrquestadorDeTurnos` | Planificada: hoy la cubren en parte FF-02 y FF-06 |
+| C-02 | **Costo de extensión:** al incorporar cada regla nueva se registra el tiempo empleado y el número de clases modificadas, con la meta de ≤ 4 horas, 1 clase nueva y 0 modificadas (§3.1) | Manual, métrica de seguimiento |
 
-FF-08 convierte el escenario de modificabilidad del driver número uno en una medición real: la
+C-02 convierte el escenario de modificabilidad del driver número uno en una medición real: la
 primera variación que se implemente, probablemente el comodín, servirá como prueba de que la
 decisión cumple lo que promete.
 
