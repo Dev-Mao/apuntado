@@ -1,0 +1,79 @@
+@startuml componentes-1a-motor-de-reglas
+' Entregable 2, figura 1a: desacoplamiento entre el orquestador y el motor de reglas
+
+
+top to bottom direction
+skinparam componentStyle uml2
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultFontSize 15
+skinparam dpi 200
+skinparam nodesep 30
+skinparam ranksep 55
+skinparam component {
+  BackgroundColor #F7F9FC
+  BorderColor #33526E
+}
+skinparam interface {
+  BackgroundColor #FFFFFF
+  BorderColor #33526E
+}
+
+component "Cliente Web" as UI <<externo>>
+
+package "interfaces" #FFFFFF {
+  component "ControladorHttp" as HTTP
+  component "PasarelaWebSocket" as WS
+}
+
+package "application · casos de uso" #F7F4FA {
+  component "JugarTurno" as UC1
+  component "DeclararCierre" as UC2
+  interface "AccionesDeJuego" as I_AJ
+}
+
+package "domain · motor de reglas (punto de extensión)" #FFFDF5 {
+  component "ResolutorDeReglas\n<<registry>>" as RR
+  interface "ReglaJuego\n<<contract>>" as I_RULE
+  component "ReglaClasica" as R1
+  component "ReglaApuntado" as R2
+  component "ReglaConComodin\n<<futura>>" as R3
+  component "EvaluadorDeMano\nCe = 0" as EVAL
+  component "CalculadorDePuntaje\nCe = 0" as SCORE
+  interface "EvaluacionDeMano" as I_EM
+  interface "CalculoDePuntaje" as I_CP
+}
+
+UC1 -up- I_AJ
+UC2 -up- I_AJ
+UI ..> HTTP
+UI ..> WS
+HTTP ..> I_AJ
+WS ..> I_AJ
+
+UC2 ..> RR
+RR -- I_RULE
+I_RULE <|.. R1
+I_RULE <|.. R2
+I_RULE <|.. R3
+
+R1 ..> I_EM
+R2 ..> I_EM
+R2 ..> I_CP
+EVAL -- I_EM
+SCORE -- I_CP
+
+note right of I_RULE
+  **Contrato del punto de extensión.**
+  Una variante nueva implementa
+  esta interfaz y se registra.
+  El orquestador no se modifica.
+end note
+
+note left of UC2
+  Solo conoce el contrato
+  ReglaJuego, nunca una
+  implementación concreta (FF-06).
+end note
+
+@enduml

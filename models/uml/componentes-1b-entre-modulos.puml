@@ -1,0 +1,78 @@
+@startuml componentes-1b-entre-modulos
+' Entregable 2, figura 1b: comunicación entre módulos (interfaces invertidas y eventos)
+
+
+top to bottom direction
+skinparam componentStyle uml2
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam defaultFontSize 15
+skinparam dpi 200
+skinparam nodesep 40
+skinparam ranksep 60
+skinparam component {
+  BackgroundColor #F7F9FC
+  BorderColor #33526E
+}
+skinparam interface {
+  BackgroundColor #FFFFFF
+  BorderColor #33526E
+}
+
+package "Módulo Juego (el que más cambia)" #F3F8F1 {
+  component "Casos de uso\nJugarTurno · DeclararCierre\nLiquidarRonda" as GAME
+  component "PartidasEnMemoria" as MEM
+  component "BitacoraAsincrona" as JOURNAL
+  interface "EventosDePartida" as I_EP
+  interface "GarantiaDeApuesta" as I_STAKE
+  interface "Identidad" as I_ID
+  interface "RepositorioDePartidas" as I_REPO
+  interface "BitacoraDeJugadas" as I_JOURNAL
+}
+
+package "Módulo Economía" #F6F1FA {
+  component "CustodioDeApuestas" as STAKE
+  component "LibroDeFichas" as LEDGER
+}
+
+package "Módulo Historial" #EEF4FA {
+  component "ArchivadorDeHistorial" as HIST
+}
+
+package "Módulo Identidad" #FBF6EE {
+  component "AutenticadorDeSesion" as AUTH
+}
+
+database "PostgreSQL" as DB
+
+GAME -up- I_EP
+GAME ..> I_REPO
+GAME ..> I_JOURNAL
+GAME ..> I_STAKE
+GAME ..> I_ID
+MEM -- I_REPO
+JOURNAL -- I_JOURNAL
+
+STAKE -- I_STAKE
+AUTH -- I_ID
+STAKE ..> I_EP
+HIST ..> I_EP
+STAKE ..> LEDGER
+
+JOURNAL --> DB : INSERT asíncrono
+LEDGER --> DB
+HIST --> DB
+
+note bottom of I_STAKE
+  **Inversión de dependencias (ADR-01).**
+  La interfaz la declara Juego y la
+  implementa Economía: en el código la
+  flecha apunta hacia Juego.
+end note
+
+note right of I_EP
+  Economía e Historial reaccionan
+  al evento. Juego no los conoce.
+end note
+
+@enduml
