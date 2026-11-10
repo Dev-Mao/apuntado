@@ -63,10 +63,10 @@
     "stakeHint": "0 significa jugar sin apuesta"
   },
   "home": {
-    "eyebrow": "Mesa de cartas en línea",
+    "eyebrow": "Para dos a cuatro jugadores",
     "title": "Apuntado",
     "tagline": "Roba, combina y cierra antes que nadie",
-    "intro": "Reúne de dos a cuatro jugadores, comparte el código de la mesa y juega en tiempo real.",
+    "intro": "Crea una mesa, comparte el código con tus amigos y jueguen en tiempo real.",
     "nickname": {
       "title": "Entra como invitado",
       "label": "Tu apodo",
@@ -123,7 +123,8 @@
     "cardCount_other": "{{count}} cartas",
     "opponents": "Oponentes",
     "opponentLabel": "{{name}}, {{count}} cartas",
-    "opponentTurn": "{{name}}, {{count}} cartas, está jugando",
+    "opponentTurn": "está jugando",
+    "opponentDisconnected": "desconectado",
     "hand": {
       "label": "Tu mano",
       "instructions": "Pulsa una carta para seleccionarla. Arrástrala o usa Alt y las flechas para moverla.",
@@ -137,7 +138,8 @@
       "draw": "Tu turno · roba una carta",
       "discard": "Tu turno · descarta una carta",
       "waiting": "Turno de {{name}}",
-      "secondsLeft": "Quedan {{count}} segundos del turno"
+      "secondsLeft": "Quedan {{count}} segundos del turno",
+      "secondsUnit": "s"
     },
     "actions": {
       "label": "Acciones del turno",
