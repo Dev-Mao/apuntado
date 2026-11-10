@@ -23,11 +23,11 @@ export function Dialog({ open, title, closeLabel, onClose, className, children }
       aria-labelledby={titleId}
       onClose={onClose}
       className={cn(
-        "paper-grain m-auto max-h-[92dvh] w-[min(100%-1.5rem,44rem)] overflow-y-auto rounded-3xl bg-paper p-0 text-ink shadow-2xl",
+        "m-auto max-h-[92dvh] w-[min(100%-1.5rem,44rem)] overflow-y-auto rounded-3xl bg-paper p-0 text-ink shadow-2xl",
         className,
       )}
     >
-      <div className="relative p-5 sm:p-8">
+      <div className="paper-grain relative p-5 sm:p-8">
         <button
           type="button"
           onClick={onClose}

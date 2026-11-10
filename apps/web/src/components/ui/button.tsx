@@ -14,14 +14,14 @@ export const BUTTON_VARIANT = {
 export type ButtonVariant = (typeof BUTTON_VARIANT)[keyof typeof BUTTON_VARIANT];
 
 const VARIANT_CLASSES: Readonly<Record<ButtonVariant, string>> = {
-  primary: "border-coral bg-coral text-ink hover:bg-coral-deep hover:border-coral-deep",
-  outline: "border-ink text-ink hover:bg-ink hover:text-paper",
-  "outline-light": "border-paper/70 text-paper hover:bg-paper hover:text-ink",
-  ghost: "border-transparent text-ink underline-offset-4 hover:underline",
+  primary: "border-coral bg-coral text-ink not-disabled:hover:bg-coral-deep not-disabled:hover:border-coral-deep",
+  outline: "border-ink text-ink not-disabled:hover:bg-ink not-disabled:hover:text-paper",
+  "outline-light": "border-paper/70 text-paper not-disabled:hover:bg-paper not-disabled:hover:text-ink",
+  ghost: "border-transparent text-ink underline-offset-4 not-disabled:hover:underline",
 };
 
 const BASE_CLASSES =
-  "label-caps inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-[1.5px] px-6 pt-[0.8rem] pb-[0.7rem] text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent";
+  "label-caps inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-[1.5px] px-4 pt-[0.8rem] pb-[0.7rem] max-sm:tracking-[0.1em] sm:px-6 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40";
 
 export function buttonClasses(variant: ButtonVariant = BUTTON_VARIANT.PRIMARY, className?: string): string {
   return cn(BASE_CLASSES, VARIANT_CLASSES[variant], className);
