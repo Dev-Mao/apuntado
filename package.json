@@ -2,16 +2,20 @@
   "name": "apuntado",
   "version": "0.2.0",
   "private": true,
-  "description": "Sistema Digital de Juego de Cartas \"Apuntado\" — Fundamentos de Arquitectura de Software",
+  "description": "Sistema Digital de Juego de Cartas \"Apuntado\", Fundamentos de Arquitectura de Software",
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "test": "vitest run",
     "test:arch": "vitest run tests/architecture",
-    "test:domain": "vitest run src",
+    "test:domain": "vitest run apps/api/src",
     "test:integration": "vitest run tests/integration",
-    "lint": "eslint src tests",
-    "arch:deps": "depcruise src --config .dependency-cruiser.cjs",
-    "arch:graph": "depcruise src --config .dependency-cruiser.cjs --output-type dot",
+    "lint": "eslint apps/api/src packages/contracts/src tests",
+    "arch:deps": "depcruise apps/api/src packages/contracts/src --config .dependency-cruiser.cjs",
+    "arch:graph": "depcruise apps/api/src packages/contracts/src --config .dependency-cruiser.cjs --output-type dot",
     "gobernanza": "npm run typecheck && npm run lint && npm run arch:deps && npm run test:arch",
     "typecheck": "tsc --noEmit",
     "verificar": "npm run gobernanza && npm run test:domain && npm run test:integration"

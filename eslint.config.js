@@ -6,7 +6,7 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ["src/**/*.ts", "tests/**/*.ts"],
+    files: ["apps/*/src/**/*.ts", "packages/*/src/**/*.ts", "tests/**/*.ts"],
     rules: {
       /**
        * FF-08 · Límite de complejidad ciclomática (Entregable 2, §5.3).
