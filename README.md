@@ -14,20 +14,25 @@ Colombia, Facultad de Minas.
 ## Estructura del repositorio
 
 ```
+apps/api/             Servidor: módulos de dominio (ADR-01)
+packages/contracts/   Tipos compartidos entre servidor e interfaz, sin lógica
 docs/adrs/            ADR-01 a ADR-05 en formato Nygard
 docs/entregable-2/    Secciones redactadas del documento
+docs/entregable-3/    Plan de construcción del MVP
 models/bpmn/          Procesos As-Is y To-Be (BPMN 2.0 editable)
 models/uml/           Casos de uso, componentes y clases (PlantUML y draw.io)
 models/er/            Modelo entidad-relación y esquema SQL
-src/modules/          Código fuente, particionado por dominio (ADR-01)
 tests/architecture/   Fitness functions ejecutables (TSArch)
 ```
 
-El backend se particiona **por dominio de negocio**, no por capa técnica. Cada módulo contiene
+La versión del repositorio entregada con el Entregable 2 está en la etiqueta
+[`entregable-2`](https://github.com/Dev-Mao/apuntado/tree/entregable-2).
+
+El servidor se particiona **por dominio de negocio**, no por capa técnica. Cada módulo contiene
 sus propias capas:
 
 ```
-src/modules/
+apps/api/src/modules/
 ├── game/        Juego: reglas, turnos, mesa          ← el único que cambia seguido
 │   ├── domain/           entidades, reglas y servicios puros
 │   ├── application/      casos de uso y puertos

@@ -124,8 +124,8 @@ Ejemplo de regla para FF-01, expresada en la herramienta de análisis de depende
 {
   "name": "juego-no-depende-de-otros-dominios",
   "severity": "error",
-  "from": { "path": "^src/modules/game" },
-  "to":   { "path": "^src/modules/(identity|economy|history)" }
+  "from": { "path": "^apps/api/src/modules/game" },
+  "to":   { "path": "^apps/api/src/modules/(identity|economy|history)" }
 }
 ```
 
