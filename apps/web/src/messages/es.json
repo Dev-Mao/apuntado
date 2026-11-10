@@ -1,0 +1,220 @@
+{
+  "meta": {
+    "title": "Apuntado",
+    "description": "Juego de cartas multijugador en tiempo real"
+  },
+  "brand": {
+    "name": "Apuntado",
+    "course": "Juego de cartas en línea",
+    "home": "Apuntado, ir al inicio"
+  },
+  "common": {
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "points_one": "{{count}} punto",
+    "points_other": "{{count}} puntos",
+    "pointsShort": "{{count}} pts",
+    "seconds": "{{count}} s",
+    "noStake": "Sin apuesta",
+    "chips_one": "{{count}} ficha",
+    "chips_other": "{{count}} fichas",
+    "you": "Tú"
+  },
+  "gameMode": {
+    "CLASICA": "Clásica (4-3-3)",
+    "APUNTADO": "Apuntado a 101",
+    "AMBAS": "Ambas"
+  },
+  "closureType": {
+    "CLASICO": "Cierre clásico (4-3-3)",
+    "APUNTADO": "Cierre por apuntado"
+  },
+  "cards": {
+    "label": "{{rank}} de {{suit}}",
+    "rank": {
+      "A": "As",
+      "2": "Dos",
+      "3": "Tres",
+      "4": "Cuatro",
+      "5": "Cinco",
+      "6": "Seis",
+      "7": "Siete",
+      "8": "Ocho",
+      "9": "Nueve",
+      "10": "Diez",
+      "J": "Jota",
+      "Q": "Reina",
+      "K": "Rey"
+    },
+    "suit": {
+      "H": "corazones",
+      "D": "diamantes",
+      "C": "tréboles",
+      "S": "picas"
+    }
+  },
+  "settings": {
+    "title": "Configuración de la mesa",
+    "mode": "Modalidad",
+    "threshold": "Umbral de eliminación",
+    "turn": "Duración del turno",
+    "turnHint": "En segundos",
+    "stake": "Apuesta",
+    "stakeHint": "0 significa jugar sin apuesta"
+  },
+  "home": {
+    "eyebrow": "Mesa de cartas en línea",
+    "title": "Apuntado",
+    "tagline": "Roba, combina y cierra antes que nadie",
+    "intro": "Reúne de dos a cuatro jugadores, comparte el código de la mesa y juega en tiempo real.",
+    "nickname": {
+      "title": "Entra como invitado",
+      "label": "Tu apodo",
+      "placeholder": "¿Cómo te llamamos?",
+      "hint": "Entre 2 y 16 caracteres"
+    },
+    "create": {
+      "title": "Crea una mesa",
+      "submit": "Crear mesa"
+    },
+    "join": {
+      "title": "Únete con un código",
+      "label": "Código de la mesa",
+      "placeholder": "K7Q2",
+      "submit": "Unirme"
+    },
+    "or": "o",
+    "errors": {
+      "nicknameRequired": "Escribe un apodo para entrar",
+      "nicknameLength": "El apodo debe tener entre 2 y 16 caracteres",
+      "thresholdInvalid": "Escribe un número entero mayor que 0",
+      "turnInvalid": "El turno debe durar al menos 10 segundos",
+      "stakeInvalid": "La apuesta debe ser un número entero, 0 o más",
+      "codeRequired": "Escribe el código que te compartieron"
+    }
+  },
+  "lobby": {
+    "eyebrow": "Sala de espera",
+    "title": "Mesa {{code}}",
+    "tagline": "Comparte el código y espera a que lleguen todos",
+    "codeLabel": "Código para compartir",
+    "copy": "Copiar código",
+    "copied": "Código copiado",
+    "players": "Jugadores",
+    "playersCount": "{{count}} de {{max}}",
+    "host": "Anfitrión",
+    "connected": "Conectado",
+    "disconnected": "Desconectado",
+    "emptySeat": "Puesto libre",
+    "start": "Iniciar partida",
+    "waitingHost": "El anfitrión iniciará la partida",
+    "waitingPlayers": "Se necesitan más jugadores para iniciar",
+    "leave": "Salir de la mesa"
+  },
+  "table": {
+    "title": "Mesa {{code}}",
+    "round": "Ronda {{count}}",
+    "stock": "Mazo",
+    "stockLabel": "Mazo, {{count}} cartas",
+    "discard": "Pozo",
+    "discardLabel": "Pozo, carta superior {{card}}",
+    "discardEmpty": "Pozo vacío",
+    "cardCount_one": "{{count}} carta",
+    "cardCount_other": "{{count}} cartas",
+    "opponents": "Oponentes",
+    "opponentLabel": "{{name}}, {{count}} cartas",
+    "opponentTurn": "{{name}}, {{count}} cartas, está jugando",
+    "hand": {
+      "label": "Tu mano",
+      "instructions": "Pulsa una carta para seleccionarla. Arrástrala o usa Alt y las flechas para moverla.",
+      "sortByRank": "Ordenar por valor",
+      "sortBySuit": "Ordenar por palo",
+      "selected_one": "{{count}} seleccionada",
+      "selected_other": "{{count}} seleccionadas"
+    },
+    "turn": {
+      "title": "Turno",
+      "draw": "Tu turno · roba una carta",
+      "discard": "Tu turno · descarta una carta",
+      "waiting": "Turno de {{name}}",
+      "secondsLeft": "Quedan {{count}} segundos del turno"
+    },
+    "actions": {
+      "label": "Acciones del turno",
+      "draw": "Robar del mazo",
+      "takeDiscard": "Tomar del pozo",
+      "discard": "Descartar",
+      "declareClosure": "Declarar cierre"
+    },
+    "scoreboard": {
+      "title": "Marcador",
+      "threshold": "Eliminación a {{count}}",
+      "eliminated": "Eliminado",
+      "entryLabel": "{{name}}, {{points}} de {{threshold}} puntos"
+    },
+    "footer": {
+      "label": "Enlaces de la mesa",
+      "rules": "Reglas",
+      "scoreboard": "Marcador"
+    },
+    "rules": {
+      "title": "Reglas en breve",
+      "item1": "En tu turno roba una carta del mazo o toma la carta superior del pozo, y termina descartando una.",
+      "item2": "Forma combinaciones: tríos o cuartetos del mismo valor, o escaleras de tres o más cartas del mismo palo.",
+      "item3": "En la modalidad clásica se cierra con tres combinaciones de 4, 3 y 3 cartas.",
+      "item4": "En Apuntado a 101 las cartas sin combinar suman puntos; quien llega al umbral queda eliminado.",
+      "note": "El servidor es el árbitro: revisa cada jugada y cada cierre."
+    }
+  },
+  "closure": {
+    "title": "Declarar cierre",
+    "intro": "Reparte tus cartas en combinaciones, marca las sobrantes y elige la carta que descartas. El servidor revisa el cierre.",
+    "type": "Tipo de cierre",
+    "unassigned": "Cartas sin asignar",
+    "allAssigned": "Ya asignaste todas tus cartas",
+    "moveTo": "Mover las seleccionadas a",
+    "group": "Combinación {{count}}",
+    "leftovers": "Sobrantes",
+    "discard": "Descarte",
+    "slotEmpty": "Vacío",
+    "selectCard": "Seleccionar {{card}}",
+    "returnCard": "Devolver {{card}} a las cartas sin asignar",
+    "submit": "Enviar cierre",
+    "submitting": "Enviando",
+    "rejectedTitle": "El servidor rechazó el cierre",
+    "rejection": {
+      "LEFTOVER_TOO_HIGH": "Las cartas sobrantes suman {{sum}}; deben sumar menos de {{limit}}"
+    },
+    "accepted": {
+      "title": "Cierre aceptado",
+      "body": "El servidor validó tu cierre y la ronda terminó.",
+      "cta": "Ver resultados"
+    }
+  },
+  "results": {
+    "roundEyebrow": "Fin de ronda",
+    "roundTitle": "Ronda {{count}}",
+    "gameEyebrow": "Fin de partida",
+    "gameTitle": "Gana {{name}}",
+    "tagline": "Así quedó la mesa",
+    "caption": "Puntos de la ronda {{count}} y acumulados",
+    "columns": {
+      "player": "Jugador",
+      "round": "Ronda",
+      "total": "Acumulado",
+      "status": "Estado"
+    },
+    "status": {
+      "playing": "Sigue en juego",
+      "eliminated": "Eliminado",
+      "winner": "Ganador",
+      "closed": "Cerró la ronda"
+    },
+    "threshold": "Umbral de eliminación: {{count}} puntos",
+    "eliminatedTitle": "Eliminados",
+    "noEliminated": "Nadie quedó eliminado en esta ronda",
+    "nextRound": "Siguiente ronda",
+    "newGame": "Nueva partida",
+    "backHome": "Volver al inicio"
+  }
+}

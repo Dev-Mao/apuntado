@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-display: var(--font-playfair), "Didot", Georgia, serif;
+  --font-sans: var(--font-josefin), "Futura", system-ui, sans-serif;
+}
+
+@theme {
+  --color-paper: #f3ead9;
+  --color-paper-deep: #e9dcc3;
+  --color-ink: #1c1916;
+  --color-ink-soft: #5b5046;
+  --color-felt: #191613;
+  --color-coral: #e0694b;
+  --color-coral-deep: #c4502f;
+  --color-card: #fbf6ec;
+  --color-suit-red: #b3362a;
+  --color-line: #1c19162e;
+  --shadow-card: 0 1px 0 #1c191614, 0 6px 14px -6px #1c191659;
+}
+
+@utility label-caps {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+@utility paper-grain {
+  position: relative;
+  isolation: isolate;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.32;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.18 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@layer base {
+  html {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  body {
+    min-height: 100dvh;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-coral-deep);
+    outline-offset: 3px;
+  }
+
+  dialog::backdrop {
+    background: #1c1916b3;
+  }
+}
