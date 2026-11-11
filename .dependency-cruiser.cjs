@@ -50,6 +50,12 @@ module.exports = {
       to: { path: "^apps/api/src/modules" },
     },
     {
+      name: "aplicacion-sin-framework",
+      severity: "error",
+      from: { path: "^apps/api/src/modules/[^/]+/application" },
+      to: { path: "node_modules/(@nestjs|socket[.]io|express|jsonwebtoken|cookie)/" },
+    },
+    {
       name: "contratos-sin-dependencias",
       severity: "error",
       comment: "Los contratos son tipos compartidos: no importan nada de las aplicaciones.",

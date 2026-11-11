@@ -18,8 +18,11 @@
     "arch:graph": "depcruise apps/api/src packages/contracts/src --config .dependency-cruiser.cjs --output-type dot",
     "gobernanza": "npm run typecheck && npm run lint && npm run arch:deps && npm run test:arch",
     "typecheck": "tsc --noEmit",
-    "verificar": "npm run gobernanza && npm run test:domain && npm run test:integration && npm run web:check",
-    "web:check": "npm run typecheck -w @apuntado/web && npm run lint -w @apuntado/web && npm run build -w @apuntado/web"
+    "verificar": "npm run gobernanza && npm run test:domain && npm run test:integration && npm run test:e2e && npm run web:check",
+    "web:check": "npm run typecheck -w @apuntado/web && npm run lint -w @apuntado/web && npm run build -w @apuntado/web",
+    "test:e2e": "vitest run tests/e2e",
+    "build": "npm run build -w @apuntado/web && npm run build -w @apuntado/api",
+    "start": "npm run start -w @apuntado/api"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.12",
