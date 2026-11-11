@@ -19,6 +19,7 @@ export function useHandDrag(onMove: (from: number, to: number) => void, cardCoun
 
   const handlePointerDown = useCallback((event: PointerEvent<HTMLButtonElement>) => {
     if (event.button !== 0) return;
+    suppressClickRef.current = false;
     const index = Number(event.currentTarget.dataset.handIndex);
     dragRef.current = { index, startX: event.clientX, startY: event.clientY, active: false };
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -44,11 +45,20 @@ export function useHandDrag(onMove: (from: number, to: number) => void, cardCoun
     [onMove],
   );
 
-  const handlePointerUp = useCallback(() => {
-    suppressClickRef.current = dragRef.current?.active ?? false;
+  const endDrag = useCallback(() => {
     dragRef.current = null;
     setDraggingIndex(null);
   }, []);
+
+  const handlePointerUp = useCallback(() => {
+    suppressClickRef.current = dragRef.current?.active ?? false;
+    endDrag();
+  }, [endDrag]);
+
+  const handlePointerCancel = useCallback(() => {
+    suppressClickRef.current = false;
+    endDrag();
+  }, [endDrag]);
 
   const consumeSuppressedClick = useCallback(() => {
     const suppressed = suppressClickRef.current;
@@ -70,5 +80,13 @@ export function useHandDrag(onMove: (from: number, to: number) => void, cardCoun
     [onMove, cardCount],
   );
 
-  return { draggingIndex, handlePointerDown, handlePointerMove, handlePointerUp, handleKeyDown, consumeSuppressedClick };
+  return {
+    draggingIndex,
+    handlePointerDown,
+    handlePointerMove,
+    handlePointerUp,
+    handlePointerCancel,
+    handleKeyDown,
+    consumeSuppressedClick,
+  };
 }

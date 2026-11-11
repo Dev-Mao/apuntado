@@ -21,6 +21,7 @@ function HandCardBase({
   onPointerDown,
   onPointerMove,
   onPointerUp,
+  onPointerCancel,
 }: HandCardProps) {
   const cardLabel = useCardLabel();
   const id = cardId(card);
@@ -39,7 +40,7 @@ function HandCardBase({
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
+        onPointerCancel={onPointerCancel}
         className={cn(
           "block touch-none rounded-[9%/6.4%] transition-[translate,scale] duration-150 select-none hover:-translate-y-2 focus-visible:-translate-y-2 focus-visible:outline-offset-4",
           isSelected && "-translate-y-5 outline-[3px] outline-coral outline-solid hover:-translate-y-6",

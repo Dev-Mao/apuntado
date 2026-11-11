@@ -68,6 +68,7 @@ function PlayerHandBase({ cards, selectedIds, onToggle, onMove, onSortByRank, on
             onPointerDown={drag.handlePointerDown}
             onPointerMove={drag.handlePointerMove}
             onPointerUp={drag.handlePointerUp}
+            onPointerCancel={drag.handlePointerCancel}
           />
         ))}
       </ul>
