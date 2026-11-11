@@ -132,7 +132,7 @@
       "selected_one": "{{count}} seleccionada",
       "selected_other": "{{count}} seleccionadas",
       "lockedCard": "{{card}}, tomada del pozo, no la puedes descartar en este turno",
-      "lockedTag": "Del pozo"
+      "lockedTag": "Pozo"
     },
     "turn": {
       "title": "Turno",
