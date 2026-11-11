@@ -25,9 +25,10 @@ describe("Ronda · reparto", () => {
     expect(start(["a", "b", "c", "d"]).stockSize).toBe(11);
   });
 
-  it("no admite menos de 2 ni más de 4 jugadores", () => {
+  it("no admite menos de 2 ni más de 4 jugadores, ni jugadores repetidos", () => {
     expect(() => start(["solo"])).toThrow();
     expect(() => start(["a", "b", "c", "d", "e"])).toThrow();
+    expect(() => start(["ana", "ana"])).toThrow();
   });
 });
 
@@ -194,6 +195,13 @@ describe("Ronda · cierre por apuntado", () => {
 });
 
 describe("Ronda · tiempo agotado", () => {
+  it("rechaza el vencimiento de un jugador que no tiene el turno, en cualquier fase", () => {
+    const round = start(["ana", "luis"]);
+    expect(round.timeOut("luis")).toEqual({ ok: false, reason: "No es su turno" });
+    round.drawFromDiscard("ana");
+    expect(round.timeOut("fantasma")).toEqual({ ok: false, reason: "No es su turno" });
+  });
+
   it("si no había robado, roba del mazo y descarta esa misma carta", () => {
     const round = start(["ana", "luis"], riggedDeck(["2C 3C 4C 5C 6C 7C 8C 9C 10C JC", "2D 3D 4D 5D 6D 7D 8D 9D 10D JD"], "KS", "QH"));
     const before = ids(round.handOf("ana"));

@@ -22,9 +22,11 @@ export class DrawCard {
     if (!session) return rejected(GAME_NOT_FOUND);
     const outcome = source === "STOCK" ? session.drawFromStock(playerId) : session.drawFromDiscard(playerId);
     if (!outcome.ok) return outcome;
-    const drawn = session.currentStatus === "PLAYING" ? (session.currentRound.handOf(playerId).at(-1) ?? null) : null;
-    const action = source === "STOCK" ? "ROBAR_MAZO" : "ROBAR_POZO";
-    this.journal.record(journalEntry(session, playerId, action, drawn, this.clock));
+    if (session.currentStatus === "PLAYING") {
+      const drawn = session.currentRound.handOf(playerId).at(-1) ?? null;
+      const action = source === "STOCK" ? "ROBAR_MAZO" : "ROBAR_POZO";
+      this.journal.record(journalEntry(session, playerId, action, drawn, this.clock));
+    }
     this.games.save(session);
     publishEvents(session, this.events);
     return outcome;

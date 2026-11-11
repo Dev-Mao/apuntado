@@ -6,8 +6,8 @@ import { OK, type Outcome, type RoundClosure, type RoundPhase, type RoundStatus,
 
 export const HAND_SIZE = 10;
 const MAX_RECYCLES = 1;
-const MIN_PLAYERS = 2;
-const MAX_PLAYERS = 4;
+export const MIN_PLAYERS = 2;
+export const MAX_PLAYERS = 4;
 
 interface LastDraw {
   readonly card: Card;
@@ -39,6 +39,7 @@ export class Round {
 
   static start(playerIds: readonly string[], deck: readonly Card[], firstTurn: number, random: RandomSource): Round {
     if (playerIds.length < MIN_PLAYERS || playerIds.length > MAX_PLAYERS) throw new Error("A round needs 2 to 4 players");
+    if (new Set(playerIds).size !== playerIds.length) throw new Error("Players must be distinct");
     if (deck.length !== DECK_SIZE) throw new Error("A round needs a full deck");
     const hands = new Map(playerIds.map((id, i) => [id, deck.slice(i * HAND_SIZE, (i + 1) * HAND_SIZE)]));
     const dealt = playerIds.length * HAND_SIZE;
@@ -126,6 +127,8 @@ export class Round {
   }
 
   timeOut(playerId: string): Outcome {
+    const reason = this.turnDenial(playerId);
+    if (reason) return rejected(reason);
     if (this.phase === "DRAW") {
       const drawn = this.drawFromStock(playerId);
       if (!drawn.ok || this.status !== "PLAYING") return drawn;
@@ -133,10 +136,14 @@ export class Round {
     return this.discard(playerId, this.automaticDiscard(playerId));
   }
 
-  private denial(playerId: string, phase: RoundPhase): string | null {
+  private turnDenial(playerId: string): string | null {
     if (this.status !== "PLAYING") return "La ronda ya terminó";
-    if (playerId !== this.currentPlayerId) return "No es su turno";
-    if (this.phase === phase) return null;
+    return playerId === this.currentPlayerId ? null : "No es su turno";
+  }
+
+  private denial(playerId: string, phase: RoundPhase): string | null {
+    const reason = this.turnDenial(playerId);
+    if (reason || this.phase === phase) return reason;
     return phase === "DRAW" ? "Ya robó una carta en este turno" : "Primero debe robar una carta";
   }
 
