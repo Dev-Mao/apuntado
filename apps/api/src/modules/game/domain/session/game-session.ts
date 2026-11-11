@@ -102,6 +102,9 @@ export class GameSession {
 
   declareClosure(playerId: string, declaration: ClosureDeclaration, rule: GameRule): ValidationResult {
     if (this.status !== "PLAYING") return invalid(NO_ROUND_IN_PLAY);
+    if (!this.enabledClosures.includes(declaration.type) || rule.type !== declaration.type) {
+      return invalid("La modalidad de cierre no está habilitada");
+    }
     const result = this.round.declareClosure(playerId, declaration, rule);
     if (result.valid) this.settle();
     return result;

@@ -14,7 +14,7 @@ const CLASSIC = {
   discard: c("9S"),
 };
 
-const session = (mode: GameMode = "APUNTADO", clock = new ManualClock()) =>
+const session = (mode: GameMode = "AMBAS", clock = new ManualClock()) =>
   GameSession.start("g1", ["ana", "luis"], { mode, eliminationThreshold: 101, turnSeconds: 60 }, {
     random: new SeededRandom(9),
     clock,
@@ -38,7 +38,7 @@ describe("Sesión de juego · turno y reloj", () => {
 
   it("la hora límite del turno se fija al empezar y se reinicia cuando cambia el jugador, no al robar", () => {
     const clock = new ManualClock();
-    const s = session("APUNTADO", clock);
+    const s = session("AMBAS", clock);
     const first = s.turnDeadline;
     clock.advance(10);
     s.drawFromStock("luis");
@@ -49,7 +49,7 @@ describe("Sesión de juego · turno y reloj", () => {
 
   it("el turno vence cuando el reloj alcanza la hora límite", () => {
     const clock = new ManualClock();
-    const s = session("APUNTADO", clock);
+    const s = session("AMBAS", clock);
     clock.advance(59);
     expect(s.isTurnExpired()).toBe(false);
     clock.advance(1);
@@ -58,8 +58,8 @@ describe("Sesión de juego · turno y reloj", () => {
 });
 
 describe("Sesión de juego · fin de ronda", () => {
-  it("en Apuntado, al cerrar se liquida la ronda y queda a la espera de la siguiente", () => {
-    const s = session("APUNTADO");
+  it("en una partida de varias rondas, al cerrar se liquida la ronda y queda a la espera de la siguiente", () => {
+    const s = session("AMBAS");
     anaClosesAfterLuisTurn(s);
     expect(s.currentStatus).toBe("ROUND_OVER");
     expect(s.lastRound).toMatchObject({ roundNumber: 1, winnerId: "ana", closureType: "CLASICO" });
@@ -68,20 +68,20 @@ describe("Sesión de juego · fin de ronda", () => {
   });
 
   it("publica el evento RondaCerrada una sola vez", () => {
-    const s = session("APUNTADO");
+    const s = session("AMBAS");
     anaClosesAfterLuisTurn(s);
     expect(s.pullEvents().map((e) => e.name)).toEqual(["RondaCerrada"]);
     expect(s.pullEvents()).toEqual([]);
   });
 
   it("entre rondas no se aceptan jugadas", () => {
-    const s = session("APUNTADO");
+    const s = session("AMBAS");
     anaClosesAfterLuisTurn(s);
     expect(s.drawFromStock("luis")).toEqual({ ok: false, reason: "No hay una ronda en juego" });
   });
 
   it("la siguiente ronda reparte de nuevo y rota quien empieza", () => {
-    const s = session("APUNTADO");
+    const s = session("AMBAS");
     anaClosesAfterLuisTurn(s);
     expect(s.startNextRound()).toEqual({ ok: true });
     expect(s.currentRoundNumber).toBe(2);
@@ -99,6 +99,12 @@ describe("Sesión de juego · fin de ronda", () => {
     expect(s.currentStatus).toBe("FINISHED");
     expect(s.winnerId).toBe("ana");
     expect(s.pullEvents().map((e) => e.name)).toEqual(["RondaCerrada", "PartidaFinalizada"]);
+  });
+
+  it("rechaza un cierre que la modalidad no habilita, aunque sea válido", () => {
+    const s = session("APUNTADO");
+    expect(anaClosesAfterLuisTurn(s)).toMatchObject({ valid: false, reason: "La modalidad de cierre no está habilitada" });
+    expect(s.currentStatus).toBe("PLAYING");
   });
 
   it("indica la carta tomada del pozo, que el jugador no puede descartar", () => {
