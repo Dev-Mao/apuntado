@@ -49,8 +49,8 @@ describe("Partidas completas simuladas, sin red ni interfaz", () => {
       const match = playMatch(mode, players, seed);
       expect(match.currentStatus).toBe("FINISHED");
       expect(match.roundsPlayed).toBeGreaterThan(1);
-      expect(match.activePlayerIds.length).toBeLessThanOrEqual(1);
-      expect(match.isEliminated(match.winnerId!)).toBe(match.activePlayerIds.length === 0);
+      expect(match.activePlayerIds).toEqual([match.winnerId]);
+      expect(match.isEliminated(match.winnerId!)).toBe(false);
     }
   });
 });

@@ -92,7 +92,13 @@ export class Match {
     }
     const survivors = contenders.filter((s) => !s.eliminated);
     if (survivors.length === 1) this.finish(survivors[0]!.playerId);
-    if (survivors.length === 0) this.finish(this.best(contenders).playerId);
+    if (survivors.length === 0) this.finishAmongEliminated(contenders);
+  }
+
+  private finishAmongEliminated(contenders: readonly Seat[]): void {
+    const winner = this.best(contenders);
+    winner.eliminated = false;
+    this.finish(winner.playerId);
   }
 
   private best(candidates: readonly Seat[]): Seat {

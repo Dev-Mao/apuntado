@@ -65,6 +65,8 @@ describe("Partida · Apuntado a 101", () => {
     m.recordRound(scores({ ana: 95, luis: 90 }), null);
     m.recordRound(scores({ ana: 10, luis: 30 }), null);
     expect(m.winnerId).toBe("ana");
+    expect(m.isEliminated("ana")).toBe(false);
+    expect(m.isEliminated("luis")).toBe(true);
   });
 
   it("ante empate en el puntaje, gana quien haya ganado más rondas", () => {
