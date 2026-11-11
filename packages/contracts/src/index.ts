@@ -66,3 +66,16 @@ export interface ClosureDeclarationDto {
 }
 
 export type ActionResult = { readonly ok: true } | { readonly ok: false; readonly reason: string };
+
+export interface SeatView {
+  readonly playerId: string;
+  readonly nickname: string;
+  readonly connected: boolean;
+  readonly isBot: boolean;
+}
+
+export interface TableSnapshot {
+  readonly code: string;
+  readonly seats: readonly SeatView[];
+  readonly view: PlayerView;
+}
