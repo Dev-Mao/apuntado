@@ -24,12 +24,15 @@ export class BotPlayer {
   ) {}
 
   playTurn(gameId: string, botId: string): void {
-    for (let step = 0; step < MAX_ACTIONS_PER_TURN; step++) {
-      const session = this.games.find(gameId);
-      if (!session) return;
-      const action = this.strategy.decide(projectPlayerView(session, botId, this.clock.now()));
-      if (!action || !this.perform(gameId, botId, action).ok) return;
-    }
+    let steps = 0;
+    while (steps < MAX_ACTIONS_PER_TURN && this.playStep(gameId, botId)) steps += 1;
+  }
+
+  playStep(gameId: string, botId: string): boolean {
+    const session = this.games.find(gameId);
+    if (!session) return false;
+    const action = this.strategy.decide(projectPlayerView(session, botId, this.clock.now()));
+    return action !== null && this.perform(gameId, botId, action).ok;
   }
 
   private perform(gameId: string, playerId: string, action: BotAction): Outcome {
