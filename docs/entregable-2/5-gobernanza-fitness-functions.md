@@ -1,4 +1,8 @@
 # Entregable 2. Sección 5: Gobernanza y funciones de idoneidad
+
+> Copia de la sección tal como se entregó en el Entregable 2. Las rutas de código corresponden a la
+> etiqueta [`entregable-2`](https://github.com/Dev-Mao/apuntado/tree/entregable-2); hoy el servidor vive en `apps/api/`.
+
 **Peso en la rúbrica: 15%**
 
 ## 5.1 Reglas de gobernanza estructural y modularidad
