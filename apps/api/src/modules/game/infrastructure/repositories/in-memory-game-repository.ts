@@ -1,13 +1,14 @@
-import type { GameRepository, GameSnapshot } from "../../application/ports/index.js";
+import type { GameRepository } from "../../application/ports/index.js";
+import type { GameSession } from "../../domain/session/game-session.js";
 
 export class InMemoryGameRepository implements GameRepository {
-  private readonly games = new Map<string, GameSnapshot>();
+  private readonly sessions = new Map<string, GameSession>();
 
-  find(gameId: string): GameSnapshot | null {
-    return this.games.get(gameId) ?? null;
+  find(gameId: string): GameSession | null {
+    return this.sessions.get(gameId) ?? null;
   }
 
-  save(snapshot: GameSnapshot): void {
-    this.games.set(snapshot.gameId, snapshot);
+  save(session: GameSession): void {
+    this.sessions.set(session.id, session);
   }
 }

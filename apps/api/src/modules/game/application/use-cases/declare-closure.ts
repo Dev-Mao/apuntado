@@ -1,8 +1,9 @@
+import type { Clock } from "../../../../shared/clock.js";
 import type { ClosureDeclaration, ValidationResult } from "../../domain/rules/game-rule.js";
 import { invalid } from "../../domain/rules/game-rule.js";
 import type { RuleResolver } from "../../domain/rules/rule-resolver.js";
-import type { Clock } from "../../../../shared/clock.js";
 import type { EventBus, GameRepository, PlayJournal } from "../ports/index.js";
+import { GAME_NOT_FOUND, journalEntry, publishEvents } from "./session-effects.js";
 
 export interface DeclareClosureCommand {
   readonly gameId: string;
@@ -19,26 +20,16 @@ export class DeclareClosure {
     private readonly clock: Clock,
   ) {}
 
-  execute(command: DeclareClosureCommand): ValidationResult {
-    const game = this.games.find(command.gameId);
-    if (game === null) return invalid("La partida no existe");
-    if (game.currentPlayerId !== command.playerId) return invalid("No es su turno");
-
-    const rule = this.rules.resolve(command.declaration.type, game.enabledClosures);
-    if (rule === null) return invalid("La modalidad de cierre no está habilitada");
-
-    const result = rule.validate(command.declaration);
+  execute({ gameId, playerId, declaration }: DeclareClosureCommand): ValidationResult {
+    const session = this.games.find(gameId);
+    if (!session) return invalid(GAME_NOT_FOUND);
+    const rule = this.rules.resolve(declaration.type, session.enabledClosures);
+    if (!rule) return invalid("La modalidad de cierre no está habilitada");
+    const result = session.declareClosure(playerId, declaration, rule);
     if (!result.valid) return result;
-
-    this.journal.record({
-      gameId: game.gameId,
-      roundNumber: 1,
-      playerId: command.playerId,
-      action: "DECLARAR_CIERRE",
-      cardId: null,
-      occurredAt: this.clock.now(),
-    });
-    this.events.publish("RondaCerrada", { gameId: game.gameId, winnerId: command.playerId });
+    this.journal.record(journalEntry(session, playerId, "DECLARAR_CIERRE", declaration.discard, this.clock));
+    this.games.save(session);
+    publishEvents(session, this.events);
     return result;
   }
 }

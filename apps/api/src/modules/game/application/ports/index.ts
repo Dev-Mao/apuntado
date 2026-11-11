@@ -1,15 +1,8 @@
-import type { ClosureType } from "../../domain/rules/game-rule.js";
-
-export interface GameSnapshot {
-  readonly gameId: string;
-  readonly currentPlayerId: string;
-  readonly enabledClosures: readonly ClosureType[];
-  readonly eliminationThreshold: number;
-}
+import type { GameSession } from "../../domain/session/game-session.js";
 
 export interface GameRepository {
-  find(gameId: string): GameSnapshot | null;
-  save(snapshot: GameSnapshot): void;
+  find(gameId: string): GameSession | null;
+  save(session: GameSession): void;
 }
 
 export interface StakeGuard {
