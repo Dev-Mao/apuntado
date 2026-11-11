@@ -1,7 +1,7 @@
 # Plan de construcción del MVP (Entregable 3)
 
 Este documento fija cómo vamos a construir el MVP: qué decidimos, en qué orden y cómo sabemos que
-cada fase terminó. Parte del plan técnico del Entregable 1 (`Entregable 1/insumos/plan-tecnico.md`)
+cada fase terminó. Parte del plan técnico del Entregable 1 (documento interno del equipo, fuera de este repositorio)
 y de los ADR-01 a ADR-05, y señala dónde nos apartamos de ellos y por qué.
 
 ## Decisiones
@@ -45,8 +45,9 @@ hooks, `index.ts` por carpeta, accesibilidad y textos con i18n.
 - Una rama por fase y una solicitud de integración hacia `main`, con el CI en verde.
 - Commits pequeños, en inglés y con Conventional Commits (`feat(game): ...`, `test(game): ...`).
 - Antes de cada commit, `npm run verificar` en verde.
-- Código sin comentarios salvo para explicar un porqué no obvio; complejidad ciclomática de 10 como
-  máximo; sin `any`.
+- Código sin comentarios: los nombres y los módulos pequeños lo explican, y las razones quedan en los
+  ADR, los commits y las solicitudes de integración. Complejidad ciclomática de 10 como máximo; sin
+  `any`.
 - La plantilla de la solicitud de integración trae los checklists del capítulo 24 de Richards y
   Ford (código, pruebas y release), que son la evidencia de la sección 2.3 del documento.
 

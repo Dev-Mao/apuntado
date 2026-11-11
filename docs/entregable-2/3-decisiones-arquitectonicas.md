@@ -22,9 +22,7 @@ completos están en `docs/adrs/` del repositorio y se adjuntan a la entrega.
 > extensión. Esto responde a la retroalimentación del Entregable 1, que recomendó mantenerse firmes
 > en Strategy para el MVP.
 
-`[Insertar aquí, textualmente, el contenido de docs/adrs/ADR-03-estilo-monolito-modular-strategy.md]`
-
-`[Insertar aquí, textualmente, el contenido de docs/adrs/ADR-04-persistencia-relacional-postgresql.md]`
-
-`[Insertar aquí, textualmente, el contenido de docs/adrs/ADR-05-sincronizacion-llamadas-directas-y-eventos.md]`
+- [ADR-03 · Adoptar monolito modular con Strategy](../adrs/ADR-03-estilo-monolito-modular-strategy.md)
+- [ADR-04 · Persistir en PostgreSQL con un esquema relacional normalizado](../adrs/ADR-04-persistencia-relacional-postgresql.md)
+- [ADR-05 · Sincronizar el turno con llamadas directas y desacoplar los efectos con eventos locales](../adrs/ADR-05-sincronizacion-llamadas-directas-y-eventos.md)
 
