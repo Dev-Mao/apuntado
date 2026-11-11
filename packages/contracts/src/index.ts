@@ -79,3 +79,47 @@ export interface TableSnapshot {
   readonly seats: readonly SeatView[];
   readonly view: PlayerView;
 }
+
+export interface SessionView {
+  readonly playerId: string;
+  readonly nickname: string;
+  readonly guest: boolean;
+}
+
+export interface RoomSettings {
+  readonly mode: GameMode;
+  readonly eliminationThreshold: number;
+  readonly turnSeconds: number;
+  readonly stake: number;
+}
+
+export type RoomStatus = "LOBBY" | "PLAYING" | "FINISHED";
+
+export interface LobbyView {
+  readonly code: string;
+  readonly hostId: string;
+  readonly status: RoomStatus;
+  readonly settings: RoomSettings;
+  readonly seats: readonly SeatView[];
+}
+
+export type RoomResult = { readonly ok: true; readonly code: string } | { readonly ok: false; readonly reason: string };
+
+export type DrawSource = "STOCK" | "DISCARD";
+
+export interface ClientToServerEvents {
+  "room:create": (settings: RoomSettings, ack: (result: RoomResult) => void) => void;
+  "room:join": (code: string, ack: (result: RoomResult) => void) => void;
+  "room:leave": (ack: (result: ActionResult) => void) => void;
+  "room:addBot": (ack: (result: ActionResult) => void) => void;
+  "room:start": (ack: (result: ActionResult) => void) => void;
+  "game:draw": (source: DrawSource, ack: (result: ActionResult) => void) => void;
+  "game:discard": (card: CardDto, ack: (result: ActionResult) => void) => void;
+  "game:declare": (declaration: ClosureDeclarationDto, ack: (result: ActionResult) => void) => void;
+  "game:nextRound": (ack: (result: ActionResult) => void) => void;
+}
+
+export interface ServerToClientEvents {
+  "lobby:update": (lobby: LobbyView) => void;
+  "table:snapshot": (snapshot: TableSnapshot) => void;
+}
