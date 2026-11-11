@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { cardId } from "../../domain/entities/card.js";
-import { ApuntadoRule } from "../../domain/rules/apuntado-rule.js";
+import { RuleResolver } from "../../domain/rules/rule-resolver.js";
 import { c, cards, riggedDeck } from "../../domain/round/round.test-support.js";
 import { harness } from "../use-cases/use-cases.test-support.js";
 import { projectPlayerView } from "./player-view-projector.js";
@@ -57,7 +57,7 @@ describe("Vista filtrada del jugador", () => {
     session.drawFromStock("ana");
     session.declareClosure("ana", {
       type: "APUNTADO", melds: [cards("7H 7S 7D"), cards("9H 9S 9D"), cards("KH KS KD")], leftovers: cards("AC"), discard: c("5D"),
-    }, new ApuntadoRule());
+    }, new RuleResolver().resolve("APUNTADO", session.enabledClosures)!);
     const view = projectPlayerView(session, "luis", NOW);
     expect(view).toMatchObject({ status: "ROUND_OVER", currentPlayerId: null, phase: null, turnDeadline: null, allowedActions: [] });
     expect(view.lastRound).toMatchObject({ roundNumber: 1, roundWinnerId: "ana", closureType: "APUNTADO" });
