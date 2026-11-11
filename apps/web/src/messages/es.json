@@ -188,13 +188,13 @@
     "discard": "Descarte",
     "slotEmpty": "Vacío",
     "selectCard": "Seleccionar {{card}}",
+    "selectLockedCard": "Seleccionar {{card}}, tomada del pozo, no puede ir al descarte",
     "returnCard": "Devolver {{card}} a las cartas sin asignar",
     "submit": "Enviar cierre",
     "submitting": "Enviando",
     "rejectedTitle": "El servidor rechazó el cierre",
-    "rejection": {
-      "LEFTOVER_TOO_HIGH": "Las cartas sobrantes suman {{sum}}; deben sumar menos de {{limit}}"
-    },
+    "failedTitle": "No pudimos enviar el cierre",
+    "failedBody": "Revisa tu conexión e inténtalo de nuevo.",
     "accepted": {
       "title": "Cierre aceptado",
       "body": "El servidor validó tu cierre y la ronda terminó.",

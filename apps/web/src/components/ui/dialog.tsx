@@ -1,14 +1,22 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useCallback, useEffect, useId, useRef } from "react";
 
 import { cn } from "@/lib";
 
 import type { DialogProps } from "./types";
+import type { SyntheticEvent } from "react";
 
-export function Dialog({ open, title, closeLabel, onClose, className, children }: DialogProps) {
+export function Dialog({ open, title, closeLabel, dismissible = true, onClose, className, children }: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
+
+  const handleCancel = useCallback(
+    (event: SyntheticEvent<HTMLDialogElement>) => {
+      if (!dismissible) event.preventDefault();
+    },
+    [dismissible],
+  );
 
   useEffect(() => {
     const dialog = ref.current;
@@ -21,6 +29,7 @@ export function Dialog({ open, title, closeLabel, onClose, className, children }
     <dialog
       ref={ref}
       aria-labelledby={titleId}
+      onCancel={handleCancel}
       onClose={onClose}
       className={cn(
         "m-auto max-h-[92dvh] w-[min(100%-1.5rem,44rem)] overflow-y-auto rounded-3xl bg-paper p-0 text-ink shadow-2xl",
@@ -31,8 +40,9 @@ export function Dialog({ open, title, closeLabel, onClose, className, children }
         <button
           type="button"
           onClick={onClose}
+          disabled={!dismissible}
           aria-label={closeLabel}
-          className="absolute top-4 right-4 grid size-10 place-items-center rounded-full border border-ink/30 text-xl leading-none hover:bg-ink hover:text-paper sm:top-6 sm:right-6"
+          className="absolute top-4 right-4 grid size-10 place-items-center rounded-full border border-ink/30 text-xl leading-none not-disabled:hover:bg-ink not-disabled:hover:text-paper disabled:opacity-40 sm:top-6 sm:right-6"
         >
           <span aria-hidden="true">×</span>
         </button>

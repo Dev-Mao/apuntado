@@ -1,3 +1,2 @@
 export { ClosureDialog } from "./components";
-export { CLOSURE_REJECTION } from "./types";
-export type { ClosureDraft, ClosureRejection, ClosureResponse } from "./types";
+export type { ClosureDialogProps, SubmitClosure } from "./types";

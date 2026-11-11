@@ -8,29 +8,26 @@ import { Button, BUTTON_VARIANT, ChoicePills } from "@/components";
 import { useCardLabel } from "@/hooks/use-card-label";
 import { cardId } from "@/lib";
 
-import { useClosureDraft } from "../hooks/use-closure-draft";
-import { useClosureSubmit } from "../hooks/use-closure-submit";
+import { useClosureDraft } from "../hooks";
 import { CLOSURE_SLOT, GROUP_SLOTS, SUBMIT_STATUS } from "../types";
 import { ClosureCardButton } from "./closure-card-button";
-import { ClosureStatus, ClosureSuccess } from "./closure-status";
+import { ClosureStatus } from "./closure-status";
 import { SlotPanel } from "./slot-panel";
 
-import type { ClosureDialogProps, ClosureSlot } from "../types";
+import type { ClosureFormProps, ClosureSlot } from "../types";
 
 const ALL_SLOTS: readonly ClosureSlot[] = [...GROUP_SLOTS, CLOSURE_SLOT.LEFTOVERS, CLOSURE_SLOT.DISCARD];
 const TARGET_BUTTON_CLASSES = "min-h-9 px-4 pt-[0.55rem] pb-[0.45rem] text-[0.62rem]";
 
-type ClosureFormProps = Omit<ClosureDialogProps, "open">;
-
-export function ClosureForm({ cards, allowedClosureTypes, onClose, onSubmit }: ClosureFormProps) {
+export function ClosureForm({ cards, enabledClosures, cannotDiscard, state, onClose, onSubmit }: ClosureFormProps) {
   const { t } = useTranslation();
   const cardLabel = useCardLabel();
-  const draft = useClosureDraft(cards, allowedClosureTypes);
-  const { state, submit } = useClosureSubmit(onSubmit);
+  const lockedId = cannotDiscard ? cardId(cannotDiscard) : null;
+  const draft = useClosureDraft(cards, enabledClosures, lockedId);
 
   const typeOptions = useMemo(
-    () => allowedClosureTypes.map((type) => ({ value: type, label: t(`closureType.${type}`) })),
-    [allowedClosureTypes, t],
+    () => enabledClosures.map((type) => ({ value: type, label: t(`closureType.${type}`) })),
+    [enabledClosures, t],
   );
   const slotTitle = (slot: ClosureSlot) => {
     if (slot === CLOSURE_SLOT.LEFTOVERS) return t("closure.leftovers");
@@ -38,11 +35,12 @@ export function ClosureForm({ cards, allowedClosureTypes, onClose, onSubmit }: C
     return t("closure.group", { count: GROUP_SLOTS.indexOf(slot) + 1 });
   };
 
-  if (state.status === SUBMIT_STATUS.ACCEPTED) return <ClosureSuccess />;
-
-  const hasSelection = draft.selectedIds.size > 0;
+  const cardLabelFor = (id: string, label: string) =>
+    id === lockedId ? t("closure.selectLockedCard", { card: label }) : t("closure.selectCard", { card: label });
   const isSubmitting = state.status === SUBMIT_STATUS.SUBMITTING;
-  const handleSubmit = () => void submit(draft.draft);
+  const handleSubmit = () => {
+    if (!isSubmitting) onSubmit(draft.declaration);
+  };
 
   return (
     <div className="mt-3 flex flex-col gap-6">
@@ -62,8 +60,9 @@ export function ClosureForm({ cards, allowedClosureTypes, onClose, onSubmit }: C
               <li key={cardId(card)}>
                 <ClosureCardButton
                   card={card}
-                  label={t("closure.selectCard", { card: cardLabel(card) })}
+                  label={cardLabelFor(cardId(card), cardLabel(card))}
                   isSelected={draft.selectedIds.has(cardId(card))}
+                  isLocked={cardId(card) === lockedId}
                   onPress={draft.toggle}
                 />
               </li>
@@ -79,7 +78,7 @@ export function ClosureForm({ cards, allowedClosureTypes, onClose, onSubmit }: C
           <Button
             key={slot}
             variant={BUTTON_VARIANT.OUTLINE}
-            disabled={!hasSelection}
+            disabled={slot === CLOSURE_SLOT.DISCARD ? !draft.canDiscardSelection : !draft.hasSelection}
             onClick={() => draft.assign(slot)}
             className={TARGET_BUTTON_CLASSES}
           >
@@ -94,10 +93,15 @@ export function ClosureForm({ cards, allowedClosureTypes, onClose, onSubmit }: C
       </div>
       <ClosureStatus state={state} />
       <div className="flex flex-col-reverse gap-3 border-t border-line pt-5 sm:flex-row sm:justify-end">
-        <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onClose}>
+        <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onClose} disabled={isSubmitting}>
           {t("common.cancel")}
         </Button>
-        <Button onClick={handleSubmit} disabled={isSubmitting} aria-busy={isSubmitting}>
+        <Button
+          onClick={handleSubmit}
+          aria-disabled={isSubmitting}
+          aria-busy={isSubmitting}
+          className="aria-disabled:cursor-wait aria-disabled:opacity-70"
+        >
           {isSubmitting ? t("closure.submitting") : t("closure.submit")}
         </Button>
       </div>

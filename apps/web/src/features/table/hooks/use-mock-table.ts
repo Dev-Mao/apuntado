@@ -2,22 +2,16 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { CLOSURE_REJECTION } from "@/features/closure";
-
 import { discard, drawFromDiscard, drawFromStock, endRound, returnTurn, startTurn } from "../mock-server";
 
 import type { TableActions } from "../types";
-import type { ClosureResponse } from "@/features/closure";
-import type { CardDto, PlayerView, TableSnapshot } from "@apuntado/contracts";
+import type { ActionResult, CardDto, PlayerView, TableSnapshot } from "@apuntado/contracts";
 
 const MOCK_LATENCY_MS = 600;
 const MOCK_OPPONENT_TURN_MS = 3000;
 
-const REJECTED: ClosureResponse = {
-  status: "REJECTED",
-  rejection: { code: CLOSURE_REJECTION.LEFTOVER_TOO_HIGH, sum: 6, limit: 5 },
-};
-const ACCEPTED: ClosureResponse = { status: "ACCEPTED" };
+const REJECTED: ActionResult = { ok: false, reason: "Las cartas sobrantes suman 6; deben sumar menos de 5" };
+const ACCEPTED: ActionResult = { ok: true };
 
 type ViewChange = (view: PlayerView, now: number) => PlayerView;
 
@@ -49,16 +43,16 @@ export function useMockTable(initial: TableSnapshot): { snapshot: TableSnapshot 
     [update],
   );
 
-  const onSubmitClosure = useCallback(() => {
+  const onDeclareClosure = useCallback(() => {
     closureAttemptsRef.current += 1;
     const response = closureAttemptsRef.current === 1 ? REJECTED : ACCEPTED;
-    return new Promise<ClosureResponse>((resolve) =>
+    return new Promise<ActionResult>((resolve) =>
       window.setTimeout(() => {
-        if (response.status === "ACCEPTED") update(endRound);
+        if (response.ok) update(endRound);
         resolve(response);
       }, MOCK_LATENCY_MS),
     );
   }, [update]);
 
-  return { snapshot, onDrawFromStock, onDrawFromDiscard, onDiscard, onSubmitClosure };
+  return { snapshot, onDrawFromStock, onDrawFromDiscard, onDiscard, onDeclareClosure };
 }

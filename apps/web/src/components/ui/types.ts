@@ -4,6 +4,7 @@ export interface DialogProps {
   open: boolean;
   title: string;
   closeLabel: string;
+  dismissible?: boolean | undefined;
   onClose: () => void;
   className?: string | undefined;
   children: ReactNode;

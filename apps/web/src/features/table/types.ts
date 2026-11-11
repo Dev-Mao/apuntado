@@ -1,12 +1,11 @@
-import type { ClosureDraft, ClosureResponse } from "@/features/closure";
-import type { CardDto, PlayerAction, TableSnapshot } from "@apuntado/contracts";
+import type { ActionResult, CardDto, ClosureDeclarationDto, PlayerAction, TableSnapshot } from "@apuntado/contracts";
 import type { CSSProperties, KeyboardEvent, PointerEvent } from "react";
 
 export interface TableActions {
   onDrawFromStock: () => void;
   onDrawFromDiscard: () => void;
   onDiscard: (card: CardDto) => void;
-  onSubmitClosure: (draft: ClosureDraft) => Promise<ClosureResponse>;
+  onDeclareClosure: (declaration: ClosureDeclarationDto) => Promise<ActionResult>;
 }
 
 export interface TableScreenProps extends TableActions {

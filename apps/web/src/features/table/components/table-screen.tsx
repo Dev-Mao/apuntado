@@ -22,7 +22,7 @@ function focusHand() {
   document.querySelector<HTMLElement>("[data-hand-index='0']")?.focus();
 }
 
-export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDiscard, onSubmitClosure }: TableScreenProps) {
+export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDiscard, onDeclareClosure }: TableScreenProps) {
   const { t } = useTranslation();
   const { view } = snapshot;
   const hand = useHand(view.hand);
@@ -92,9 +92,10 @@ export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDi
       <ClosureDialog
         open={closureOpen}
         cards={hand.cards}
-        allowedClosureTypes={view.enabledClosures}
+        enabledClosures={view.enabledClosures}
+        cannotDiscard={view.cannotDiscard}
         onClose={handleCloseClosure}
-        onSubmit={onSubmitClosure}
+        onSubmit={onDeclareClosure}
       />
     </div>
   );

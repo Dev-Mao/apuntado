@@ -3,27 +3,33 @@
 import { useTranslation } from "react-i18next";
 
 import { ButtonLink } from "@/components";
+import { useFocusOnMount } from "@/hooks/use-focus-on-mount";
 import { ROUTES } from "@/lib";
 
 import { SUBMIT_STATUS } from "../types";
 
 import type { SubmitState } from "../types";
 
+function StatusAlert({ title, message }: { title: string; message: string }) {
+  return (
+    <div role="alert" className="flex gap-3 rounded-2xl border-[1.5px] border-coral-deep bg-coral/10 p-4">
+      <span aria-hidden="true" className="mt-1 size-2.5 shrink-0 rounded-full bg-coral-deep" />
+      <div>
+        <p className="label-caps text-[0.65rem] text-coral-ink">{title}</p>
+        <p className="mt-1 font-display text-lg">{message}</p>
+      </div>
+    </div>
+  );
+}
+
 export function ClosureStatus({ state }: { state: SubmitState }) {
   const { t } = useTranslation();
 
   return (
     <div aria-live="polite" className="empty:hidden">
-      {state.status === SUBMIT_STATUS.REJECTED && (
-        <div role="alert" className="flex gap-3 rounded-2xl border-[1.5px] border-coral-deep bg-coral/10 p-4">
-          <span aria-hidden="true" className="mt-1 size-2.5 shrink-0 rounded-full bg-coral-deep" />
-          <div>
-            <p className="label-caps text-[0.65rem] text-coral-ink">{t("closure.rejectedTitle")}</p>
-            <p className="mt-1 font-display text-lg">
-              {t(`closure.rejection.${state.rejection.code}`, { sum: state.rejection.sum, limit: state.rejection.limit })}
-            </p>
-          </div>
-        </div>
+      {state.status === SUBMIT_STATUS.REJECTED && <StatusAlert title={t("closure.rejectedTitle")} message={state.reason} />}
+      {state.status === SUBMIT_STATUS.FAILED && (
+        <StatusAlert title={t("closure.failedTitle")} message={t("closure.failedBody")} />
       )}
     </div>
   );
@@ -31,10 +37,14 @@ export function ClosureStatus({ state }: { state: SubmitState }) {
 
 export function ClosureSuccess() {
   const { t } = useTranslation();
+  const headingRef = useFocusOnMount<HTMLHeadingElement>();
+
   return (
     <div role="status" className="relative mt-6 overflow-hidden rounded-3xl bg-felt px-6 pt-16 pb-10 text-center text-paper">
       <span aria-hidden="true" className="absolute -top-20 left-1/2 size-32 -translate-x-1/2 rounded-full bg-coral" />
-      <p className="relative font-display text-4xl italic">{t("closure.accepted.title")}</p>
+      <h3 ref={headingRef} tabIndex={-1} className="relative font-display text-4xl italic focus-visible:outline-paper">
+        {t("closure.accepted.title")}
+      </h3>
       <p className="relative mt-3 text-paper/80">{t("closure.accepted.body")}</p>
       <ButtonLink href={ROUTES.ROUND_RESULTS} className="relative mt-6">
         {t("closure.accepted.cta")}

@@ -1,4 +1,4 @@
-import type { CardDto, ClosureType } from "@apuntado/contracts";
+import type { ActionResult, CardDto, ClosureDeclarationDto, ClosureType } from "@apuntado/contracts";
 
 export const CLOSURE_SLOT = {
   GROUP_1: "GROUP_1",
@@ -12,50 +12,41 @@ export type ClosureSlot = (typeof CLOSURE_SLOT)[keyof typeof CLOSURE_SLOT];
 
 export const GROUP_SLOTS: readonly ClosureSlot[] = [CLOSURE_SLOT.GROUP_1, CLOSURE_SLOT.GROUP_2, CLOSURE_SLOT.GROUP_3];
 
-export interface ClosureDraft {
-  readonly type: ClosureType;
-  readonly groups: readonly (readonly CardDto[])[];
-  readonly leftovers: readonly CardDto[];
-  readonly discard: CardDto | null;
-}
-
-export const CLOSURE_REJECTION = {
-  LEFTOVER_TOO_HIGH: "LEFTOVER_TOO_HIGH",
-} as const;
-
-export interface ClosureRejection {
-  readonly code: (typeof CLOSURE_REJECTION)[keyof typeof CLOSURE_REJECTION];
-  readonly sum: number;
-  readonly limit: number;
-}
-
-export type ClosureResponse =
-  | { readonly status: "ACCEPTED" }
-  | { readonly status: "REJECTED"; readonly rejection: ClosureRejection };
-
 export const SUBMIT_STATUS = {
   IDLE: "IDLE",
   SUBMITTING: "SUBMITTING",
   ACCEPTED: "ACCEPTED",
   REJECTED: "REJECTED",
+  FAILED: "FAILED",
 } as const;
 
+type PlainSubmitStatus = Exclude<(typeof SUBMIT_STATUS)[keyof typeof SUBMIT_STATUS], typeof SUBMIT_STATUS.REJECTED>;
+
 export type SubmitState =
-  | { readonly status: typeof SUBMIT_STATUS.IDLE | typeof SUBMIT_STATUS.SUBMITTING | typeof SUBMIT_STATUS.ACCEPTED }
-  | { readonly status: typeof SUBMIT_STATUS.REJECTED; readonly rejection: ClosureRejection };
+  | { readonly status: PlainSubmitStatus }
+  | { readonly status: typeof SUBMIT_STATUS.REJECTED; readonly reason: string };
+
+export type SubmitClosure = (declaration: ClosureDeclarationDto) => Promise<ActionResult>;
 
 export interface ClosureDialogProps {
   open: boolean;
   cards: readonly CardDto[];
-  allowedClosureTypes: readonly ClosureType[];
+  enabledClosures: readonly ClosureType[];
+  cannotDiscard: CardDto | null;
   onClose: () => void;
-  onSubmit: (draft: ClosureDraft) => Promise<ClosureResponse>;
+  onSubmit: SubmitClosure;
+}
+
+export interface ClosureFormProps extends Omit<ClosureDialogProps, "open" | "onSubmit"> {
+  state: SubmitState;
+  onSubmit: (declaration: ClosureDeclarationDto) => void;
 }
 
 export interface ClosureCardButtonProps {
   card: CardDto;
   label: string;
   isSelected?: boolean;
+  isLocked?: boolean;
   onPress: (id: string) => void;
 }
 
