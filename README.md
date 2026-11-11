@@ -25,6 +25,7 @@ models/uml/           Casos de uso, componentes y clases (PlantUML y draw.io)
 models/er/            Modelo entidad-relación y esquema SQL
 tests/architecture/   Fitness functions ejecutables (TSArch)
 tests/integration/    Esquema SQL probado sobre PostgreSQL (PGlite)
+tests/e2e/            Servidor real jugado con clientes Socket.IO
 ```
 
 La versión del repositorio entregada con el Entregable 2 está en la etiqueta
@@ -38,9 +39,9 @@ apps/api/src/modules/
 ├── game/        Juego: reglas, turnos, mesa          ← el único que cambia seguido
 │   ├── domain/           entidades, ronda, partida, sesión y servicios puros
 │   ├── application/      casos de uso, puertos, vista filtrada y oponente virtual
-│   ├── infrastructure/   repositorios y adaptadores
-│   └── interfaces/       capa de presentación
-├── identity/    Identidad: registro, sesión, invitados
+│   ├── infrastructure/   repositorios, temporizadores y bitácora
+│   └── interfaces/       gateway de Socket.IO
+├── identity/    Identidad: sesión de invitado con token firmado
 ├── economy/     Economía: fichas, apuestas, movimientos
 └── history/     Historial: resultados y estadísticas
 ```
@@ -58,10 +59,25 @@ npm run test:integration  # esquema SQL sobre PostgreSQL (PGlite, sin Docker)
 npm run typecheck         # TypeScript estricto del servidor y los contratos
 npm run lint              # incluye el límite de complejidad ciclomática (CC ≤ 10)
 npm run arch:deps         # reglas de dependencia (dependency-cruiser)
+npm run test:e2e          # servidor real y clientes Socket.IO de punta a punta
 npm run web:check         # tipos, estilo y build de la interfaz web
 npm run verificar         # todo lo anterior: exactamente lo que corre el pipeline
+npm run build             # compila la interfaz web y el servidor
+npm start                 # arranca el servidor en http://localhost:3000 con la interfaz incluida
 npm run dev -w @apuntado/web  # interfaz web en modo desarrollo
 ```
+
+Variables de entorno del servidor:
+
+| Variable | Uso | Por defecto |
+|---|---|---|
+| `PORT` | Puerto HTTP | `3000` |
+| `NODE_ENV` | `production` activa las cookies seguras y exige `SESSION_SECRET` | sin definir |
+| `SESSION_SECRET` | Clave con que se firman las sesiones | clave de desarrollo |
+| `WEB_DIR` | Carpeta de la interfaz compilada | `apps/web/out` |
+
+El despliegue en Render está descrito en `render.yaml`: un solo servicio que compila todo, sirve la
+interfaz, la API y el socket desde el mismo origen, y genera `SESSION_SECRET` automáticamente.
 
 El flujo `.github/workflows/gobernanza.yml` ejecuta esas mismas etapas en cada subida a `main` y en
 cada solicitud de integración, y marca la construcción en rojo si alguna regla de arquitectura se
@@ -84,7 +100,8 @@ Las reglas de los ADR no se sostienen con disciplina sino con pruebas que fallan
 | FF-07 | `shared/` no contiene lógica de negocio | ADR-01 | dependency-cruiser |
 | FF-08 | Complejidad ciclomática ≤ 10 por función | §5.3 de la guía | ESLint |
 
-Además, `packages/contracts` no puede importar nada de las aplicaciones.
+Además, `packages/contracts` no puede importar nada de las aplicaciones, y la capa de aplicación de
+cada módulo no puede importar NestJS, Socket.IO ni otras librerías de infraestructura.
 
 ### Las reglas están verificadas contra violaciones reales
 
@@ -107,17 +124,18 @@ violadas. Se reescribieron con `matchingPattern` explícito. El análisis está 
 
 ## Estado actual
 
-Fase 2 del [plan de construcción](docs/entregable-3/plan-de-construccion.md): el dominio del
-juego y la capa de aplicación del módulo Juego están completos y probados sin red ni interfaz.
+Fase 3 del [plan de construcción](docs/entregable-3/plan-de-construccion.md): el servidor en tiempo
+real funciona de punta a punta.
 
-- Ronda como máquina de estados: reparto, robo del mazo o del pozo, descarte, reciclado del pozo,
-  cierre clásico y por apuntado, y vencimiento del turno.
-- Partida en las modalidades Clásica, Apuntado y Ambas, con acumulación y eliminación por umbral.
-- Casos de uso, vista filtrada por jugador y oponente virtual. Dos bots juegan partidas completas
-  solo con los casos de uso.
-- La interfaz web tiene el sistema de diseño y las pantallas con datos simulados.
+- Dominio completo: ronda, partida en las modalidades Clásica, Apuntado y Ambas, acumulación y
+  eliminación por umbral, vencimiento del turno.
+- Salas con código de 4 caracteres, anfitrión, bots, inicio y reconexión con la vista completa.
+- Sesión de invitado con token firmado en una cookie `httpOnly`.
+- Servidor NestJS con Socket.IO: cada jugador recibe solo su vista; el reloj de turno y el bot juegan
+  solos cuando corresponde.
+- La interfaz web tiene el sistema de diseño y sus pantallas; falta conectarla al servidor.
 
 ```
-170 pruebas  ·  154 de dominio y aplicación + 6 de arquitectura + 10 de esquema
+220 pruebas  ·  199 de servidor + 6 de arquitectura + 10 de esquema + 5 de punta a punta
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```
