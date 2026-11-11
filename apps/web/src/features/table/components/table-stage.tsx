@@ -3,23 +3,25 @@
 import { useTranslation } from "react-i18next";
 
 import { Pill, PILL_TONE } from "@/components";
+import { nicknameOf, seatOf } from "@/lib";
 
 import { CardPiles } from "./card-piles";
-import { OpponentSeat, SEAT } from "./opponent-seat";
+import { OpponentSeat, SEAT_POSITION } from "./opponent-seat";
 
-import type { Seat } from "./opponent-seat";
-import type { TableView } from "../types";
+import type { SeatPosition } from "./opponent-seat";
+import type { TableSnapshot } from "@apuntado/contracts";
 
-const SEATS_BY_COUNT: Readonly<Record<number, readonly Seat[]>> = {
-  1: [SEAT.TOP],
-  2: [SEAT.LEFT, SEAT.RIGHT],
-  3: [SEAT.LEFT, SEAT.TOP, SEAT.RIGHT],
+const POSITIONS_BY_COUNT: Readonly<Record<number, readonly SeatPosition[]>> = {
+  1: [SEAT_POSITION.TOP],
+  2: [SEAT_POSITION.LEFT, SEAT_POSITION.RIGHT],
+  3: [SEAT_POSITION.LEFT, SEAT_POSITION.TOP, SEAT_POSITION.RIGHT],
 };
 
-export function TableStage({ view }: { view: TableView }) {
+export function TableStage({ snapshot }: { snapshot: TableSnapshot }) {
   const { t } = useTranslation();
-  const seats = SEATS_BY_COUNT[view.opponents.length] ?? [];
-  const isMyTurn = view.turn.playerId === view.selfId;
+  const { seats, view } = snapshot;
+  const positions = POSITIONS_BY_COUNT[view.opponents.length] ?? [];
+  const isMyTurn = view.currentPlayerId === view.playerId;
 
   return (
     <section aria-labelledby="stage-title" className="relative isolate mx-4 flex flex-col sm:mx-8 lg:mx-16 lg:min-h-0 lg:flex-1">
@@ -33,19 +35,20 @@ export function TableStage({ view }: { view: TableView }) {
         <ul className="flex items-start justify-around gap-2 lg:contents">
           {view.opponents.map((opponent, index) => (
             <OpponentSeat
-              key={opponent.id}
+              key={opponent.playerId}
               opponent={opponent}
-              seat={seats[index] ?? SEAT.TOP}
-              isTurn={view.turn.playerId === opponent.id}
+              seat={seatOf(seats, opponent.playerId)}
+              position={positions[index] ?? SEAT_POSITION.TOP}
+              isTurn={view.currentPlayerId === opponent.playerId}
             />
           ))}
         </ul>
         <div className="flex flex-1 items-center justify-center lg:absolute lg:inset-0">
-          <CardPiles stockCount={view.stockCount} discardTop={view.discardTop} />
+          <CardPiles stockSize={view.stockSize} discardTop={view.discardTop} />
         </div>
         <div className="flex justify-center lg:absolute lg:inset-x-0 lg:bottom-[7%]">
           <Pill tone={isMyTurn ? PILL_TONE.ACTIVE : PILL_TONE.DARK}>
-            {t("common.you")} · {view.selfName}
+            {t("table.selfLabel", { name: nicknameOf(seats, view.playerId) })}
             <span className="font-display text-sm tracking-normal">{view.hand.length}</span>
           </Pill>
         </div>

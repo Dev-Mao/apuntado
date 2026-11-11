@@ -20,15 +20,23 @@ function moveItem<T>(items: readonly T[], from: number, to: number): T[] {
   return next;
 }
 
+function handKeyOf(cards: readonly CardDto[]): string {
+  return cards.map(cardId).sort().join(",");
+}
+
 export function useHand(cards: readonly CardDto[]) {
   const [order, setOrder] = useState<readonly string[]>(() => cards.map(cardId));
   const [selected, setSelected] = useState<ReadonlySet<string>>(() => new Set());
+  const [handKey, setHandKey] = useState(() => handKeyOf(cards));
+
+  const nextHandKey = handKeyOf(cards);
+  if (nextHandKey !== handKey) {
+    setHandKey(nextHandKey);
+    setOrder((prev) => arrange(cards, prev).map(cardId));
+    setSelected(new Set());
+  }
 
   const ordered = useMemo(() => arrange(cards, order), [cards, order]);
-  const selectedIds = useMemo(
-    () => new Set(ordered.map(cardId).filter((id) => selected.has(id))),
-    [ordered, selected],
-  );
 
   const toggle = useCallback((id: string) => {
     setSelected((prev) => {
@@ -39,14 +47,11 @@ export function useHand(cards: readonly CardDto[]) {
     });
   }, []);
 
-  const move = useCallback(
-    (from: number, to: number) => setOrder(moveItem(ordered.map(cardId), from, to)),
-    [ordered],
-  );
+  const move = useCallback((from: number, to: number) => setOrder((prev) => moveItem(prev, from, to)), []);
 
   const handleSortByRank = useCallback(() => setOrder(sortByRank(cards).map(cardId)), [cards]);
   const handleSortBySuit = useCallback(() => setOrder(sortBySuit(cards).map(cardId)), [cards]);
   const clearSelection = useCallback(() => setSelected(new Set()), []);
 
-  return { cards: ordered, selectedIds, toggle, move, handleSortByRank, handleSortBySuit, clearSelection };
+  return { cards: ordered, selectedIds: selected, toggle, move, handleSortByRank, handleSortBySuit, clearSelection };
 }

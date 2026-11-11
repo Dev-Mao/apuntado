@@ -18,7 +18,7 @@ const HAND_ARC_PX = 0.7;
 const EMPTY_STYLE = {};
 const SORT_BUTTON_CLASSES = "min-h-9 px-4 pt-[0.55rem] pb-[0.45rem] text-[0.62rem]";
 
-function PlayerHandBase({ cards, selectedIds, onToggle, onMove, onSortByRank, onSortBySuit }: PlayerHandProps) {
+function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSortByRank, onSortBySuit }: PlayerHandProps) {
   const { t } = useTranslation();
   const drag = useHandDrag(onMove, cards.length);
   const styles = useMemo(() => fanStyles(cards.length, HAND_SPREAD_DEG, HAND_ARC_PX), [cards.length]);
@@ -61,6 +61,7 @@ function PlayerHandBase({ cards, selectedIds, onToggle, onMove, onSortByRank, on
             card={card}
             index={index}
             isSelected={selectedIds.has(cardId(card))}
+            isLocked={lockedId === cardId(card)}
             isDragging={drag.draggingIndex === index}
             fanStyle={styles[index] ?? EMPTY_STYLE}
             onToggle={handleToggle}

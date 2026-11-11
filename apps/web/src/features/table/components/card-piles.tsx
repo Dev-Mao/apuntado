@@ -8,20 +8,20 @@ import { useCardLabel } from "@/hooks/use-card-label";
 import type { CardDto } from "@apuntado/contracts";
 
 interface CardPilesProps {
-  stockCount: number;
+  stockSize: number;
   discardTop: CardDto | null;
 }
 
 const PILE_LABEL_CLASSES = "label-caps text-[0.62rem] text-paper/70";
 
-export function CardPiles({ stockCount, discardTop }: CardPilesProps) {
+export function CardPiles({ stockSize, discardTop }: CardPilesProps) {
   const { t } = useTranslation();
   const cardLabel = useCardLabel();
   const discardLabel = discardTop ? t("table.discardLabel", { card: cardLabel(discardTop) }) : t("table.discardEmpty");
 
   return (
     <div className="flex items-end justify-center gap-10 sm:gap-16">
-      <figure role="img" aria-label={t("table.stockLabel", { count: stockCount })} className="flex flex-col items-center gap-3">
+      <figure role="img" aria-label={t("table.stockLabel", { count: stockSize })} className="flex flex-col items-center gap-3">
         <span aria-hidden="true" className="grid">
           <PlayingCard card={null} size={CARD_SIZE.LG} className="col-start-1 row-start-1 translate-1.5 brightness-75" />
           <PlayingCard card={null} size={CARD_SIZE.LG} className="col-start-1 row-start-1 translate-0.5 brightness-90" />
@@ -29,7 +29,7 @@ export function CardPiles({ stockCount, discardTop }: CardPilesProps) {
         </span>
         <figcaption aria-hidden="true" className="flex items-baseline gap-2">
           <span className={PILE_LABEL_CLASSES}>{t("table.stock")}</span>
-          <span className="font-display text-paper">{stockCount}</span>
+          <span className="font-display text-paper">{stockSize}</span>
         </figcaption>
       </figure>
       <figure role="img" aria-label={discardLabel} className="flex flex-col items-center gap-3">
