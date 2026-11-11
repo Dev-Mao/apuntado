@@ -1,4 +1,5 @@
-import { type Card, cardId, order } from "../entities/card.js";
+import { type Card, cardId } from "../entities/card.js";
+import { quartaCandidates, setCandidates } from "./meld-candidates.js";
 import { pointsOf } from "./score-calculator.js";
 
 export interface Arrangement {
@@ -6,36 +7,7 @@ export interface Arrangement {
   readonly loose: readonly Card[];
 }
 
-const combinationsOf = (cards: readonly Card[], size: number): Card[][] => {
-  if (size === 0) return [[]];
-  return cards.flatMap((first, i) =>
-    combinationsOf(cards.slice(i + 1), size - 1).map((rest) => [first, ...rest]),
-  );
-};
-
-const groupBy = (cards: readonly Card[], key: (c: Card) => string): Card[][] => {
-  const groups = new Map<string, Card[]>();
-  for (const c of cards) groups.set(key(c), [...(groups.get(key(c)) ?? []), c]);
-  return [...groups.values()];
-};
-
-const sameRankMelds = (cards: readonly Card[]): Card[][] =>
-  groupBy(cards, (c) => c.rank).flatMap((group) => [
-    ...combinationsOf(group, 3),
-    ...(group.length === 4 ? [group] : []),
-  ]);
-
-const runsOf = (suited: readonly Card[]): Card[][] => {
-  const sorted = [...suited].sort((a, b) => order(a) - order(b));
-  return sorted
-    .map((_, i) => sorted.slice(i, i + 4))
-    .filter((w) => w.length === 4 && w.every((c, k) => k === 0 || order(c) === order(w[k - 1]!) + 1));
-};
-
-const candidateMelds = (hand: readonly Card[]): Card[][] => [
-  ...sameRankMelds(hand),
-  ...groupBy(hand, (c) => c.suit).flatMap(runsOf),
-];
+const candidateMelds = (hand: readonly Card[]): Card[][] => [...setCandidates(hand), ...quartaCandidates(hand)];
 
 interface Search {
   readonly candidates: readonly Card[][];
