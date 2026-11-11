@@ -1,5 +1,5 @@
-import { MOCK_GAME_RESULTS, ResultsScreen } from "@/features/results";
+import { MOCK_MATCH_SNAPSHOT, ResultsScreen } from "@/features/results";
 
 export default function GameResultsPage() {
-  return <ResultsScreen results={MOCK_GAME_RESULTS} />;
+  return <ResultsScreen snapshot={MOCK_MATCH_SNAPSHOT} />;
 }

@@ -1,5 +1,5 @@
-import { MOCK_ROUND_RESULTS, ResultsScreen } from "@/features/results";
+import { MOCK_ROUND_SNAPSHOT, ResultsScreen } from "@/features/results";
 
 export default function RoundResultsPage() {
-  return <ResultsScreen results={MOCK_ROUND_RESULTS} />;
+  return <ResultsScreen snapshot={MOCK_ROUND_SNAPSHOT} />;
 }

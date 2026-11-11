@@ -1,18 +1,30 @@
-import type { GameMode } from "@apuntado/contracts";
+import type { ClosureType, GameMode } from "@apuntado/contracts";
 
-export interface PlayerResult {
-  readonly id: string;
+export const RESULT_STATUS = {
+  WINNER: "winner",
+  ELIMINATED: "eliminated",
+  CLOSED: "closed",
+  PLAYING: "playing",
+} as const;
+
+export type ResultStatus = (typeof RESULT_STATUS)[keyof typeof RESULT_STATUS];
+
+export interface ResultRow {
+  readonly playerId: string;
   readonly name: string;
   readonly roundPoints: number;
-  readonly totalPoints: number;
-  readonly isEliminated: boolean;
-  readonly closedRound: boolean;
+  readonly total: number;
+  readonly eliminated: boolean;
+  readonly status: ResultStatus;
 }
 
-export interface ResultsView {
-  readonly round: number;
+export interface ResultsSummary {
   readonly mode: GameMode;
-  readonly eliminationThreshold: number;
-  readonly players: readonly PlayerResult[];
-  readonly winnerId: string | null;
+  readonly threshold: number;
+  readonly roundNumber: number;
+  readonly isFinished: boolean;
+  readonly winnerName: string | null;
+  readonly roundWinnerName: string | null;
+  readonly closureType: ClosureType | null;
+  readonly rows: readonly ResultRow[];
 }

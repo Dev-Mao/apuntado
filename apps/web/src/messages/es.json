@@ -202,11 +202,14 @@
     }
   },
   "results": {
+    "eyebrow": "{{stage}} · {{mode}}",
     "roundEyebrow": "Fin de ronda",
     "roundTitle": "Ronda {{count}}",
     "gameEyebrow": "Fin de partida",
     "gameTitle": "Gana {{name}}",
     "tagline": "Así quedó la mesa",
+    "closedBy": "Cerró {{name}} · {{closure}}",
+    "noClosure": "La ronda terminó sin cierre",
     "caption": "Puntos de la ronda {{count}} y acumulados",
     "columns": {
       "player": "Jugador",
@@ -225,6 +228,7 @@
     "noEliminated": "Nadie quedó eliminado en esta ronda",
     "nextRound": "Siguiente ronda",
     "newGame": "Nueva partida",
-    "backHome": "Volver al inicio"
+    "backHome": "Volver al inicio",
+    "roundPoints": "+{{count}}"
   }
 }

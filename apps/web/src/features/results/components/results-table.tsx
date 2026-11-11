@@ -5,23 +5,18 @@ import { useTranslation } from "react-i18next";
 import { ThresholdBar } from "@/components";
 import { cn } from "@/lib";
 
-import type { PlayerResult, ResultsView } from "../types";
+import { RESULT_STATUS } from "../types";
+
+import type { ResultsSummary } from "../types";
 
 const HEADER_CLASSES = "label-caps pb-3 text-left text-[0.62rem] font-semibold text-ink-soft";
 
-function statusKey(player: PlayerResult, winnerId: string | null) {
-  if (player.id === winnerId) return "results.status.winner" as const;
-  if (player.isEliminated) return "results.status.eliminated" as const;
-  if (player.closedRound) return "results.status.closed" as const;
-  return "results.status.playing" as const;
-}
-
-export function ResultsTable({ results }: { results: ResultsView }) {
+export function ResultsTable({ summary }: { summary: ResultsSummary }) {
   const { t } = useTranslation();
 
   return (
     <table className="w-full border-collapse">
-      <caption className="sr-only">{t("results.caption", { count: results.round })}</caption>
+      <caption className="sr-only">{t("results.caption", { count: summary.roundNumber })}</caption>
       <thead className="border-b border-ink">
         <tr>
           <th scope="col" className={HEADER_CLASSES}>
@@ -39,23 +34,25 @@ export function ResultsTable({ results }: { results: ResultsView }) {
         </tr>
       </thead>
       <tbody className="divide-y divide-line">
-        {results.players.map((player) => {
-          const isWinner = player.id === results.winnerId;
-          const status = t(statusKey(player, results.winnerId));
+        {summary.rows.map((row) => {
+          const isWinner = row.status === RESULT_STATUS.WINNER;
+          const status = t(`results.status.${row.status}`);
           return (
-            <tr key={player.id} className={cn(player.isEliminated && "text-ink-soft")}>
+            <tr key={row.playerId} className={cn(row.eliminated && "text-ink-soft")}>
               <th scope="row" className="py-4 text-left font-normal">
                 <span className="flex items-center gap-3">
                   <span aria-hidden="true" className={cn("size-2.5 shrink-0 rounded-full", isWinner ? "bg-coral" : "bg-ink/20")} />
-                  <span className={cn("font-display text-xl sm:text-2xl", player.isEliminated && "line-through")}>{player.name}</span>
+                  <span className={cn("font-display text-xl sm:text-2xl", row.eliminated && "line-through")}>{row.name}</span>
                 </span>
                 <span className="label-caps mt-1 ml-5.5 block text-[0.58rem] text-ink-soft sm:hidden">{status}</span>
               </th>
-              <td className="py-4 text-right font-display text-xl tabular-nums sm:text-2xl">+{player.roundPoints}</td>
+              <td className="py-4 text-right font-display text-xl tabular-nums sm:text-2xl">
+                {t("results.roundPoints", { count: row.roundPoints })}
+              </td>
               <td className="py-4 pl-4 sm:pl-8">
                 <span className="flex flex-col items-end gap-2">
-                  <span className="font-display text-3xl leading-none tabular-nums sm:text-4xl">{player.totalPoints}</span>
-                  <ThresholdBar value={player.totalPoints} max={results.eliminationThreshold} className="w-20 sm:w-32" />
+                  <span className="font-display text-3xl leading-none tabular-nums sm:text-4xl">{row.total}</span>
+                  <ThresholdBar value={row.total} max={summary.threshold} className="w-20 sm:w-32" />
                 </span>
               </td>
               <td className={cn("hidden py-4 pl-8 sm:table-cell", isWinner && "text-coral-ink")}>
