@@ -9,6 +9,21 @@ const IMPLEMENTACIONES: readonly GameRule[] = [new ClassicRule(), new ApuntadoRu
 const terna = (rank: "7" | "9" | "K") =>
   [card(rank, "H"), card(rank, "S"), card(rank, "D")] as const;
 
+const VALIDAS: Record<ClosureDeclaration["type"], ClosureDeclaration> = {
+  CLASICO: {
+    type: "CLASICO",
+    melds: [[card("7", "H"), card("7", "S"), card("7", "D"), card("7", "C")], terna("9"), terna("K")],
+    leftovers: [],
+    discard: card("2", "C"),
+  },
+  APUNTADO: {
+    type: "APUNTADO",
+    melds: [terna("7"), terna("9"), terna("K")],
+    leftovers: [card("A", "D"), card("A", "C")],
+    discard: null,
+  },
+};
+
 const vacia = (type: ClosureDeclaration["type"]): ClosureDeclaration => ({
   type, melds: [], leftovers: [], discard: null,
 });
@@ -45,14 +60,9 @@ describe.each(IMPLEMENTACIONES.map((r) => [r.type, r] as const))("Contrato de Re
     expect(regla.validate(declaracion)).toEqual(regla.validate(declaracion));
   });
 
-  it("un resultado válido nunca trae motivo de rechazo", () => {
-    const apuntado = new ApuntadoRule().validate({
-      type: "APUNTADO",
-      melds: [terna("7"), terna("9"), terna("K")],
-      leftovers: [card("A", "D"), card("A", "C")],
-      discard: null,
-    });
-    expect(apuntado.valid).toBe(true);
-    expect(apuntado.reason).toBeNull();
+  it("acepta una declaración válida y entonces no trae motivo de rechazo", () => {
+    const resultado = regla.validate(VALIDAS[regla.type]);
+    expect(resultado.valid).toBe(true);
+    expect(resultado.reason).toBeNull();
   });
 });
