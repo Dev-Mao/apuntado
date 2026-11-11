@@ -118,6 +118,6 @@ juego y la capa de aplicación del módulo Juego están completos y probados sin
 - La interfaz web tiene el sistema de diseño y las pantallas con datos simulados.
 
 ```
-162 pruebas  ·  146 de dominio y aplicación + 6 de arquitectura + 10 de esquema
+170 pruebas  ·  154 de dominio y aplicación + 6 de arquitectura + 10 de esquema
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```

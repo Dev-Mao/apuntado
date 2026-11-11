@@ -135,6 +135,8 @@ abstract class Combinacion {
 
 class Terna {
   + esValida() : boolean
+  - esPorValor() : boolean
+  - esPorSecuencia() : boolean
 }
 
 class Cuarta {

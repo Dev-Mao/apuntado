@@ -168,8 +168,8 @@
     "rules": {
       "title": "Reglas en breve",
       "item1": "En tu turno roba una carta del mazo o toma la carta superior del pozo, y termina descartando una. La carta que tomas del pozo no la puedes descartar en ese mismo turno.",
-      "item2": "Una terna son exactamente 3 cartas del mismo valor.",
-      "item3": "Una cuarta son 4 cartas del mismo valor o 4 cartas seguidas del mismo palo. El as va abajo: A-2-3-4 vale, J-Q-K-A no.",
+      "item2": "Una terna son 3 cartas del mismo valor o 3 cartas seguidas del mismo palo.",
+      "item3": "Una cuarta son 4 cartas del mismo valor o 4 cartas seguidas del mismo palo. En las escaleras el as va abajo: A-2-3 vale, Q-K-A no.",
       "item4": "Cierre clásico: una cuarta, dos ternas y una carta de descarte.",
       "item5": "Cierre por apuntado: exactamente tres ternas, y las cartas sobrantes deben sumar menos de 5 puntos. El as vale 1, del 2 al 10 valen su número, y J, Q y K valen 10.",
       "item6": "Al cerrar una ronda, los demás suman los puntos de sus cartas sin combinar. Quien llega a {{threshold}} puntos queda eliminado.",
