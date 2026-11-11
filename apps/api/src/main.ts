@@ -3,7 +3,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module.js";
 import { loadConfig } from "./config.js";
 
-const config = loadConfig(process.env, process.cwd());
+const config = loadConfig(process.env);
 const app = await NestFactory.create(AppModule.register(config));
 app.enableShutdownHooks();
 await app.listen(config.port);
