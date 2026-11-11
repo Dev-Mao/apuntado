@@ -1,8 +1,5 @@
 import type { CardDto, Rank, Suit } from "@apuntado/contracts";
 
-export const CARD_IMAGE_DIR = "/cards";
-export const CARD_BACK_SRC = `${CARD_IMAGE_DIR}/back.png`;
-
 export const SUIT_SYMBOL: Readonly<Record<Suit, string>> = {
   H: "♥",
   D: "♦",
@@ -20,10 +17,6 @@ export function isRedSuit(suit: Suit): boolean {
 
 export function cardId(card: CardDto): string {
   return `${card.rank}${card.suit}`;
-}
-
-export function cardImageSrc(card: CardDto): string {
-  return `${CARD_IMAGE_DIR}/${cardId(card)}.png`;
 }
 
 function compareBy(primary: (card: CardDto) => number, secondary: (card: CardDto) => number) {

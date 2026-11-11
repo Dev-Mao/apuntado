@@ -1,11 +1,8 @@
-import Image from "next/image";
 import { memo } from "react";
 
-import { CARD_BACK_SRC, cardImageSrc, cn, FACE_RANKS, isRedSuit, SUIT_SYMBOL } from "@/lib";
+import { cn, FACE_RANKS, isRedSuit, SUIT_SYMBOL } from "@/lib";
 
 import type { CardDto } from "@apuntado/contracts";
-
-const USE_CARD_IMAGES = false;
 
 export const CARD_SIZE = {
   XS: "xs",
@@ -22,8 +19,6 @@ const SIZE_CLASSES: Readonly<Record<CardSize, string>> = {
   md: "w-[4.4rem] sm:w-24",
   lg: "w-16 sm:w-24 lg:w-28",
 };
-
-const SIZE_PX: Readonly<Record<CardSize, number>> = { xs: 40, sm: 56, md: 96, lg: 112 };
 
 interface PlayingCardProps {
   card: CardDto | null;
@@ -73,23 +68,10 @@ function CardBack() {
   );
 }
 
-function CardImage({ card, size }: { card: CardDto | null; size: CardSize }) {
-  const width = SIZE_PX[size];
-  return (
-    <Image
-      src={card ? cardImageSrc(card) : CARD_BACK_SRC}
-      alt=""
-      width={width}
-      height={Math.round(width * 1.4)}
-      className="absolute inset-0 size-full object-cover"
-    />
-  );
-}
-
 function PlayingCardBase({ card, size = CARD_SIZE.MD, className }: PlayingCardProps) {
   return (
     <span aria-hidden="true" className={cn(FRAME_CLASSES, SIZE_CLASSES[size], "block", className)}>
-      {USE_CARD_IMAGES ? <CardImage card={card} size={size} /> : card ? <CardFace card={card} /> : <CardBack />}
+      {card ? <CardFace card={card} /> : <CardBack />}
     </span>
   );
 }
