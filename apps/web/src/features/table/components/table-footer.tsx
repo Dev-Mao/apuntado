@@ -8,10 +8,17 @@ import { Dialog } from "@/components";
 
 import { SCOREBOARD_ID } from "./scoreboard";
 
-const RULE_KEYS = ["table.rules.item1", "table.rules.item2", "table.rules.item3", "table.rules.item4"] as const;
+const RULE_KEYS = [
+  "table.rules.item1",
+  "table.rules.item2",
+  "table.rules.item3",
+  "table.rules.item4",
+  "table.rules.item5",
+  "table.rules.item6",
+] as const;
 const LINK_CLASSES = "label-caps text-[0.65rem] underline-offset-4 hover:underline";
 
-export function TableFooter() {
+export function TableFooter({ threshold }: { threshold: number }) {
   const { t } = useTranslation();
   const [rulesOpen, setRulesOpen] = useState(false);
 
@@ -30,7 +37,7 @@ export function TableFooter() {
           {RULE_KEYS.map((key, index) => (
             <li key={key} className="flex gap-4">
               <span className="font-display text-3xl leading-none text-coral-deep italic">{index + 1}</span>
-              <p className="leading-relaxed">{t(key)}</p>
+              <p className="leading-relaxed">{t(key, { threshold })}</p>
             </li>
           ))}
         </ol>

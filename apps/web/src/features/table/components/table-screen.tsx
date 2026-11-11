@@ -87,7 +87,7 @@ export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDi
             onDeclareClosure={handleOpenClosure}
           />
         </div>
-        <TableFooter />
+        <TableFooter threshold={view.eliminationThreshold} />
       </aside>
       <ClosureDialog
         open={closureOpen}

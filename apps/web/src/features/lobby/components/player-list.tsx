@@ -22,7 +22,7 @@ function PlayerRow({ player, isSelf }: { player: LobbyPlayer; isSelf: boolean })
       />
       <span className="min-w-0 flex-1 truncate font-display text-xl sm:text-2xl">
         {player.name}
-        {isSelf && <span className="ml-2 text-base text-ink-soft italic">({t("common.you")})</span>}
+        {isSelf && <span className="ml-2 text-base text-ink-soft italic">{t("lobby.selfTag")}</span>}
       </span>
       {player.isHost && (
         <span className="label-caps rounded-full bg-ink px-3 pt-[0.4rem] pb-[0.3rem] text-[0.6rem] text-paper">

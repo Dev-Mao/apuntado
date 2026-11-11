@@ -13,16 +13,14 @@
     "cancel": "Cancelar",
     "points_one": "{{count}} punto",
     "points_other": "{{count}} puntos",
-    "pointsShort": "{{count}} pts",
     "seconds": "{{count}} s",
     "noStake": "Sin apuesta",
     "chips_one": "{{count}} ficha",
-    "chips_other": "{{count}} fichas",
-    "you": "Tú"
+    "chips_other": "{{count}} fichas"
   },
   "gameMode": {
     "CLASICA": "Clásica (4-3-3)",
-    "APUNTADO": "Apuntado a 101",
+    "APUNTADO": "Apuntado",
     "AMBAS": "Ambas"
   },
   "closureType": {
@@ -83,7 +81,6 @@
       "placeholder": "K7Q2",
       "submit": "Unirme"
     },
-    "or": "o",
     "errors": {
       "nicknameRequired": "Escribe un apodo para entrar",
       "nicknameLength": "El apodo debe tener entre 2 y 16 caracteres",
@@ -103,6 +100,7 @@
     "players": "Jugadores",
     "playersCount": "{{count}} de {{max}}",
     "host": "Anfitrión",
+    "selfTag": "(Tú)",
     "connected": "Conectado",
     "disconnected": "Desconectado",
     "emptySeat": "Puesto libre",
@@ -169,10 +167,12 @@
     },
     "rules": {
       "title": "Reglas en breve",
-      "item1": "En tu turno roba una carta del mazo o toma la carta superior del pozo, y termina descartando una.",
-      "item2": "Forma combinaciones: tríos o cuartetos del mismo valor, o escaleras de tres o más cartas del mismo palo.",
-      "item3": "En la modalidad clásica se cierra con tres combinaciones de 4, 3 y 3 cartas.",
-      "item4": "En Apuntado a 101 las cartas sin combinar suman puntos; quien llega al umbral queda eliminado.",
+      "item1": "En tu turno roba una carta del mazo o toma la carta superior del pozo, y termina descartando una. La carta que tomas del pozo no la puedes descartar en ese mismo turno.",
+      "item2": "Una terna son exactamente 3 cartas del mismo valor.",
+      "item3": "Una cuarta son 4 cartas del mismo valor o 4 cartas seguidas del mismo palo. El as va abajo: A-2-3-4 vale, J-Q-K-A no.",
+      "item4": "Cierre clásico: una cuarta, dos ternas y una carta de descarte.",
+      "item5": "Cierre por apuntado: exactamente tres ternas, y las cartas sobrantes deben sumar menos de 5 puntos. El as vale 1, del 2 al 10 valen su número, y J, Q y K valen 10.",
+      "item6": "Al cerrar una ronda, los demás suman los puntos de sus cartas sin combinar. Quien llega a {{threshold}} puntos queda eliminado.",
       "note": "El servidor es el árbitro: revisa cada jugada y cada cierre."
     }
   },
