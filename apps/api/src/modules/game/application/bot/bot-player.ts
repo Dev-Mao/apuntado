@@ -1,3 +1,4 @@
+import type { Clock } from "../../../../shared/clock.js";
 import type { Outcome } from "../../domain/round/round.types.js";
 import type { GameRepository } from "../ports/index.js";
 import type { DeclareClosure } from "../use-cases/declare-closure.js";
@@ -19,13 +20,14 @@ export class BotPlayer {
     private readonly games: GameRepository,
     private readonly strategy: BotStrategy,
     private readonly useCases: BotUseCases,
+    private readonly clock: Clock,
   ) {}
 
   playTurn(gameId: string, botId: string): void {
     for (let step = 0; step < MAX_ACTIONS_PER_TURN; step++) {
       const session = this.games.find(gameId);
       if (!session) return;
-      const action = this.strategy.decide(projectPlayerView(session, botId));
+      const action = this.strategy.decide(projectPlayerView(session, botId, this.clock.now()));
       if (!action || !this.perform(gameId, botId, action).ok) return;
     }
   }

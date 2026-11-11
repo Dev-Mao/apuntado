@@ -15,6 +15,8 @@ export type TurnPhase = "DRAW" | "DISCARD";
 
 export type GameStatus = "PLAYING" | "ROUND_OVER" | "FINISHED";
 
+export type PlayerAction = "DRAW_STOCK" | "DRAW_DISCARD" | "DISCARD" | "DECLARE_CLOSURE";
+
 export interface OpponentView {
   readonly playerId: string;
   readonly cardCount: number;
@@ -28,7 +30,7 @@ export interface ScoreLineView {
 
 export interface RoundResultView {
   readonly roundNumber: number;
-  readonly winnerId: string | null;
+  readonly roundWinnerId: string | null;
   readonly closureType: ClosureType | null;
   readonly scores: readonly { readonly playerId: string; readonly points: number }[];
 }
@@ -43,13 +45,24 @@ export interface PlayerView {
   readonly playerId: string;
   readonly hand: readonly CardDto[];
   readonly cannotDiscard: CardDto | null;
+  readonly allowedActions: readonly PlayerAction[];
   readonly opponents: readonly OpponentView[];
   readonly stockSize: number;
   readonly discardTop: CardDto | null;
-  readonly currentPlayerId: string;
-  readonly phase: TurnPhase;
-  readonly turnDeadline: string;
+  readonly currentPlayerId: string | null;
+  readonly phase: TurnPhase | null;
+  readonly turnDeadline: string | null;
+  readonly serverTime: string;
   readonly scoreboard: readonly ScoreLineView[];
   readonly lastRound: RoundResultView | null;
   readonly winnerId: string | null;
 }
+
+export interface ClosureDeclarationDto {
+  readonly type: ClosureType;
+  readonly melds: readonly (readonly CardDto[])[];
+  readonly leftovers: readonly CardDto[];
+  readonly discard: CardDto | null;
+}
+
+export type ActionResult = { readonly ok: true } | { readonly ok: false; readonly reason: string };

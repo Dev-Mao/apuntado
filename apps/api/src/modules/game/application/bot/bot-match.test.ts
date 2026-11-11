@@ -25,7 +25,7 @@ const playBotMatch = (mode: GameMode, seed: number) => {
     discard: new DiscardCard(games, journal, events, clock),
     declare: new DeclareClosure(games, new RuleResolver(), journal, events, clock),
   };
-  const bot = new BotPlayer(games, new SimpleBotStrategy(), useCases);
+  const bot = new BotPlayer(games, new SimpleBotStrategy(), useCases, clock);
   const nextRound = new StartNextRound(games);
   new StartGame(games, new SeededRandom(seed), clock).execute({
     gameId: "g1",
