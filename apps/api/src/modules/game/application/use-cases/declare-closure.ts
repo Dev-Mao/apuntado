@@ -10,11 +10,6 @@ export interface DeclareClosureCommand {
   readonly declaration: ClosureDeclaration;
 }
 
-/**
- * Caso de uso: orquesta, no decide. Verifica turno, delega la validación en la regla
- * y, solo si es válida, cambia el estado y notifica. Una jugada inválida no altera
- * el estado ni consume el turno (RN-03).
- */
 export class DeclareClosure {
   constructor(
     private readonly games: GameRepository,

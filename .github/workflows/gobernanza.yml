@@ -1,7 +1,5 @@
 name: Gobernanza arquitectónica
 
-# Las fitness functions corren en cada subida y en cada solicitud de integración.
-# Si alguna regla falla, la construcción se marca en rojo y no debería integrarse.
 on:
   push:
     branches: [main]

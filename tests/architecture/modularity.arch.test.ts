@@ -2,18 +2,8 @@ import { describe, it } from "vitest";
 import { filesOfProject } from "tsarch";
 import { expectNoViolations } from "./arch-helpers.js";
 
-/**
- * Gobernanza estructural — Entregable 2, sección 5.
- * Cada prueba implementa una regla formal de gobernanza y protege una decisión de los ADRs.
- *
- * NOTA TÉCNICA: TSArch expone rutas RELATIVAS ("src/modules/game/..."), mientras que su
- * atajo `inFolder(x)` genera un patrón que exige una barra antes del primer segmento y,
- * por lo tanto, nunca coincide con una ruta relativa. Por eso se usa `matchingPattern`
- * de forma explícita. Comprobado con el control negativo documentado en docs/entregable-2.
- */
 const TIMEOUT = 60_000;
 
-/** Patrón de carpeta tolerante a rutas relativas y absolutas. */
 const folder = (path: string): string => `.*${path}/.*`;
 const file = (name: string): string => `.*${name}\\.ts`;
 

@@ -4,11 +4,6 @@ import { ApuntadoRule } from "./apuntado-rule.js";
 import { ClassicRule } from "./classic-rule.js";
 import type { ClosureDeclaration, GameRule } from "./game-rule.js";
 
-/**
- * C-01 (ADR-02 y ADR-03): batería de pruebas de contrato.
- * Toda implementación de ReglaJuego debe superarla. Una variante nueva, por ejemplo el
- * comodín, se agrega a esta lista y hereda las mismas exigencias sin escribir pruebas nuevas.
- */
 const IMPLEMENTACIONES: readonly GameRule[] = [new ClassicRule(), new ApuntadoRule()];
 
 const terna = (rank: "7" | "9" | "K") =>

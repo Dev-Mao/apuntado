@@ -2,11 +2,6 @@ import { ApuntadoRule } from "./apuntado-rule.js";
 import { ClassicRule } from "./classic-rule.js";
 import type { ClosureType, GameRule } from "./game-rule.js";
 
-/**
- * ResolutorDeReglas — selecciona la regla aplicable según la configuración de la partida.
- * Es el registro (registry) del punto de extensión: agregar una variante es registrar
- * una implementación más, sin tocar la máquina de estados ni el orquestador.
- */
 export class RuleResolver {
   private readonly rules = new Map<ClosureType, GameRule>();
 

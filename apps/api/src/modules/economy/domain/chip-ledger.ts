@@ -1,7 +1,3 @@
-/**
- * LibroDeFichas — registro inmutable de movimientos. El saldo es el resultado de
- * sumarlos, no un número que se sobrescribe: así es auditable y reconstruible.
- */
 export type MovementReason = "BONO_BIENVENIDA" | "APUESTA_RETENIDA" | "BOTE_GANADO" | "RECARGA";
 
 export interface ChipMovement {

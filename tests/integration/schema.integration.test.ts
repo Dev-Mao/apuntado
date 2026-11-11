@@ -3,12 +3,6 @@ import { fileURLToPath } from "node:url";
 import { PGlite } from "@electric-sql/pglite";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-/**
- * Pruebas de integración del esquema relacional (ADR-04).
- * Se ejecutan sobre PostgreSQL real compilado a WebAssembly (PGlite): no requieren Docker
- * ni una instancia instalada. Verifican C-03 y C-04 del ADR-04: el esquema aplica sobre una
- * base limpia y las restricciones declarativas rechazan los casos inválidos en el motor.
- */
 const SCHEMA = readFileSync(
   fileURLToPath(new URL("../../models/er/schema.sql", import.meta.url)),
   "utf8",

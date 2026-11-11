@@ -1,7 +1,3 @@
-/**
- * Reglas de dependencia verificadas en el pipeline (`npm run arch:deps`).
- * Complementan a TSArch: aquí se vigila el grafo completo, incluidos los paquetes externos.
- */
 module.exports = {
   forbidden: [
     {

@@ -1,9 +1,7 @@
 import type { Card } from "../entities/card.js";
 
-/** Punto de extensión del ADR-02/ADR-03: una variante nueva es una clase nueva. */
 export type ClosureType = "CLASICO" | "APUNTADO";
 
-/** Lo que el jugador propone. La regla NO recibe la Partida completa (Ley de Deméter). */
 export interface ClosureDeclaration {
   readonly type: ClosureType;
   readonly melds: readonly (readonly Card[])[];

@@ -4,15 +4,8 @@ import {
   type ClosureDeclaration, type GameRule, type ValidationResult, invalid, valid,
 } from "./game-rule.js";
 
-/** Límite de puntos de las cartas sobrantes al tocar. */
 export const LEFTOVER_LIMIT = 5;
 
-/**
- * ReglaApuntado101 — "tocar": tres ternas y cartas sobrantes que sumen menos de 5.
- * El número de sobrantes es libre: una o varias; solo importa la suma.
- * El umbral de 101 NO vive aquí: pertenece a ConfiguracionDeReglas y a PoliticaDeEliminacion.
- * No conoce ni importa la regla clásica (gobernanza: reglas independientes).
- */
 export class ApuntadoRule implements GameRule {
   readonly type = "APUNTADO" as const;
 

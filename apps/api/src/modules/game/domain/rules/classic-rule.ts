@@ -3,10 +3,6 @@ import {
   type ClosureDeclaration, type GameRule, type ValidationResult, invalid, valid,
 } from "./game-rule.js";
 
-/**
- * ReglaClasicaCuartaTerna — cierre 4-3-3: una cuarta, dos ternas y una carta de descarte.
- * No conoce ni importa la regla del apuntado (gobernanza: reglas independientes).
- */
 export class ClassicRule implements GameRule {
   readonly type = "CLASICO" as const;
 

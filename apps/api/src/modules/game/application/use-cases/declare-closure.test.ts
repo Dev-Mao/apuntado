@@ -7,10 +7,6 @@ import { InMemoryGameRepository } from "../../infrastructure/repositories/in-mem
 import type { EventBus, PlayJournal, PlayJournalEntry } from "../ports/index.js";
 import { DeclareClosure } from "./declare-closure.js";
 
-/**
- * C-06 (ADR-05): una declaración de cierre inválida no publica ningún evento ni escribe en la
- * bitácora. Es la garantía de RN-03: una jugada inválida no altera el estado ni consume el turno.
- */
 class BitacoraEspia implements PlayJournal {
   readonly entradas: PlayJournalEntry[] = [];
   record(entry: PlayJournalEntry): void {
@@ -37,7 +33,7 @@ const apuntadoValido: ClosureDeclaration = {
 
 const apuntadoInvalido: ClosureDeclaration = {
   ...apuntadoValido,
-  leftovers: [card("K", "C"), card("9", "C")], // suman 19: deben sumar menos de 5
+  leftovers: [card("K", "C"), card("9", "C")],
 };
 
 let bitacora: BitacoraEspia;
