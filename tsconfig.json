@@ -1,5 +1,11 @@
 {
   "extends": "./tsconfig.base.json",
-  "compilerOptions": {},
-  "include": ["apps/api/src", "packages/contracts/src", "tests"]
+  "compilerOptions": {
+    "experimentalDecorators": true
+  },
+  "include": [
+    "apps/api/src",
+    "packages/contracts/src",
+    "tests"
+  ]
 }

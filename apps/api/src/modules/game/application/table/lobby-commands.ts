@@ -32,7 +32,7 @@ export class LobbyCommands {
     const code = this.freeCode();
     const room = Room.open(code, player, settings);
     if (typeof room === "string") return { ok: false, reason: room };
-    this.deps.rooms.save(room);
+    this.saveAndAnnounce(room);
     return { ok: true, code };
   }
 
