@@ -53,6 +53,10 @@ export class Match {
     return this.rounds;
   }
 
+  get playerIds(): string[] {
+    return this.seats.map((s) => s.playerId);
+  }
+
   get activePlayerIds(): string[] {
     return this.seats.filter((s) => !s.eliminated).map((s) => s.playerId);
   }

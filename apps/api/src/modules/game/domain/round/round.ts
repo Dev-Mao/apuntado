@@ -73,6 +73,10 @@ export class Round {
     return this.discardPile.at(-1) ?? null;
   }
 
+  get cardTakenFromDiscard(): Card | null {
+    return this.lastDraw?.fromDiscard ? this.lastDraw.card : null;
+  }
+
   handOf(playerId: string): readonly Card[] {
     return this.hands.get(playerId) ?? [];
   }
