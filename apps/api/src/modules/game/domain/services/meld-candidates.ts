@@ -13,20 +13,22 @@ const groupBy = (cards: readonly Card[], key: (c: Card) => string): Card[][] => 
   return [...groups.values()];
 };
 
-export const setCandidates = (cards: readonly Card[]): Card[][] =>
-  groupBy(cards, (c) => c.rank).flatMap((group) => combinationsOf(group, 3));
-
-const quadCandidates = (cards: readonly Card[]): Card[][] =>
-  groupBy(cards, (c) => c.rank).filter((group) => group.length === 4);
-
-const runsOf = (suited: readonly Card[]): Card[][] => {
+const runsOf = (suited: readonly Card[], size: number): Card[][] => {
   const sorted = [...suited].sort((a, b) => order(a) - order(b));
   return sorted
-    .map((_, i) => sorted.slice(i, i + 4))
-    .filter((w) => w.length === 4 && w.every((c, k) => k === 0 || order(c) === order(w[k - 1]!) + 1));
+    .map((_, i) => sorted.slice(i, i + size))
+    .filter((w) => w.length === size && w.every((c, k) => k === 0 || order(c) === order(w[k - 1]!) + 1));
 };
 
+const runCandidates = (cards: readonly Card[], size: number): Card[][] =>
+  groupBy(cards, (c) => c.suit).flatMap((suited) => runsOf(suited, size));
+
+export const setCandidates = (cards: readonly Card[]): Card[][] => [
+  ...groupBy(cards, (c) => c.rank).flatMap((group) => combinationsOf(group, 3)),
+  ...runCandidates(cards, 3),
+];
+
 export const quartaCandidates = (cards: readonly Card[]): Card[][] => [
-  ...quadCandidates(cards),
-  ...groupBy(cards, (c) => c.suit).flatMap(runsOf),
+  ...groupBy(cards, (c) => c.rank).filter((group) => group.length === 4),
+  ...runCandidates(cards, 4),
 ];

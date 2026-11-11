@@ -11,8 +11,26 @@ describe("EvaluadorDeMano · terna", () => {
     expect(isSet([card("7", "H"), card("8", "S"), card("7", "D")])).toBe(false);
   });
 
-  it("rechaza una secuencia: una terna nunca es escalera", () => {
-    expect(isSet([card("5", "H"), card("6", "H"), card("7", "H")])).toBe(false);
+  it("acepta tres cartas consecutivas del mismo palo", () => {
+    expect(isSet([card("5", "H"), card("6", "H"), card("7", "H")])).toBe(true);
+    expect(isSet([card("7", "H"), card("5", "H"), card("6", "H")])).toBe(true);
+  });
+
+  it("acepta la escalera de tres con el as abajo", () => {
+    expect(isSet([card("A", "S"), card("2", "S"), card("3", "S")])).toBe(true);
+  });
+
+  it("rechaza una escalera de tres con palos mezclados", () => {
+    expect(isSet([card("5", "H"), card("6", "S"), card("7", "H")])).toBe(false);
+  });
+
+  it("rechaza una escalera de tres que da la vuelta con el as", () => {
+    expect(isSet([card("Q", "S"), card("K", "S"), card("A", "S")])).toBe(false);
+    expect(isSet([card("K", "D"), card("A", "D"), card("2", "D")])).toBe(false);
+  });
+
+  it("rechaza tres cartas del mismo palo que no son consecutivas", () => {
+    expect(isSet([card("5", "H"), card("7", "H"), card("9", "H")])).toBe(false);
   });
 
   it("rechaza un conjunto que no tenga exactamente tres cartas", () => {

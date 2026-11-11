@@ -26,16 +26,26 @@ describe("Mejor agrupación de una mano", () => {
   });
 
   it("si una carta sirve a dos combinaciones, elige la que deja menos puntos sueltos", () => {
-    expect(loosePoints("7H 7S 7D 8H 9H 10H")).toBe(7 + 7);
-    expect(loosePoints("KH KS KD QH JH 10H")).toBe(10 + 10);
+    expect(loosePoints("7H 7S 7D 8H 9H")).toBe(7 + 7);
+    expect(loosePoints("2H 2S 2D 3H 4H")).toBe(2 + 2);
   });
 
-  it("una secuencia de tres no es combinación", () => {
-    expect(loosePoints("5H 6H 7H")).toBe(18);
+  it("aparta una terna por valor y otra en escalera cuando no se pisan", () => {
+    expect(loosePoints("7H 7S 7D 8H 9H 10H")).toBe(0);
+    expect(loosePoints("KH KS KD QH JH 10H")).toBe(0);
   });
 
-  it("no da la vuelta con el as: J-Q-K-A del mismo palo no es secuencia", () => {
-    expect(loosePoints("JS QS KS AS")).toBe(31);
+  it("una escalera de tres del mismo palo es una terna", () => {
+    expect(loosePoints("5H 6H 7H")).toBe(0);
+  });
+
+  it("una escalera de tres con palos mezclados no es combinación", () => {
+    expect(loosePoints("5H 6S 7H")).toBe(18);
+  });
+
+  it("no da la vuelta con el as: en J-Q-K-A solo combina J-Q-K y el as queda suelto", () => {
+    expect(loosePoints("JS QS KS AS")).toBe(1);
+    expect(loosePoints("QS KS AS")).toBe(21);
   });
 
   it("cada carta aparece una sola vez entre combinaciones y sueltas", () => {

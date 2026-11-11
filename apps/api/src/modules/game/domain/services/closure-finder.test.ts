@@ -45,6 +45,18 @@ describe("Buscador de cierres", () => {
     expect(found).toMatchObject({ type: "APUNTADO", discard: c("KC"), leftovers: [c("4D")] });
   });
 
+  it("toca con ternas en escalera", () => {
+    const found = findClosure(cards("3H 4H 5H 9C 9H 9S JD QD KD AD AC"), ["APUNTADO"], null);
+    expect(found).toMatchObject({ type: "APUNTADO", discard: null });
+    expect(found && RULES.APUNTADO.validate(found).valid).toBe(true);
+  });
+
+  it("cierra en clásico con una terna en escalera", () => {
+    const found = findClosure(cards("7H 7S 7D 7C 2S 3S 4S 4C 4D 4H 9S"), ["CLASICO"], null);
+    expect(found).toMatchObject({ type: "CLASICO", discard: c("9S") });
+    expect(found && RULES.CLASICO.validate(found).valid).toBe(true);
+  });
+
   it("no descarta la carta que acaba de tomar del pozo", () => {
     expect(findClosure(cards("3H 3S 3D 9C 9H 9S QH QS QD 4D KC"), ["APUNTADO"], c("KC"))).toBeNull();
   });
