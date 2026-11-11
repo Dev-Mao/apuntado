@@ -60,7 +60,7 @@ export function TableScreen({ view, onDrawFromStock, onTakeFromDiscard, onDiscar
         className="flex flex-col gap-6 border-t border-line px-5 py-6 sm:px-8 lg:overflow-y-auto lg:border-t-0 lg:border-l lg:px-7"
       >
         <div>
-          <p className="label-caps text-[0.65rem] text-coral-deep">{t(`gameMode.${view.mode}`)}</p>
+          <p className="label-caps text-[0.65rem] text-coral-ink">{t(`gameMode.${view.mode}`)}</p>
           <p className="mt-1 font-display text-5xl leading-none">{t("table.round", { count: view.round })}</p>
         </div>
         <Scoreboard entries={view.scoreboard} threshold={view.eliminationThreshold} turnPlayerId={turn.playerId} />

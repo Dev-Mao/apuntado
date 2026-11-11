@@ -20,7 +20,7 @@ export function LobbyScreen({ lobby, onStart, onLeave }: LobbyScreenProps) {
       <main className="grid flex-1 gap-10 px-5 pb-10 sm:px-8 lg:grid-cols-2 lg:gap-16">
         <div className="flex flex-col gap-8">
           <div>
-            <p className="label-caps text-[0.7rem] text-coral-deep">{t("lobby.eyebrow")}</p>
+            <p className="label-caps text-[0.7rem] text-coral-ink">{t("lobby.eyebrow")}</p>
             <h1 className="mt-3 font-display text-5xl leading-none sm:text-7xl">{t("lobby.title", { code: lobby.code })}</h1>
             <p className="mt-4 font-display text-xl text-ink-soft italic">{t("lobby.tagline")}</p>
           </div>

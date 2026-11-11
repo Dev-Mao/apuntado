@@ -31,7 +31,7 @@ export function TextField({ label, hint, error, className, id, ...props }: TextF
           {hint}
         </p>
       )}
-      <p id={errorId} aria-live="polite" className="min-h-0 text-sm font-semibold text-coral-deep empty:hidden">
+      <p id={errorId} aria-live="polite" className="min-h-0 text-sm font-semibold text-coral-ink empty:hidden">
         {error}
       </p>
     </div>

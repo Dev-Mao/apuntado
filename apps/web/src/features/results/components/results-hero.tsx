@@ -11,7 +11,7 @@ export function ResultsHero({ results }: { results: ResultsView }) {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <p className="label-caps text-[0.7rem] text-coral-deep">
+        <p className="label-caps text-[0.7rem] text-coral-ink">
           {winner ? t("results.gameEyebrow") : t("results.roundEyebrow")} · {t(`gameMode.${results.mode}`)}
         </p>
         <h1 className="mt-3 font-display text-5xl leading-none sm:text-7xl">

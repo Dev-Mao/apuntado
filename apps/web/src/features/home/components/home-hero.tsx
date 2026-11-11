@@ -24,7 +24,7 @@ export function HomeHero() {
   const { t } = useTranslation();
   return (
     <section aria-labelledby="home-title" className="relative flex flex-col">
-      <p className="label-caps text-[0.7rem] text-coral-deep">{t("home.eyebrow")}</p>
+      <p className="label-caps text-[0.7rem] text-coral-ink">{t("home.eyebrow")}</p>
       <h1 id="home-title" className="mt-3 font-display text-[clamp(3.8rem,10vw,8.5rem)] leading-[0.85] font-medium tracking-tight">
         {t("home.title")}
       </h1>

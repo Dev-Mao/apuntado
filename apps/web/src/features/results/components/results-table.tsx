@@ -58,7 +58,7 @@ export function ResultsTable({ results }: { results: ResultsView }) {
                   <ThresholdBar value={player.totalPoints} max={results.eliminationThreshold} className="w-20 sm:w-32" />
                 </span>
               </td>
-              <td className={cn("hidden py-4 pl-8 sm:table-cell", isWinner && "text-coral-deep")}>
+              <td className={cn("hidden py-4 pl-8 sm:table-cell", isWinner && "text-coral-ink")}>
                 <span className="label-caps text-[0.65rem]">{status}</span>
               </td>
             </tr>

@@ -43,7 +43,7 @@ export function Scoreboard({ entries, threshold, turnPlayerId }: ScoreboardProps
                 {entry.name}
               </span>
               {entry.isEliminated && (
-                <span className="label-caps text-[0.58rem] text-coral-deep">{t("table.scoreboard.eliminated")}</span>
+                <span className="label-caps text-[0.58rem] text-coral-ink">{t("table.scoreboard.eliminated")}</span>
               )}
               <span className="font-display text-3xl leading-none tabular-nums">{entry.points}</span>
             </span>
