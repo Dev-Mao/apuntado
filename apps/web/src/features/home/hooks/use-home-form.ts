@@ -81,6 +81,14 @@ export function useHomeForm(linkCode: string | null) {
     [nickname, code, enter, commands],
   );
 
+  const handleNicknameSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      if (code.trim()) return handleJoin(event);
+      event.preventDefault();
+    },
+    [code, handleJoin],
+  );
+
   const handleModeChange = useCallback((mode: GameMode) => setSettings((prev) => ({ ...prev, mode })), []);
 
   const handleNumberChange = useCallback(
@@ -102,6 +110,7 @@ export function useHomeForm(linkCode: string | null) {
     createError: errorFor(HOME_FORM.CREATE),
     joinError: errorFor(HOME_FORM.JOIN),
     handleNicknameChange: setNicknameDraft,
+    handleNicknameSubmit,
     handleModeChange,
     handleNumberChange,
     handleCodeChange,

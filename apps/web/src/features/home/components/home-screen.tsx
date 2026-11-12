@@ -27,7 +27,7 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
         <HomeHero />
         <div className="flex flex-col divide-y divide-line border-y border-line lg:self-start">
           <EntryNotice message={form.entryNotice} />
-          <section aria-labelledby="nickname-title" className="flex flex-col gap-5 py-7">
+          <form noValidate onSubmit={form.handleNicknameSubmit} aria-labelledby="nickname-title" className="flex flex-col gap-5 py-7">
             <h2 id="nickname-title" className="font-display text-2xl sm:text-3xl">
               {t("home.nickname.title")}
             </h2>
@@ -42,7 +42,7 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
               error={form.errors.nickname ? t(`home.errors.${form.errors.nickname}`) : undefined}
               onChange={(event) => form.handleNicknameChange(event.target.value)}
             />
-          </section>
+          </form>
           <div className="py-7">
             <CreateTableForm
               settings={form.settings}
