@@ -12,7 +12,7 @@ describe("Sesión de invitado", () => {
   it("normaliza el apodo y emite un token legible por el servidor", () => {
     const result = start.execute("  Ana   María ");
     expect(result).toMatchObject({ ok: true, player: { id: "id-1", nickname: "Ana María", kind: "INVITADO" } });
-    if (result.ok) expect(read.fromToken(result.token)).toEqual(result.player);
+    if (result.ok) expect(read.fromToken(result.token ?? undefined)).toEqual(result.player);
   });
 
   it.each([["una letra", "A"], ["17 caracteres", "abcdefghijklmnopq"], ["un valor que no es texto", 42], ["nada", undefined]])(
@@ -25,11 +25,21 @@ describe("Sesión de invitado", () => {
   it("no acepta un token alterado ni uno firmado con otra clave", () => {
     const result = start.execute("Ana");
     if (!result.ok) throw new Error(result.reason);
-    const [header, payload, signature] = result.token.split(".");
+    const [header, payload, signature] = (result.token ?? "").split(".");
     const forged = Buffer.from(JSON.stringify({ sub: "otro", nickname: "Ana", kind: "REGISTRADO" })).toString("base64url");
     expect(read.fromToken(`${header}.${forged}.${signature}`)).toBeNull();
-    expect(new ReadSession(new JwtSessionTokens("otra-clave")).fromToken(result.token)).toBeNull();
+    expect(new ReadSession(new JwtSessionTokens("otra-clave")).fromToken(result.token ?? undefined)).toBeNull();
     expect(read.fromToken(`${header}.${payload}`)).toBeNull();
+  });
+
+  it("con una sesión activa conserva al jugador y solo emite un token nuevo si cambia el apodo", () => {
+    const first = start.execute("Ana");
+    if (!first.ok) throw new Error(first.reason);
+    expect(start.execute("Ana", first.player)).toEqual({ ok: true, player: first.player, token: null });
+    expect(start.execute(undefined, first.player)).toEqual({ ok: true, player: first.player, token: null });
+    const renamed = start.execute("Anita", first.player);
+    expect(renamed).toMatchObject({ ok: true, player: { id: "id-1", nickname: "Anita", kind: "INVITADO" } });
+    if (renamed.ok) expect(read.fromToken(renamed.token ?? "")?.nickname).toBe("Anita");
   });
 
   it("sin token no hay sesión", () => {

@@ -1,5 +1,5 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Inject, Post, Res, UnauthorizedException } from "@nestjs/common";
-import type { SessionView } from "@apuntado/contracts";
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Inject, Post, Res } from "@nestjs/common";
+import type { SessionState, SessionView } from "@apuntado/contracts";
 import { parseCookie } from "cookie";
 import type { Response } from "express";
 import type { OriginPolicy } from "../../../../shared/origin-policy.js";
@@ -34,10 +34,10 @@ export class SessionController {
   ): SessionView {
     if (!this.origins.allows(headers["origin"], headers["host"])) throw new ForbiddenException("Origen no permitido");
     const existing = this.playerFrom(headers["cookie"]);
-    if (existing) return toView(existing);
     const nickname = typeof body === "object" && body !== null ? (body as Record<string, unknown>)["nickname"] : undefined;
-    const result = this.startGuest.execute(nickname);
+    const result = this.startGuest.execute(nickname, existing);
     if (!result.ok) throw new BadRequestException(result.reason);
+    if (!result.token) return toView(result.player);
     res.cookie(SESSION_COOKIE, result.token, {
       httpOnly: true,
       sameSite: "lax",
@@ -49,10 +49,9 @@ export class SessionController {
   }
 
   @Get()
-  current(@Headers("cookie") cookieHeader: string | undefined): SessionView {
+  current(@Headers("cookie") cookieHeader: string | undefined): SessionState {
     const player = this.playerFrom(cookieHeader);
-    if (!player) throw new UnauthorizedException("No hay una sesión activa");
-    return toView(player);
+    return { session: player ? toView(player) : null };
   }
 
   private playerFrom(cookieHeader: string | undefined): Player | null {

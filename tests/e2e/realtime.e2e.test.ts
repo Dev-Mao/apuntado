@@ -84,21 +84,29 @@ describe("Sesión de invitado por HTTP", () => {
     const setCookie = response.headers.getSetCookie()[0]!;
     expect(setCookie).toMatch(/HttpOnly/i);
     const session = await fetch(`${baseUrl}/api/session`, { headers: { cookie: setCookie.split(";")[0]! } });
-    expect(await session.json()).toMatchObject({ nickname: "Ana", guest: true });
+    expect(await session.json()).toMatchObject({ session: { nickname: "Ana", guest: true } });
   });
 
-  it("con una sesión activa devuelve la misma en lugar de crear otra", async () => {
+  it("con una sesión activa la conserva, y al cambiar el apodo mantiene al mismo jugador", async () => {
     const cookie = await guestCookie("Ana");
-    const first = await (await fetch(`${baseUrl}/api/session`, { headers: { cookie } })).json();
-    const again = await fetch(`${baseUrl}/api/session/guest`, {
-      method: "POST",
-      headers: { "content-type": "application/json", cookie },
-      body: JSON.stringify({ nickname: "Otra" }),
-    });
-    expect(again.headers.getSetCookie()).toEqual([]);
-    expect(await again.json()).toEqual(first);
+    const { session: first } = (await (await fetch(`${baseUrl}/api/session`, { headers: { cookie } })).json()) as { session: object };
+    const post = (nickname: string) =>
+      fetch(`${baseUrl}/api/session/guest`, {
+        method: "POST",
+        headers: { "content-type": "application/json", cookie },
+        body: JSON.stringify({ nickname }),
+      });
+    const same = await post("Ana");
+    expect(same.headers.getSetCookie()).toEqual([]);
+    expect(await same.json()).toEqual(first);
+    const renamed = await post("Anita");
+    expect(renamed.headers.getSetCookie()).toHaveLength(1);
+    expect(await renamed.json()).toEqual({ ...first, nickname: "Anita" });
   });
 
+});
+
+describe("Sesión de invitado · orígenes y validación", () => {
   it("rechaza crear una sesión desde otro sitio web", async () => {
     const response = await fetch(`${baseUrl}/api/session/guest`, {
       method: "POST",
@@ -131,7 +139,9 @@ describe("Sesión de invitado por HTTP", () => {
       body: JSON.stringify({ nickname: "A" }),
     });
     expect(short.status).toBe(400);
-    expect((await fetch(`${baseUrl}/api/session`)).status).toBe(401);
+    const anonymous = await fetch(`${baseUrl}/api/session`);
+    expect(anonymous.status).toBe(200);
+    expect(await anonymous.json()).toEqual({ session: null });
   });
 });
 
