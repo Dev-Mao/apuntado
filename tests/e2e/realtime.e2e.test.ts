@@ -22,7 +22,8 @@ beforeAll(async () => {
       sessionSecret: "e2e-secret",
       secureCookies: false,
       webDir: null,
-      timing: { botDelayMs: 20, roundPauseMs: 50 },
+      timing: { botDelayMs: 20, roundPauseMs: 50, cleanupMs: 60_000 },
+      allowedOrigins: [],
     }),
     { logger: false },
   );
@@ -84,6 +85,28 @@ describe("Sesión de invitado por HTTP", () => {
     expect(await session.json()).toMatchObject({ nickname: "Ana", guest: true });
   });
 
+  it("con una sesión activa devuelve la misma en lugar de crear otra", async () => {
+    const cookie = await guestCookie("Ana");
+    const first = await (await fetch(`${baseUrl}/api/session`, { headers: { cookie } })).json();
+    const again = await fetch(`${baseUrl}/api/session/guest`, {
+      method: "POST",
+      headers: { "content-type": "application/json", cookie },
+      body: JSON.stringify({ nickname: "Otra" }),
+    });
+    expect(again.headers.getSetCookie()).toEqual([]);
+    expect(await again.json()).toEqual(first);
+  });
+
+  it("rechaza crear una sesión desde otro sitio web", async () => {
+    const response = await fetch(`${baseUrl}/api/session/guest`, {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded", origin: "https://evil.example" },
+      body: "nickname=Pwned",
+    });
+    expect(response.status).toBe(403);
+    expect(response.headers.getSetCookie()).toEqual([]);
+  });
+
   it("rechaza un apodo demasiado corto y una consulta sin sesión", async () => {
     const short = await fetch(`${baseUrl}/api/session/guest`, {
       method: "POST",
@@ -101,6 +124,18 @@ describe("Mesa en tiempo real", () => {
     clients.push(anonymous);
     const error = await new Promise<Error>((resolve) => anonymous.once("connect_error", resolve));
     expect(error.message).toBe("No hay una sesión activa");
+  });
+
+  it("rechaza un socket que llega desde otro sitio web aunque traiga la cookie", async () => {
+    const cookie = await guestCookie("Dora");
+    const foreign: Client = io(baseUrl, {
+      transports: ["websocket"],
+      extraHeaders: { cookie, origin: "https://evil.example" },
+      forceNew: true,
+    });
+    clients.push(foreign);
+    const error = await new Promise<Error>((resolve) => foreign.once("connect_error", resolve));
+    expect(error.message).toBe("Origen no permitido");
   });
 
   it("dos jugadores crean, se unen, juegan y uno se reconecta sin perder su mano", async () => {
@@ -144,15 +179,48 @@ describe("Mesa en tiempo real", () => {
     expect(restored.view.hand.slice(0, 10)).toEqual(luisHand.slice(0, 10));
   });
 
+});
+
+describe("Mesa en tiempo real · partidas", () => {
   it("contra la máquina, el bot juega su turno solo y devuelve el turno al humano", async () => {
     const carla = await connect(await guestCookie("Carla"));
     const created = await carla.emitWithAck("room:create", SETTINGS);
     expect(created.ok).toBe(true);
     expect(await carla.emitWithAck("room:addBot")).toEqual({ ok: true });
+    const botTurn = next(carla, "table:snapshot", (s: TableSnapshot) => s.view.currentPlayerId !== s.view.playerId);
     const humanTurn = next(carla, "table:snapshot", (s: TableSnapshot) => s.view.currentPlayerId === s.view.playerId);
-    await carla.emitWithAck("room:start");
-    const snapshot = await humanTurn;
-    expect(snapshot.seats.find((s) => s.isBot)?.nickname).toBe("Máquina 1");
-    expect(snapshot.view.allowedActions).toEqual(["DRAW_STOCK", "DRAW_DISCARD"]);
+    expect(await carla.emitWithAck("room:start")).toEqual({ ok: true });
+    const before = (await botTurn).view;
+    const after = await humanTurn;
+    const botMoved = after.view.stockSize < before.stockSize || JSON.stringify(after.view.discardTop) !== JSON.stringify(before.discardTop);
+    expect(botMoved).toBe(true);
+    expect(after.view.opponents).toEqual([{ playerId: before.currentPlayerId, cardCount: 10 }]);
+    expect(after.seats.find((s) => s.isBot)?.nickname).toBe("Máquina 1");
+    expect(after.view.allowedActions).toEqual(["DRAW_STOCK", "DRAW_DISCARD"]);
+  });
+
+  it("cuatro jugadores juegan por socket y uno se desconecta, vuelve y recupera su vista", async () => {
+    const names = ["Eva", "Fede", "Gabi", "Hugo"];
+    const cookies = await Promise.all(names.map(guestCookie));
+    const players = await Promise.all(cookies.map(connect));
+    const created = await players[0]!.emitWithAck("room:create", { ...SETTINGS, mode: "AMBAS" });
+    const code = created.ok ? created.code : "";
+    for (const p of players.slice(1)) expect(await p.emitWithAck("room:join", code)).toEqual({ ok: true, code });
+    const views = players.map((p) => next(p, "table:snapshot"));
+    expect(await players[0]!.emitWithAck("room:start")).toEqual({ ok: true });
+    const snapshots = await Promise.all(views);
+    expect(snapshots.map((s) => s.view.hand.length)).toEqual([10, 10, 10, 10]);
+    expect(snapshots.every((s) => s.view.opponents.length === 3)).toBe(true);
+    expect(snapshots[0]!.view.stockSize).toBe(11);
+
+    const gabiHand = snapshots[2]!.view.hand;
+    const seen = next(players[0]!, "table:snapshot", (s: TableSnapshot) => s.seats.some((x) => x.nickname === "Gabi" && !x.connected));
+    players[2]!.disconnect();
+    await seen;
+    const back = io(baseUrl, { transports: ["websocket"], extraHeaders: { cookie: cookies[2]! }, forceNew: true }) as Client;
+    clients.push(back);
+    const restored = await next(back, "table:snapshot");
+    expect(restored.view.hand).toEqual(gabiHand);
+    expect(restored.seats.find((x) => x.nickname === "Gabi")?.connected).toBe(true);
   });
 });
