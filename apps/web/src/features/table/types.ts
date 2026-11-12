@@ -10,6 +10,7 @@ export interface TableActions {
 
 export interface TableScreenProps extends TableActions {
   snapshot: TableSnapshot;
+  pending: boolean;
 }
 
 export interface DragState {
@@ -46,6 +47,7 @@ export interface PlayerHandProps {
 
 export interface TurnActionsProps {
   allowedActions: readonly PlayerAction[];
+  pending: boolean;
   canDiscard: boolean;
   showLockedHint: boolean;
   notice: string | null;

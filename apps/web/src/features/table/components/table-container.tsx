@@ -12,7 +12,7 @@ import { TableScreen } from "./table-screen";
 export function TableContainer() {
   const code = useRoomCode();
   const { room } = useRealtime();
-  const actions = useTableCommands();
+  const { actions, pending } = useTableCommands();
   const { notice, leave } = useLeaveRoom(true);
   const handleLeave = useCallback(() => void leave(), [leave]);
   useRoomEntry(code);
@@ -20,6 +20,6 @@ export function TableContainer() {
   const { snapshot } = room;
 
   if (!snapshot || snapshot.code !== code) return <RoomLoading />;
-  if (snapshot.view.status === "PLAYING") return <TableScreen snapshot={snapshot} {...actions} />;
+  if (snapshot.view.status === "PLAYING") return <TableScreen snapshot={snapshot} pending={pending} {...actions} />;
   return <ResultsScreen snapshot={snapshot} notice={notice} onLeave={handleLeave} />;
 }

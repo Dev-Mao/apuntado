@@ -24,7 +24,7 @@ function focusHand() {
   document.querySelector<HTMLElement>("[data-hand-index='0']")?.focus();
 }
 
-export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDiscard, onDeclareClosure }: TableScreenProps) {
+export function TableScreen({ snapshot, pending, onDrawFromStock, onDrawFromDiscard, onDiscard, onDeclareClosure }: TableScreenProps) {
   const { t } = useTranslation();
   const { view } = snapshot;
   const hand = useHand(view.hand);
@@ -83,6 +83,7 @@ export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDi
           <TurnStatus message={turnMessage} turnDeadline={view.turnDeadline} serverTime={view.serverTime} isMyTurn={isMyTurn} />
           <TurnActions
             allowedActions={view.allowedActions}
+            pending={pending}
             canDiscard={hand.selectedIds.size === 1 && !selectedIsLocked}
             showLockedHint={selectedIsLocked}
             notice={notice}

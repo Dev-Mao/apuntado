@@ -13,6 +13,7 @@ import type { PlayerAction } from "@apuntado/contracts";
 
 function TurnActionsBase({
   allowedActions,
+  pending,
   canDiscard,
   showLockedHint,
   notice,
@@ -24,7 +25,7 @@ function TurnActionsBase({
 }: TurnActionsProps) {
   const { t } = useTranslation();
   const { groupRef, handleFocus, handleBlur } = useFocusRecovery<HTMLDivElement>(allowedActions, onFocusLost);
-  const isAllowed = (action: PlayerAction) => allowedActions.includes(action);
+  const isAllowed = (action: PlayerAction) => !pending && allowedActions.includes(action);
 
   return (
     <div className="flex flex-col">
