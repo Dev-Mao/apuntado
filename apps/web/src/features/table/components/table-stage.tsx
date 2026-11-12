@@ -55,7 +55,7 @@ export function TableStage({ snapshot, selfName, stockAction, discardAction }: T
         <SparkleIcon className="pointer-events-none absolute top-[18%] left-[18%] hidden size-5 text-paper/70 sm:block" />
         <CardPiles stockSize={view.stockSize} discardTop={view.discardTop} stockAction={stockAction} discardAction={discardAction} />
       </div>
-      <div className="flex justify-center lg:absolute lg:inset-x-0 lg:bottom-3 [@media(max-height:44rem)]:max-lg:hidden">
+      <div className="flex justify-center lg:absolute lg:inset-x-0 lg:bottom-3">
         <SeatPill name={t("table.selfLabel", { name: selfName })} count={view.hand.length} isSelf isActive={view.currentPlayerId === view.playerId} />
       </div>
     </section>

@@ -115,7 +115,9 @@
         "title": "Ambas",
         "detail": "Vale cualquier cierre"
       }
-    }
+    },
+    "thresholdLabel": "Eliminación a",
+    "thresholdHint": "En puntos"
   },
   "lobby": {
     "heading": "Sala de espera",
