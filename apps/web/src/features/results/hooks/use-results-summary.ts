@@ -13,7 +13,7 @@ function statusOf(line: ScoreLineView, view: PlayerView): ResultStatus {
   if (line.playerId === view.winnerId) return RESULT_STATUS.WINNER;
   if (line.eliminated) return RESULT_STATUS.ELIMINATED;
   if (line.playerId === view.lastRound?.roundWinnerId) return RESULT_STATUS.CLOSED;
-  return RESULT_STATUS.PLAYING;
+  return view.status === "FINISHED" ? RESULT_STATUS.FINISHED : RESULT_STATUS.PLAYING;
 }
 
 function summarize({ seats, view }: TableSnapshot): ResultsSummary {

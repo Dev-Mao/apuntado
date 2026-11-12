@@ -4,6 +4,7 @@ export const RESULT_STATUS = {
   WINNER: "winner",
   ELIMINATED: "eliminated",
   CLOSED: "closed",
+  FINISHED: "finished",
   PLAYING: "playing",
 } as const;
 

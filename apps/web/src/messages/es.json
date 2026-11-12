@@ -260,6 +260,7 @@
     },
     "status": {
       "playing": "Sigue en juego",
+      "finished": "Partida terminada",
       "eliminated": "Eliminado",
       "winner": "Ganador",
       "closed": "Cerró la ronda"
