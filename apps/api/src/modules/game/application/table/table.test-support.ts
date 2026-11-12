@@ -66,7 +66,7 @@ export const tableHarness = (seed = 7) => {
     presence,
     journal,
     events: new InProcessEventBus(),
-    timing: { botDelayMs: 1200, roundPauseMs: 8000 },
+    timing: { botDelayMs: 1200, roundPauseMs: 8000, cleanupMs: 60_000 },
   });
   return { clock, scheduler, notifier, presence, journal, ...components };
 };

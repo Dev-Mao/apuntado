@@ -40,6 +40,9 @@ describe("Sala de espera", () => {
     expect(tableHarness().lobby.join(LUIS, "ZZZZ")).toEqual({ ok: false, reason: "No existe una mesa con ese código" });
   });
 
+});
+
+describe("Sala de espera · inicio y ciclo de vida", () => {
   it("si el último humano sale, la mesa desaparece", () => {
     const h = tableHarness();
     const code = created(h);
@@ -64,6 +67,20 @@ describe("Sala de espera", () => {
     expect(h.lobby.start("ana").ok).toBe(false);
     h.lobby.join(LUIS, code);
     expect(h.lobby.start("luis")).toEqual({ ok: false, reason: "Solo el anfitrión puede hacerlo" });
+  });
+
+  it("una sala de espera sin nadie conectado se borra tras la espera, y se salva si alguien vuelve", () => {
+    const h = tableHarness();
+    const code = created(h);
+    h.lobby.presenceChanged(code);
+    expect(h.scheduler.tasks.has(`${code}:cleanup`)).toBe(true);
+    h.presence.online.add("ana");
+    h.lobby.presenceChanged(code);
+    expect(h.scheduler.tasks.has(`${code}:cleanup`)).toBe(false);
+    h.presence.online.delete("ana");
+    h.lobby.presenceChanged(code);
+    h.scheduler.runNext();
+    expect(h.queries.lobby(code)).toBeNull();
   });
 
   it("la vista de la sala marca la conexión de cada humano y los bots siempre conectados", () => {

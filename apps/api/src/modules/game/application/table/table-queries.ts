@@ -11,8 +11,8 @@ export class TableQueries {
     private readonly clock: Clock,
   ) {}
 
-  activeRoomOf(playerId: string): string | null {
-    return this.rooms.findActiveByPlayer(playerId)?.code ?? null;
+  currentRoomOf(playerId: string): string | null {
+    return this.rooms.findByPlayer(playerId)?.code ?? null;
   }
 
   playersOf(code: string): string[] {

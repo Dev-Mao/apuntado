@@ -12,6 +12,10 @@ export class InMemoryRoomRepository implements RoomRepository {
     return [...this.rooms.values()].find((r) => r.status !== "FINISHED" && r.hasPlayer(playerId)) ?? null;
   }
 
+  findByPlayer(playerId: string): Room | null {
+    return this.findActiveByPlayer(playerId) ?? [...this.rooms.values()].find((r) => r.hasPlayer(playerId)) ?? null;
+  }
+
   save(room: Room): void {
     this.rooms.set(room.code, room);
   }

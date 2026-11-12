@@ -44,11 +44,11 @@ export const composeGame = (infra: GameInfrastructure): GameComponents => {
   const nextRound = new StartNextRound(games);
   const bot = new BotPlayer(games, new SimpleBotStrategy(), { draw, discard, declare }, clock);
   const timeOut = new TimeOutTurn(games, journal, events, clock);
-  const coordinator = new TableCoordinator({ games, rooms, notifier, scheduler, clock, timeOut, nextRound, bot, timing });
+  const coordinator = new TableCoordinator({ games, rooms, notifier, scheduler, presence, clock, timeOut, nextRound, bot, timing });
   const startGame = new StartGame(games, random, clock);
   return {
     lobby: new LobbyCommands({ rooms, startGame, coordinator, notifier, random }),
-    table: new TableCommands({ rooms, draw, discard, declare, nextRound, coordinator }),
+    table: new TableCommands({ rooms, draw, discard, declare, coordinator }),
     queries: new TableQueries(rooms, games, presence, clock),
   };
 };

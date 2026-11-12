@@ -11,4 +11,8 @@ export class InMemoryGameRepository implements GameRepository {
   save(session: GameSession): void {
     this.sessions.set(session.id, session);
   }
+
+  delete(gameId: string): void {
+    this.sessions.delete(gameId);
+  }
 }

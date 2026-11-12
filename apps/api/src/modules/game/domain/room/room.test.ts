@@ -23,7 +23,8 @@ describe("Sala · apertura", () => {
 
   it.each([
     ["una modalidad inexistente", { ...SETTINGS, mode: "POKER" as never }, "La modalidad no existe"],
-    ["un umbral en cero", { ...SETTINGS, eliminationThreshold: 0 }, "El umbral debe ser un entero positivo"],
+    ["un umbral en cero", { ...SETTINGS, eliminationThreshold: 0 }, "El umbral debe estar entre 1 y 500 puntos"],
+    ["un umbral desmedido", { ...SETTINGS, eliminationThreshold: 1e15 }, "El umbral debe estar entre 1 y 500 puntos"],
     ["un turno de 5 segundos", { ...SETTINGS, turnSeconds: 5 }, "La duración del turno debe estar entre 10 y 600 segundos"],
     ["una apuesta negativa", { ...SETTINGS, stake: -1 }, "La apuesta debe ser un entero mayor o igual a cero"],
   ])("rechaza %s", (_caso, settings, reason) => {
@@ -82,6 +83,14 @@ describe("Sala · inicio", () => {
     room.addBot("ana");
     expect(room.canStart("bot:1")).toEqual({ ok: false, reason: "Solo el anfitrión puede hacerlo" });
     expect(room.canStart("ana")).toEqual({ ok: true });
+  });
+
+  it("terminada la partida, los jugadores pueden salir de la mesa", () => {
+    const room = openRoom();
+    room.join(LUIS);
+    room.markStarted();
+    room.markFinished();
+    expect(room.leave("luis")).toEqual({ ok: true });
   });
 
   it("con la partida en curso nadie entra ni sale", () => {

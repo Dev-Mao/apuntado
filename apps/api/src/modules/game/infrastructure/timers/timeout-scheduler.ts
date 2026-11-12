@@ -4,14 +4,21 @@ import type { TaskScheduler } from "../../application/ports/index.js";
 export class TimeoutScheduler implements TaskScheduler {
   private readonly handles = new Map<string, ReturnType<typeof setTimeout>>();
 
-  constructor(private readonly clock: Clock) {}
+  constructor(
+    private readonly clock: Clock,
+    private readonly onError: (error: unknown) => void,
+  ) {}
 
   schedule(key: string, at: Date, task: () => void): void {
     this.cancel(key);
     const delay = Math.max(0, at.getTime() - this.clock.now().getTime());
     this.handles.set(key, setTimeout(() => {
       this.handles.delete(key);
-      task();
+      try {
+        task();
+      } catch (error) {
+        this.onError(error);
+      }
     }, delay));
   }
 

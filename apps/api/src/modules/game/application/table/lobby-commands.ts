@@ -49,13 +49,17 @@ export class LobbyCommands {
   }
 
   leave(playerId: string): Outcome {
-    const room = this.deps.rooms.findActiveByPlayer(playerId);
+    const room = this.deps.rooms.findByPlayer(playerId);
     if (!room) return rejected(NOT_SEATED);
     const outcome = room.leave(playerId);
     if (!outcome.ok) return outcome;
-    if (room.humanIds.length === 0) this.deps.rooms.delete(room.code);
+    if (room.humanIds.length === 0) this.deps.coordinator.close(room.code);
     else this.saveAndAnnounce(room);
     return OK;
+  }
+
+  presenceChanged(code: string): void {
+    this.deps.coordinator.presenceChanged(code);
   }
 
   addBot(playerId: string): Outcome {

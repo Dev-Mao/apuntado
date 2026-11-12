@@ -42,6 +42,10 @@ describe("Comandos de la mesa", () => {
     expect(action(twoPlayers())).toEqual({ ok: false, reason });
   });
 
+  it("ningún jugador puede saltarse la pausa entre rondas: no existe ese comando", () => {
+    expect("nextRound" in twoPlayers().table).toBe(false);
+  });
+
   it("quien no está en una mesa no puede jugar", () => {
     expect(tableHarness().table.draw("nadie", "STOCK")).toEqual({ ok: false, reason: "No está jugando en ninguna mesa" });
   });

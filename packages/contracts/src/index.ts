@@ -116,7 +116,6 @@ export interface ClientToServerEvents {
   "game:draw": (source: DrawSource, ack: (result: ActionResult) => void) => void;
   "game:discard": (card: CardDto, ack: (result: ActionResult) => void) => void;
   "game:declare": (declaration: ClosureDeclarationDto, ack: (result: ActionResult) => void) => void;
-  "game:nextRound": (ack: (result: ActionResult) => void) => void;
 }
 
 export interface ServerToClientEvents {

@@ -4,6 +4,7 @@ import type { Room } from "../../domain/room/room.js";
 export interface GameRepository {
   find(gameId: string): GameSession | null;
   save(session: GameSession): void;
+  delete(gameId: string): void;
 }
 
 export interface StakeGuard {
@@ -30,6 +31,7 @@ export interface EventBus {
 export interface RoomRepository {
   find(code: string): Room | null;
   findActiveByPlayer(playerId: string): Room | null;
+  findByPlayer(playerId: string): Room | null;
   save(room: Room): void;
   delete(code: string): void;
 }

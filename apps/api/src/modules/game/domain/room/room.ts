@@ -5,13 +5,16 @@ import type { RoomMember, RoomSettings, RoomStatus, Seat } from "./room.types.js
 const MODES: readonly string[] = ["CLASICA", "APUNTADO", "AMBAS"];
 const MIN_TURN_SECONDS = 10;
 const MAX_TURN_SECONDS = 600;
+const MAX_THRESHOLD = 500;
 const BOT_PREFIX = "bot:";
 
 const isWhole = (value: number, min: number): boolean => Number.isInteger(value) && value >= min;
 
 export const invalidSettings = (s: RoomSettings): string | null => {
   if (!MODES.includes(s.mode)) return "La modalidad no existe";
-  if (!isWhole(s.eliminationThreshold, 1)) return "El umbral debe ser un entero positivo";
+  if (!isWhole(s.eliminationThreshold, 1) || s.eliminationThreshold > MAX_THRESHOLD) {
+    return `El umbral debe estar entre 1 y ${MAX_THRESHOLD} puntos`;
+  }
   if (!isWhole(s.turnSeconds, MIN_TURN_SECONDS) || s.turnSeconds > MAX_TURN_SECONDS) {
     return `La duración del turno debe estar entre ${MIN_TURN_SECONDS} y ${MAX_TURN_SECONDS} segundos`;
   }
