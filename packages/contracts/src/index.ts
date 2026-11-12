@@ -86,6 +86,10 @@ export interface SessionView {
   readonly guest: boolean;
 }
 
+export interface SessionState {
+  readonly session: SessionView | null;
+}
+
 export interface RoomSettings {
   readonly mode: GameMode;
   readonly eliminationThreshold: number;
@@ -99,6 +103,7 @@ export interface LobbyView {
   readonly code: string;
   readonly hostId: string;
   readonly status: RoomStatus;
+  readonly maxSeats: number;
   readonly settings: RoomSettings;
   readonly seats: readonly SeatView[];
 }

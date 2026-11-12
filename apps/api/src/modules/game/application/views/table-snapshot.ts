@@ -1,5 +1,6 @@
 import type { LobbyView, SeatView, TableSnapshot } from "@apuntado/contracts";
 import type { Room } from "../../domain/room/room.js";
+import { MAX_PLAYERS } from "../../domain/round/round.js";
 import type { GameSession } from "../../domain/session/game-session.js";
 import type { Presence } from "../ports/index.js";
 import { projectPlayerView } from "./player-view-projector.js";
@@ -16,6 +17,7 @@ export const buildLobbyView = (room: Room, presence: Presence): LobbyView => ({
   code: room.code,
   hostId: room.hostId,
   status: room.status,
+  maxSeats: MAX_PLAYERS,
   settings: room.settings,
   seats: seatViews(room, presence),
 });

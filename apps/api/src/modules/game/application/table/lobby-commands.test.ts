@@ -36,6 +36,20 @@ describe("Sala de espera", () => {
     expect(h.notifier.lobby).toContain(code);
   });
 
+  it("volver a unirse estando sentado no anuncia nada a la sala", () => {
+    const h = tableHarness();
+    const code = created(h);
+    h.lobby.join(LUIS, code);
+    const announced = h.notifier.lobby.length;
+    expect(h.lobby.join(LUIS, code)).toEqual({ ok: true, code });
+    expect(h.notifier.lobby.length).toBe(announced);
+  });
+
+  it("la vista de la sala informa la capacidad de la mesa", () => {
+    const h = tableHarness();
+    expect(h.queries.lobby(created(h))?.maxSeats).toBe(4);
+  });
+
   it("un código inexistente se rechaza", () => {
     expect(tableHarness().lobby.join(LUIS, "ZZZZ")).toEqual({ ok: false, reason: "No existe una mesa con ese código" });
   });

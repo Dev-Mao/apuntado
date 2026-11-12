@@ -42,6 +42,7 @@ export class LobbyCommands {
     if (!room || room.status === "FINISHED") return { ok: false, reason: "No existe una mesa con ese código" };
     const current = this.deps.rooms.findActiveByPlayer(player.id);
     if (current && current.code !== room.code) return { ok: false, reason: ALREADY_SEATED };
+    if (room.hasPlayer(player.id)) return { ok: true, code: room.code };
     const outcome = room.join(player);
     if (!outcome.ok) return outcome;
     this.saveAndAnnounce(room);
