@@ -1,6 +1,7 @@
 import { Jost, Playfair_Display, Source_Serif_4 } from "next/font/google";
 
 import { AppProviders } from "@/components";
+import { AccountProvider } from "@/features/account";
 import { ConnectionBanner, RealtimeProvider, RoomNotice } from "@/features/realtime";
 import es from "@/messages/es.json";
 
@@ -45,9 +46,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <AppProviders>
           <RealtimeProvider>
-            <ConnectionBanner />
-            {children}
-            <RoomNotice />
+            <AccountProvider>
+              <ConnectionBanner />
+              {children}
+              <RoomNotice />
+            </AccountProvider>
           </RealtimeProvider>
         </AppProviders>
       </body>

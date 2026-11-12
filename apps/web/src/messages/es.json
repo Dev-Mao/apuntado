@@ -63,7 +63,10 @@
     "turn": "Duración del turno",
     "turnHint": "En segundos",
     "stake": "Apuesta",
-    "stakeHint": "0 significa jugar sin apuesta"
+    "stakeHint": "0 significa jugar sin apuesta",
+    "stakeGuest": "Apostar requiere una cuenta con fichas.",
+    "stakeGuestAction": "Crear cuenta",
+    "stakeBalance": "0 significa jugar sin apuesta. Tu saldo: {{chips}}."
   },
   "home": {
     "title": "Apuntado",
@@ -140,7 +143,9 @@
     "start": "Iniciar partida",
     "addBot": "Agregar bot",
     "waitingHost": "El anfitrión iniciará la partida",
-    "leave": "Salir de la mesa"
+    "leave": "Salir de la mesa",
+    "stakeBadge": "Apuesta de {{chips}} por jugador",
+    "botDisabled": "La máquina no juega en mesas con apuesta"
   },
   "table": {
     "title": "Mesa {{code}}",
@@ -276,7 +281,9 @@
     },
     "finalSheet": "Resultado final",
     "roundSheet": "Puntos de la ronda {{count}}",
-    "profile": "Ver mi perfil"
+    "profile": "Ver mi perfil",
+    "potWon": "Ganaste {{chips}}",
+    "potWinner": "{{name}} se llevó el bote de {{chips}}"
   },
   "profile": {
     "title": "Tu perfil",
@@ -319,6 +326,53 @@
       "title": "No pudimos cargar tu perfil"
     },
     "retry": "Intentar de nuevo",
-    "open": "Abrir mi perfil"
+    "open": "Abrir mi perfil",
+    "balanceTitle": "Tus fichas",
+    "tabs": {
+      "label": "Contenido del perfil",
+      "matches": "Partidas",
+      "chips": "Fichas"
+    },
+    "movements": {
+      "title": "Últimos movimientos",
+      "empty": "Todavía no tienes movimientos de fichas.",
+      "failed": "No pudimos cargar tus fichas en este momento.",
+      "loading": "Cargando tus fichas",
+      "reason": {
+        "BONO_BIENVENIDA": "Bono de bienvenida",
+        "APUESTA_RETENIDA": "Apuesta retenida",
+        "BOTE_GANADO": "Bote ganado",
+        "APUESTA_DEVUELTA": "Apuesta devuelta",
+        "RECARGA": "Recarga"
+      }
+    },
+    "guestInvite": {
+      "title": "Crea una cuenta gratis",
+      "body": "Recibes 1000 fichas de bienvenida, guardas tu saldo y puedes apostar en tus mesas.",
+      "action": "Crear cuenta"
+    }
+  },
+  "account": {
+    "enter": "Entrar",
+    "create": "Crear cuenta",
+    "loginTitle": "Entrar a tu cuenta",
+    "registerTitle": "Crea tu cuenta",
+    "bonus": "Una cuenta gratis trae 1000 fichas para que apuestes en tus mesas.",
+    "email": "Correo",
+    "password": "Contraseña",
+    "nickname": "Apodo",
+    "submitLogin": "Entrar",
+    "submitRegister": "Crear cuenta",
+    "switchToRegister": "¿No tienes cuenta? Crea una",
+    "switchToLogin": "¿Ya tienes cuenta? Entra",
+    "noDatabase": "Las cuentas no están disponibles en este momento. Puedes seguir jugando como invitado.",
+    "menu": "Menú de tu cuenta",
+    "profile": "Tu perfil",
+    "logout": "Cerrar sesión",
+    "logoutFailed": "No pudimos cerrar la sesión. Inténtalo de nuevo.",
+    "balance": "Saldo: {{chips}}",
+    "guestNudge": "Con una cuenta gratis tienes 1000 fichas y puedes apostar.",
+    "guestNudgeAction": "Crear cuenta",
+    "registeredNickname": "Juegas con el apodo de tu cuenta"
   }
 }
