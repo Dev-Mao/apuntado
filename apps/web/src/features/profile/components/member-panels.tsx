@@ -50,7 +50,7 @@ export function MemberPanels({ matches }: { matches: readonly ProfileMatch[] }) 
           </button>
         ))}
       </div>
-      <div id="profile-panel" role="tabpanel" aria-labelledby={`tab-${tab}`} className="flex min-h-0 flex-1 flex-col">
+      <div id="profile-panel" role="tabpanel" aria-labelledby={`tab-${tab}`} className="flex flex-1 flex-col">
         {tab === "matches" ? <MatchList matches={matches} /> : <MovementList />}
       </div>
     </>

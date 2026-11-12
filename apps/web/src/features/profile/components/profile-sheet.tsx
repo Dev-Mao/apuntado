@@ -17,14 +17,14 @@ export function ProfileSheet({ profile }: { profile: ProfileView }) {
   ];
 
   return (
-    <section aria-labelledby="sheet-title" className="flex min-h-0 animate-sheet-rise flex-col rounded-[1.75rem] bg-paper-light px-6 pt-5 pb-3 shadow-sheet sm:px-10 sm:pt-7">
+    <section aria-labelledby="sheet-title" className="flex animate-sheet-rise flex-col rounded-[1.75rem] bg-paper-light px-6 pt-5 pb-3 shadow-sheet sm:px-10 sm:pt-7">
       <h2 id="sheet-title" className="sr-only">
         {t("profile.sheetTitle")}
       </h2>
       <dl className="grid grid-cols-2 gap-x-6 sm:grid-cols-4">
         {stats.map((stat) => (
           <div key={stat.label} className="flex flex-col gap-1.5 border-t border-line py-3">
-            <dt className="label-caps text-[0.55rem] leading-relaxed text-ink-soft">{stat.label}</dt>
+            <dt className="label-caps text-[0.65rem] leading-relaxed text-ink-soft">{stat.label}</dt>
             <dd className="order-first font-display font-semibold text-[2.6rem] leading-none sm:text-[3.2rem] tabular-nums lining-nums">{stat.value}</dd>
           </div>
         ))}

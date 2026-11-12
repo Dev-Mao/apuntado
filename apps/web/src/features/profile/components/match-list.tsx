@@ -27,7 +27,7 @@ function EmptyHistory() {
 export function MatchList({ matches }: { matches: readonly ProfileMatch[] }) {
   if (matches.length === 0) return <EmptyHistory />;
   return (
-    <ol className="min-h-0 divide-y divide-line overflow-y-auto overscroll-contain [mask-image:linear-gradient(to_bottom,black_calc(100%-1.25rem),transparent)]">
+    <ol className="min-h-[12rem] divide-y divide-line overflow-y-auto overscroll-contain [mask-image:linear-gradient(to_bottom,black_calc(100%-1.25rem),transparent)]">
       {matches.map((match) => (
         <MatchItem key={match.matchId} match={match} />
       ))}
