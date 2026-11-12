@@ -1,7 +1,7 @@
 import { Josefin_Sans, Playfair_Display } from "next/font/google";
 
 import { AppProviders } from "@/components";
-import { ConnectionBanner, RealtimeProvider } from "@/features/realtime";
+import { ConnectionBanner, RealtimeProvider, RoomNotice } from "@/features/realtime";
 import es from "@/messages/es.json";
 
 import "./globals.css";
@@ -40,6 +40,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <RealtimeProvider>
             <ConnectionBanner />
             {children}
+            <RoomNotice />
           </RealtimeProvider>
         </AppProviders>
       </body>

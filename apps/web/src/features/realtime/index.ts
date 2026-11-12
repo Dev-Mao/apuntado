@@ -1,4 +1,4 @@
-export { ConnectionBanner, RealtimeProvider, RoomLoading } from "./components";
+export { ConnectionBanner, RealtimeProvider, RoomLoading, RoomNotice } from "./components";
 export { useRealtime } from "./context";
 export { useLeaveRoom, useRoomCode, useRoomEntry, useRoomRedirect } from "./hooks";
 export type { ConnectionStatus, RealtimeContextValue, RoomState, SessionState } from "./types";

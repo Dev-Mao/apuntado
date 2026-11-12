@@ -26,9 +26,8 @@ export function useRoomEntry(code: string | null) {
     let active = true;
     commands.joinRoom(code).then(
       (result) => {
-        if (!active) return;
-        setEntryNotice(result.ok ? null : result.reason);
-        if (receivedSinceConnect()) return;
+        if (!result.ok) setEntryNotice(result.reason);
+        if (!active || receivedSinceConnect()) return;
         clearRoom();
         router.replace(ROUTES.HOME);
       },
