@@ -17,7 +17,7 @@ const HAND_SPREAD_DEG = 1.8;
 const HAND_ARC_PX = 0.55;
 const EMPTY_STYLE = {};
 const SORT_CLASSES =
-  "label-caps min-h-9 rounded-full px-3 pt-[0.55rem] pb-[0.45rem] text-[0.6rem] whitespace-nowrap text-ink-soft transition-colors hover:bg-ink hover:text-paper";
+  "label-caps min-h-9 rounded-full px-3 pt-[0.55rem] pb-[0.45rem] text-[0.65rem] whitespace-nowrap text-ink-soft transition-colors hover:bg-ink hover:text-paper";
 
 function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSortByRank, onSortBySuit }: PlayerHandProps) {
   const { t } = useTranslation();
@@ -50,7 +50,7 @@ function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSort
           </span>
         </div>
         <div role="group" aria-label={t("table.hand.sortLabel")} className="flex items-center gap-1">
-          <span aria-hidden="true" className="label-caps mr-1 hidden text-[0.6rem] text-ink-soft sm:inline">
+          <span aria-hidden="true" className="label-caps mr-1 hidden text-[0.65rem] text-ink-soft sm:inline">
             {t("table.hand.sortLabel")}
           </span>
           <button type="button" onClick={onSortByRank} className={SORT_CLASSES}>

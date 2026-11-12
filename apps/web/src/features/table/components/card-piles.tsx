@@ -32,7 +32,7 @@ function Pile({ name, label, caption, action, children }: PileProps) {
       <span data-pile={name} className={SLOT_CLASSES}>
         {children}
       </span>
-      <span aria-hidden="true" className="label-caps flex items-baseline gap-2 text-[0.6rem] text-paper/70">
+      <span aria-hidden="true" className="label-caps flex items-baseline gap-2 text-[0.65rem] text-paper/70">
         {caption}
       </span>
     </>

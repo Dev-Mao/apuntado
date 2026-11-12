@@ -26,7 +26,7 @@ export function Pill({ tone = PILL_TONE.LIGHT, className, children }: PillProps)
   return (
     <span
       className={cn(
-        "label-caps inline-flex items-center gap-1.5 rounded-full px-2.5 pt-[0.4rem] pb-[0.3rem] text-[0.6rem] whitespace-nowrap",
+        "label-caps inline-flex items-center gap-1.5 rounded-full px-2.5 pt-[0.4rem] pb-[0.3rem] text-[0.65rem] whitespace-nowrap",
         TONE_CLASSES[tone],
         className,
       )}

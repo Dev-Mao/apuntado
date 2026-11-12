@@ -26,11 +26,11 @@ export function TableHeader({ code, round, onShowRules, onShowScores }: TableHea
       </div>
       <TableLinks onShowRules={onShowRules} onShowScores={onShowScores} />
       <div className="flex items-center gap-4 lg:hidden">
-        <span className="label-caps text-[0.62rem] lg:hidden">{t("table.round", { count: round })}</span>
+        <span className="label-caps text-[0.65rem] lg:hidden">{t("table.round", { count: round })}</span>
         <button
           type="button"
           onClick={onShowRules}
-          className="label-caps flex items-center gap-2 rounded-full py-2 text-[0.62rem] transition-colors hover:text-coral-ink"
+          className="label-caps flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full py-2 text-[0.65rem] transition-colors hover:text-coral-ink"
         >
           <RulesIcon className="size-5" />
           <span className="max-sm:sr-only">{t("table.footer.rules")}</span>

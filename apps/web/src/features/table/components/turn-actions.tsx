@@ -57,7 +57,7 @@ function TurnActionsBase({
           variant={index === 0 ? BUTTON_VARIANT.PRIMARY : BUTTON_VARIANT.OUTLINE}
           onClick={handlers[action]}
           disabled={pending || (action === "DISCARD" && !canDiscard)}
-          className={cn("animate-turn-in", layout === "stack" ? "w-full" : "min-w-0 flex-1 px-2 max-sm:text-[0.62rem] max-sm:tracking-[0.1em]")}
+          className={cn("animate-turn-in", layout === "stack" ? "w-full" : "min-w-0 flex-1 px-2 max-sm:text-[0.65rem] max-sm:tracking-[0.1em]")}
         >
           {t(ACTION_LABELS[action])}
         </Button>

@@ -25,7 +25,7 @@ export function StakeField({ value, error, onChange }: StakeFieldProps) {
         <TextField label={t("settings.stake")} type="number" value="0" disabled readOnly aria-describedby="stake-guest" />
         <p id="stake-guest" className="-mt-1 text-sm italic text-ink-soft">
           {t("settings.stakeGuest")}{" "}
-          <button type="button" onClick={() => openAuth(AUTH_MODE.REGISTER)} className="label-caps text-[0.58rem] text-coral-ink not-italic underline underline-offset-4">
+          <button type="button" onClick={() => openAuth(AUTH_MODE.REGISTER)} className="label-caps text-[0.65rem] text-coral-ink not-italic underline underline-offset-4">
             {t("settings.stakeGuestAction")}
           </button>
         </p>

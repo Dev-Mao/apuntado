@@ -26,7 +26,7 @@ export function TurnPanel({ isMine, message, waitingFor, notice, turnKey, turnDe
 
   return (
     <section aria-labelledby={titleId} className={cn("flex flex-col gap-2", className)}>
-      <h2 id={titleId} className="label-caps text-[0.62rem] text-ink-soft short:sr-only">
+      <h2 id={titleId} className="label-caps text-[0.65rem] text-ink-soft short:sr-only">
         {t("table.turn.title")}
       </h2>
       <div className="flex items-stretch">

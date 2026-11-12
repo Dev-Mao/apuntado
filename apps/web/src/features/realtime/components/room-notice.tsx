@@ -25,7 +25,7 @@ export function RoomNotice() {
             <p className="label-caps text-[0.65rem] text-coral-ink">{t("home.entryFailed")}</p>
             <p className="mt-1 text-lg">{entryNotice}</p>
           </div>
-          <button type="button" onClick={handleDismiss} className="label-caps rounded-full border border-ink px-3 pt-2 pb-1.5 text-[0.6rem] hover:bg-ink hover:text-paper">
+          <button type="button" onClick={handleDismiss} className="label-caps rounded-full border border-ink px-3 pt-2 pb-1.5 text-[0.65rem] hover:bg-ink hover:text-paper">
             {t("common.close")}
           </button>
         </div>

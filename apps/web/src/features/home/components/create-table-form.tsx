@@ -28,7 +28,7 @@ function CreateTableFormBase({ settings, errors, pending, invited, serverError, 
       <ModeCards value={settings.mode} onChange={onModeChange} />
       <p className="flex flex-wrap items-baseline gap-x-2 text-paper/75 italic">
         {t("home.settingsSummary", { threshold: settings.eliminationThreshold, seconds: settings.turnSeconds, stake })}
-        <button type="button" onClick={() => setSettingsOpen(true)} className="label-caps text-[0.58rem] text-coral not-italic underline-offset-4 hover:underline">
+        <button type="button" onClick={() => setSettingsOpen(true)} className="label-caps -my-3 inline-flex min-h-11 items-center text-[0.65rem] text-coral not-italic underline-offset-4 hover:underline">
           {t("home.settingsEdit")}
         </button>
       </p>

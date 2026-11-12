@@ -9,7 +9,7 @@ interface TableLinksProps {
   onShowScores: () => void;
 }
 
-const LINK_CLASSES = "label-caps flex items-center gap-2.5 py-2 text-[0.6rem] transition-colors hover:text-coral-ink";
+const LINK_CLASSES = "label-caps flex items-center gap-2.5 py-2 text-[0.65rem] transition-colors hover:text-coral-ink";
 
 export function TableLinks({ onShowRules, onShowScores }: TableLinksProps) {
   const { t } = useTranslation();
