@@ -146,6 +146,13 @@ describe("Sesión de invitado · orígenes y validación", () => {
   });
 });
 
+describe("Perfil sin base de datos", () => {
+  it("con sesión pero sin base de datos, el perfil responde que el historial no está disponible", async () => {
+    const response = await fetch(`${baseUrl}/api/profile`, { headers: { cookie: await guestCookie("Ana") } });
+    expect(response.status).toBe(503);
+  });
+});
+
 describe("Mesa en tiempo real", () => {
   it("rechaza un socket sin sesión", async () => {
     const anonymous: Client = io(baseUrl, { transports: ["websocket"], forceNew: true });
