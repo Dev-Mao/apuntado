@@ -19,7 +19,10 @@ export class PgSqlClient implements SqlClient {
   private readonly pool: pg.Pool;
   private readonly direct: SqlExecutor;
 
-  constructor(connectionString: string, onError: (error: unknown) => void) {
+  constructor(
+    connectionString: string,
+    private readonly onError: (error: unknown) => void,
+  ) {
     this.pool = new pg.Pool({
       connectionString,
       max: POOL_SIZE,
@@ -46,7 +49,7 @@ export class PgSqlClient implements SqlClient {
       await client.query("COMMIT");
       client.release();
     } catch (error) {
-      await client.query("ROLLBACK").catch(() => undefined);
+      await client.query("ROLLBACK").catch(this.onError);
       client.release(error instanceof Error ? error : true);
       throw error;
     }
