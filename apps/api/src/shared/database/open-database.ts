@@ -8,8 +8,9 @@ export interface DatabaseLog {
 }
 
 export const openDatabase = async (connectionString: string, log: DatabaseLog): Promise<Database> => {
-  const sql = new PgSqlClient(connectionString);
+  const report = (error: unknown) => log.error(error);
+  const sql = new PgSqlClient(connectionString, report);
   const applied = await runMigrations(sql);
   log.info(applied.length ? `Migraciones aplicadas: ${applied.join(", ")}` : "Esquema al día");
-  return createDatabase(sql, (error) => log.error(error));
+  return createDatabase(sql, report);
 };
