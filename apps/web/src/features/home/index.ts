@@ -1,1 +1,1 @@
-export { HomeScreen } from "./components";
+export { HomeScreen, LinkedHomeScreen } from "./components";

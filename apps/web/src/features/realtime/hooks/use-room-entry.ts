@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-import { ROOM_CODE_PARAM, ROUTES } from "@/lib";
+import { homeHref, ROOM_CODE_PARAM, ROUTES } from "@/lib";
 
 import { useRealtime } from "../context";
 
@@ -16,7 +16,8 @@ export function useRoomEntry(code: string | null) {
   const { session, connection, connectCount, commands, receivedSinceConnect, clearRoom } = useRealtime();
 
   useEffect(() => {
-    if (session.status === "none" || code === null) router.replace(ROUTES.HOME);
+    if (code === null) router.replace(ROUTES.HOME);
+    else if (session.status === "none") router.replace(homeHref(code));
   }, [session.status, code, router]);
 
   useEffect(() => {

@@ -10,9 +10,13 @@ import { HomeHero } from "./home-hero";
 import { JoinTableForm } from "./join-table-form";
 import { useHomeForm } from "../hooks/use-home-form";
 
-export function HomeScreen() {
+interface HomeScreenProps {
+  linkCode: string | null;
+}
+
+export function HomeScreen({ linkCode }: HomeScreenProps) {
   const { t } = useTranslation();
-  const form = useHomeForm();
+  const form = useHomeForm(linkCode);
   useRoomRedirect(null);
 
   return (
@@ -30,6 +34,7 @@ export function HomeScreen() {
               placeholder={t("home.nickname.placeholder")}
               hint={t("home.nickname.hint")}
               autoComplete="nickname"
+              autoFocus={linkCode !== null}
               maxLength={16}
               value={form.nickname}
               error={form.errors.nickname ? t(`home.errors.${form.errors.nickname}`) : undefined}
