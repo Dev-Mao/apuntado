@@ -26,6 +26,7 @@ beforeAll(async () => {
     webDir: null,
     timing: { botDelayMs: 20, roundPauseMs: 50, cleanupMs: 60_000 },
     allowedOrigins: [DEV_ORIGIN],
+    databaseUrl: null,
   };
   app = await NestFactory.create(AppModule.register(config), { logger: false });
   configureApp(app, config);
