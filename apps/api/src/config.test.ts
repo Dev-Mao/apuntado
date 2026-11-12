@@ -17,9 +17,12 @@ describe("Configuración del servidor", () => {
     expect(loadConfig({}).allowedOrigins).toEqual(["http://localhost:3001"]);
     expect(loadConfig({ NODE_ENV: "production", SESSION_SECRET: "s" }).allowedOrigins).toEqual([]);
     expect(loadConfig({ ALLOWED_ORIGINS: "https://a.example, https://b.example" }).allowedOrigins).toEqual([
+      "http://localhost:3001",
       "https://a.example",
       "https://b.example",
     ]);
+    expect(loadConfig({ NODE_ENV: "production", SESSION_SECRET: "s", ALLOWED_ORIGINS: "https://a.example" }).allowedOrigins)
+      .toEqual(["https://a.example"]);
   });
 
   it("toma el puerto del entorno e ignora una carpeta web inexistente", () => {

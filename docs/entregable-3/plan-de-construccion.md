@@ -17,7 +17,7 @@ y de los ADR-01 a ADR-05, y señala dónde nos apartamos de ellos y por qué.
 | Autenticación | Propia y mínima: un token firmado en una cookie `httpOnly` de 7 días, igual para invitados y registrados. Contraseñas con Argon2 | El E1 usaba un par de tokens de acceso y refresco. Lo simplificamos a uno; sin verificación de correo ni recuperación de contraseña |
 | Modalidades | Clásica (una ronda, cierre 4-3-3), Apuntado a 101 (varias rondas, cierre por apuntado) y Ambas (varias rondas con los dos cierres) | Cubre el RF-CF-01, el reglamento y la guía del E3 |
 | Apuesta | Opcional por mesa; 0 significa jugar sin fichas. Un invitado nunca apuesta | Igual al E1 |
-| Cartas | La baraja la maneja el dominio. El cliente recibe `{ rank, suit }` y lo traduce a una imagen (`7H.png`, `back.png`) | No se usa ninguna API externa de cartas |
+| Cartas | La baraja la maneja el dominio. El cliente recibe `{ rank, suit }` y lo dibuja; cuando lleguen las imágenes del equipo se mostrarán como `7H.png` y `back.png` | No se usa ninguna API externa de cartas |
 
 ## Fases del servidor
 
@@ -26,7 +26,7 @@ Cada fase deja algo verificable y no se avanza sin que la anterior funcione.
 | Fase | Qué se construye | Terminada cuando |
 |---|---|---|
 | 0. Monorepo | Estructura de workspaces, paquete `contracts`, fitness functions y CI adaptados | El pipeline pasa con las mismas 44 pruebas y las reglas siguen detectando violaciones con las rutas nuevas |
-| 1. Dominio | Baraja con semilla, reparto, pozo, turno, reciclado del pozo (máximo dos por ronda), mejor agrupación de una mano, liquidación de ronda, umbral y empates | Una partida completa se simula en una prueba, la invariante de las 52 cartas se mantiene en una prueba de propiedad y pasan los casos borde del checklist |
+| 1. Dominio | Baraja con semilla, reparto, pozo, turno, reciclado del pozo (una vez; si hace falta un segundo reciclaje la ronda termina sin ganador), mejor agrupación de una mano, liquidación de ronda, umbral y empates | Una partida completa se simula en una prueba, la invariante de las 52 cartas se mantiene en una prueba de propiedad y pasan los casos borde del checklist |
 | 2. Aplicación | Casos de uso, vista filtrada por jugador, reloj de turno con reloj inyectado, oponente virtual | Una partida 1v1 contra el bot termina con un ganador sin red ni interfaz |
 | 3. API en tiempo real | NestJS, gateway de Socket.IO, invitado con token, salas por código, reconexión con snapshot, procesamiento en serie por mesa, primer despliegue | Cuatro clientes juegan por socket; uno se desconecta, vuelve y recupera su vista |
 | 4. Persistencia e historial | Repositorios con `pg`, migraciones desde `schema.sql`, bitácora asíncrona (cierra la deuda de C-07), archivado por evento, perfil | Al terminar una partida aparece en el perfil |

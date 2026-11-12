@@ -19,8 +19,8 @@ const DEVELOPMENT_ORIGINS = ["http://localhost:3001"];
 const BUNDLED_WEB_DIR = fileURLToPath(new URL("../../web/out", import.meta.url));
 
 const allowedOrigins = (raw: string | undefined, production: boolean): string[] => {
-  if (raw === undefined) return production ? [] : DEVELOPMENT_ORIGINS;
-  return raw.split(",").map((o) => o.trim()).filter(Boolean);
+  const listed = (raw ?? "").split(",").map((o) => o.trim()).filter(Boolean);
+  return production ? listed : [...new Set([...DEVELOPMENT_ORIGINS, ...listed])];
 };
 
 export const loadConfig = (env: Record<string, string | undefined>): AppConfig => {

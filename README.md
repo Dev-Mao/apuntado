@@ -82,7 +82,7 @@ Variables de entorno del servidor:
 | `NODE_ENV` | `production` activa las cookies seguras y exige `SESSION_SECRET` | sin definir |
 | `SESSION_SECRET` | Clave con que se firman las sesiones | clave de desarrollo |
 | `WEB_DIR` | Carpeta de la interfaz compilada | `apps/web/out` |
-| `ALLOWED_ORIGINS` | Orígenes adicionales aceptados, separados por comas | en desarrollo, `http://localhost:3001`; en producción, ninguno |
+| `ALLOWED_ORIGINS` | Orígenes adicionales aceptados, separados por comas; en desarrollo se suman a `http://localhost:3001` | ninguno |
 
 El despliegue en Render está descrito en `render.yaml`: un solo servicio que compila todo, sirve la
 interfaz, la API y el socket desde el mismo origen, y genera `SESSION_SECRET` automáticamente.
@@ -140,7 +140,8 @@ puede jugar de punta a punta desde varios navegadores.
   eliminación por umbral, vencimiento del turno.
 - Salas con código de 4 caracteres, anfitrión, bots, inicio y reconexión con la vista completa.
   Las mesas terminadas o abandonadas se borran tras diez minutos.
-- La sesión y el socket solo aceptan peticiones del propio origen.
+- En producción, la sesión y el socket solo aceptan peticiones del propio origen y de los listados
+  en `ALLOWED_ORIGINS`; en desarrollo aceptan además la interfaz en `http://localhost:3001`.
 - Sesión de invitado con token firmado en una cookie `httpOnly`.
 - Servidor NestJS con Socket.IO: cada jugador recibe solo su vista; el reloj de turno y el bot juegan
   solos cuando corresponde.
