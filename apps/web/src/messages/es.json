@@ -80,6 +80,7 @@
       "title": "Crea una mesa",
       "submit": "Crear mesa"
     },
+    "entryFailed": "No pudiste entrar a la mesa",
     "join": {
       "title": "Únete con un código",
       "label": "Código de la mesa",

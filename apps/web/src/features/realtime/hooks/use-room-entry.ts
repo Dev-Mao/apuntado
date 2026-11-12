@@ -13,7 +13,7 @@ export function useRoomCode(): string | null {
 
 export function useRoomEntry(code: string | null) {
   const router = useRouter();
-  const { session, connection, connectCount, commands, receivedSinceConnect, clearRoom } = useRealtime();
+  const { session, connection, connectCount, commands, receivedSinceConnect, clearRoom, setEntryNotice } = useRealtime();
 
   useEffect(() => {
     if (code === null) router.replace(ROUTES.HOME);
@@ -24,8 +24,10 @@ export function useRoomEntry(code: string | null) {
     if (connection !== "connected" || code === null) return;
     let active = true;
     commands.joinRoom(code).then(
-      () => {
-        if (!active || receivedSinceConnect()) return;
+      (result) => {
+        if (!active) return;
+        setEntryNotice(result.ok ? null : result.reason);
+        if (receivedSinceConnect()) return;
         clearRoom();
         router.replace(ROUTES.HOME);
       },
@@ -34,5 +36,5 @@ export function useRoomEntry(code: string | null) {
     return () => {
       active = false;
     };
-  }, [connection, connectCount, code, commands, receivedSinceConnect, clearRoom, router]);
+  }, [connection, connectCount, code, commands, receivedSinceConnect, clearRoom, setEntryNotice, router]);
 }

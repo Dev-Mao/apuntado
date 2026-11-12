@@ -32,7 +32,7 @@ function toRoomSettings(draft: SettingsDraft): RoomSettings {
 
 export function useHomeForm(linkCode: string | null) {
   const { t } = useTranslation();
-  const { session, commands, startSession } = useRealtime();
+  const { session, entryNotice, commands, startSession, setEntryNotice } = useRealtime();
   const [nicknameDraft, setNicknameDraft] = useState<string | null>(null);
   const [settings, setSettings] = useState<SettingsDraft>(INITIAL_SETTINGS);
   const [codeDraft, setCodeDraft] = useState<string | null>(null);
@@ -46,6 +46,7 @@ export function useHomeForm(linkCode: string | null) {
     async (form: HomeForm, nextErrors: HomeErrors, command: () => Promise<RoomResult>) => {
       setErrors(nextErrors);
       setServerError(null);
+      setEntryNotice(null);
       if (Object.keys(nextErrors).length > 0) return;
       setPending(form);
       try {
@@ -58,7 +59,7 @@ export function useHomeForm(linkCode: string | null) {
       }
       setPending(null);
     },
-    [nickname, startSession, t],
+    [nickname, startSession, setEntryNotice, t],
   );
 
   const handleCreate = useCallback(
@@ -94,6 +95,7 @@ export function useHomeForm(linkCode: string | null) {
     nickname,
     settings,
     code,
+    entryNotice,
     errors,
     pending,
     createError: errorFor(HOME_FORM.CREATE),

@@ -13,6 +13,7 @@ const RETRY_MS = 3000;
 
 export function useRealtimeStore(): RealtimeContextValue {
   const [session, setSession] = useState<SessionState>({ status: "checking" });
+  const [entryNotice, setEntryNotice] = useState<string | null>(null);
   const recheckRef = useRef<() => void>(() => undefined);
   const handleRejected = useCallback(() => {
     window.setTimeout(() => recheckRef.current(), RETRY_MS);
@@ -60,7 +61,18 @@ export function useRealtimeStore(): RealtimeContextValue {
   );
 
   return useMemo(
-    () => ({ session, connection, connectCount, room, commands, startSession, receivedSinceConnect, clearRoom }),
-    [session, connection, connectCount, room, commands, startSession, receivedSinceConnect, clearRoom],
+    () => ({
+      session,
+      connection,
+      connectCount,
+      room,
+      entryNotice,
+      commands,
+      startSession,
+      receivedSinceConnect,
+      clearRoom,
+      setEntryNotice,
+    }),
+    [session, connection, connectCount, room, entryNotice, commands, startSession, receivedSinceConnect, clearRoom],
   );
 }

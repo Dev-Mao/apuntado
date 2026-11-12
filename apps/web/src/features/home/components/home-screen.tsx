@@ -6,6 +6,7 @@ import { AppHeader, TextField } from "@/components";
 import { useRoomRedirect } from "@/features/realtime";
 
 import { CreateTableForm } from "./create-table-form";
+import { EntryNotice } from "./entry-notice";
 import { HomeHero } from "./home-hero";
 import { JoinTableForm } from "./join-table-form";
 import { useHomeForm } from "../hooks/use-home-form";
@@ -25,6 +26,7 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
       <main className="grid flex-1 gap-10 px-5 pb-10 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-8">
         <HomeHero />
         <div className="flex flex-col divide-y divide-line border-y border-line lg:self-start">
+          <EntryNotice message={form.entryNotice} />
           <section aria-labelledby="nickname-title" className="flex flex-col gap-5 py-7">
             <h2 id="nickname-title" className="font-display text-2xl sm:text-3xl">
               {t("home.nickname.title")}
