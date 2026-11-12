@@ -9,7 +9,7 @@ import { CreateTableForm } from "./create-table-form";
 import { EntryNotice } from "./entry-notice";
 import { HomeHero } from "./home-hero";
 import { JoinTableForm } from "./join-table-form";
-import { useHomeForm } from "../hooks/use-home-form";
+import { useHomeForm } from "../hooks";
 
 interface HomeScreenProps {
   linkCode: string | null;

@@ -21,7 +21,7 @@ const VARIANT_CLASSES: Readonly<Record<ButtonVariant, string>> = {
 const BASE_CLASSES =
   "label-caps inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-[1.5px] px-4 pt-[0.8rem] pb-[0.7rem] max-sm:tracking-[0.1em] sm:px-6 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40";
 
-export function buttonClasses(variant: ButtonVariant = BUTTON_VARIANT.PRIMARY, className?: string): string {
+function buttonClasses(variant: ButtonVariant = BUTTON_VARIANT.PRIMARY, className?: string): string {
   return cn(BASE_CLASSES, VARIANT_CLASSES[variant], className);
 }
 
