@@ -42,7 +42,7 @@ export function ProfileSheet({ profile }: { profile: ProfileView }) {
         {stats.map((stat) => (
           <div key={stat.label} className="flex flex-col gap-2 border-t border-line py-4">
             <dt className="label-caps text-[0.55rem] leading-relaxed text-ink-soft">{stat.label}</dt>
-            <dd className="order-first font-display font-semibold text-[3.2rem] leading-none tabular-nums">{stat.value}</dd>
+            <dd className="order-first font-display font-semibold text-[3.2rem] leading-none tabular-nums lining-nums">{stat.value}</dd>
           </div>
         ))}
       </dl>

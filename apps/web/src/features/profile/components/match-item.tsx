@@ -21,7 +21,7 @@ export function MatchItem({ match }: { match: ProfileMatch }) {
         <span className="text-ink-soft">{format.rivals(match.rivals)}</span>
       </p>
       <p className="row-span-2 self-center text-right">
-        <span className="block font-display font-semibold text-[2rem] leading-none tabular-nums">{match.points}</span>
+        <span className="block font-display font-semibold text-[2rem] leading-none tabular-nums lining-nums">{match.points}</span>
         <span className="label-caps text-[0.5rem] text-ink-soft">{t("profile.match.pointsUnit", { count: match.points })}</span>
       </p>
       <p className="label-caps text-[0.55rem] leading-relaxed text-ink-soft">

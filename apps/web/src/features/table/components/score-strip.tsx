@@ -36,7 +36,7 @@ export function ScoreStrip({ entries, seats, selfId, turnPlayerId, onOpen }: Sco
         >
           {entry.playerId === turnPlayerId && <span className="size-1.5 self-center rounded-full bg-ink" />}
           <span className={cn("max-w-[5.5rem] truncate text-sm", entry.eliminated && "line-through")}>{nicknameOf(seats, entry.playerId)}</span>
-          <span className="text-lg leading-none tabular-nums">{entry.total}</span>
+          <span className="text-lg leading-none tabular-nums lining-nums">{entry.total}</span>
         </span>
       ))}
     </button>
