@@ -42,7 +42,7 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
             <SessionBadge />
           </nav>
         </AppHeader>
-        <main className="grid min-h-0 flex-1 content-center gap-6 overflow-y-auto overscroll-contain px-4 pb-6 short:gap-3 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:items-center lg:gap-16">
+        <main className="grid min-h-0 w-full flex-1 gap-5 overflow-y-auto overscroll-contain px-4 pt-1 pb-4 [align-content:safe_center] short:gap-3 sm:px-8 max-lg:mx-auto max-lg:max-w-xl md:short:max-w-4xl md:short:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] md:short:gap-10 md:short:[align-items:safe_center] lg:max-w-none lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:gap-16 lg:[align-items:safe_center]">
           <HomeHero />
           <div className="flex flex-col gap-4">
             <EntryNotice message={form.entryNotice} />

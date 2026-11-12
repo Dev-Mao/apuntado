@@ -3,6 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import { TextField } from "@/components";
+import { cn } from "@/lib";
 
 import { CreateTableForm } from "./create-table-form";
 import { JoinTableForm } from "./join-table-form";
@@ -29,7 +30,13 @@ export function HomeEntry({ form, linkCode }: HomeEntryProps) {
           {t("home.entry.eyebrow")}
           <span aria-hidden="true" className="h-px w-12 bg-paper/40" />
         </p>
-        <h2 id="entry-title" className="mt-2 font-display text-[2.3rem] leading-[0.95] font-semibold italic short:mt-0 short:text-[1.9rem] sm:text-[2.9rem]">
+        <h2
+          id="entry-title"
+          className={cn(
+            "mt-2 font-display leading-[0.95] font-semibold italic short:mt-0",
+            invited ? "text-[2rem] short:text-[1.7rem] sm:text-[2.4rem]" : "text-[2.3rem] short:text-[1.9rem] sm:text-[2.9rem]",
+          )}
+        >
           {invited ? t("home.entry.invitedTitle", { code: linkCode.toUpperCase() }) : t("home.entry.title")}
         </h2>
       </div>
