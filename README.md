@@ -52,7 +52,7 @@ apps/api/src/modules/
 
 ```bash
 npm install
-npm test                  # todas las pruebas del servidor, de arquitectura y del esquema
+npm test                  # todas las pruebas: servidor, arquitectura, esquema y punta a punta
 npm run test:domain       # dominio y aplicación del servidor
 npm run test:arch         # fitness functions
 npm run test:integration  # esquema SQL sobre PostgreSQL (PGlite, sin Docker)
@@ -60,6 +60,7 @@ npm run typecheck         # TypeScript estricto del servidor y los contratos
 npm run lint              # incluye el límite de complejidad ciclomática (CC ≤ 10)
 npm run arch:deps         # reglas de dependencia (dependency-cruiser)
 npm run test:e2e          # servidor real y clientes Socket.IO de punta a punta
+npm run api:build         # compilación de producción del servidor
 npm run web:check         # tipos, estilo y build de la interfaz web
 npm run verificar         # todo lo anterior: exactamente lo que corre el pipeline
 npm run build             # compila la interfaz web y el servidor
@@ -75,6 +76,7 @@ Variables de entorno del servidor:
 | `NODE_ENV` | `production` activa las cookies seguras y exige `SESSION_SECRET` | sin definir |
 | `SESSION_SECRET` | Clave con que se firman las sesiones | clave de desarrollo |
 | `WEB_DIR` | Carpeta de la interfaz compilada | `apps/web/out` |
+| `ALLOWED_ORIGINS` | Orígenes adicionales aceptados, separados por comas (por ejemplo, la interfaz en modo desarrollo) | ninguno |
 
 El despliegue en Render está descrito en `render.yaml`: un solo servicio que compila todo, sirve la
 interfaz, la API y el socket desde el mismo origen, y genera `SESSION_SECRET` automáticamente.
@@ -101,7 +103,8 @@ Las reglas de los ADR no se sostienen con disciplina sino con pruebas que fallan
 | FF-08 | Complejidad ciclomática ≤ 10 por función | §5.3 de la guía | ESLint |
 
 Además, `packages/contracts` no puede importar nada de las aplicaciones, y la capa de aplicación de
-cada módulo no puede importar NestJS, Socket.IO ni otras librerías de infraestructura.
+cada módulo no puede importar NestJS, Socket.IO ni otras librerías de infraestructura. El dominio
+tampoco puede importar la capa de aplicación.
 
 ### Las reglas están verificadas contra violaciones reales
 
@@ -130,12 +133,14 @@ real funciona de punta a punta.
 - Dominio completo: ronda, partida en las modalidades Clásica, Apuntado y Ambas, acumulación y
   eliminación por umbral, vencimiento del turno.
 - Salas con código de 4 caracteres, anfitrión, bots, inicio y reconexión con la vista completa.
+  Las mesas terminadas o abandonadas se borran tras diez minutos.
+- La sesión y el socket solo aceptan peticiones del propio origen.
 - Sesión de invitado con token firmado en una cookie `httpOnly`.
 - Servidor NestJS con Socket.IO: cada jugador recibe solo su vista; el reloj de turno y el bot juegan
   solos cuando corresponde.
 - La interfaz web tiene el sistema de diseño y sus pantallas; falta conectarla al servidor.
 
 ```
-220 pruebas  ·  199 de servidor + 6 de arquitectura + 10 de esquema + 5 de punta a punta
+235 pruebas  ·  210 de servidor + 6 de arquitectura + 10 de esquema + 9 de punta a punta
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```

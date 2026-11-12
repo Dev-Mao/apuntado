@@ -49,5 +49,8 @@ jobs:
       - name: Servidor en tiempo real de punta a punta
         run: npm run test:e2e
 
+      - name: Compilación de producción del servidor
+        run: npm run api:build
+
       - name: Interfaz web (tipos, estilo y build)
         run: npm run web:check

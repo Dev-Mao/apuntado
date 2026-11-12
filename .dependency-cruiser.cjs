@@ -50,6 +50,12 @@ module.exports = {
       to: { path: "^apps/api/src/modules" },
     },
     {
+      name: "dominio-sin-aplicacion",
+      severity: "error",
+      from: { path: "^apps/api/src/modules/[^/]+/domain" },
+      to: { path: "^apps/api/src/modules/[^/]+/application" },
+    },
+    {
       name: "aplicacion-sin-framework",
       severity: "error",
       from: { path: "^apps/api/src/modules/[^/]+/application" },
