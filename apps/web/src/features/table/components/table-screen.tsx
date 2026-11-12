@@ -44,7 +44,7 @@ export function TableScreen(props: TableScreenProps) {
   };
 
   return (
-    <div className="relative isolate grid min-h-dvh grid-rows-[auto_auto_minmax(0,1fr)_auto] overflow-clip lg:grid-cols-[minmax(0,1fr)_22rem] lg:grid-rows-[auto_minmax(0,1fr)_auto] [@media(min-height:44rem)]:h-dvh">
+    <div className="relative isolate grid grid-cols-[minmax(0,1fr)] grid-rows-[auto_auto_minmax(0,1fr)_auto] h-dvh overflow-clip lg:grid-cols-[minmax(0,1fr)_22rem] lg:grid-rows-[auto_minmax(0,1fr)_auto]">
       <TableBackdrop />
       <TableHeader code={snapshot.code} round={view.roundNumber} onShowRules={panels.showRules} onShowScores={panels.showScores} />
       <ScoreStrip entries={view.scoreboard} seats={seats} selfId={view.playerId} turnPlayerId={view.currentPlayerId} onOpen={panels.showScores} />
@@ -55,10 +55,10 @@ export function TableScreen(props: TableScreenProps) {
       <div className="col-start-1 row-start-3 mx-3 grid min-h-0 sm:mx-6 lg:row-start-2 lg:mx-0 lg:ml-8">
         <TableStage snapshot={snapshot} selfName={screen.selfName} stockAction={piles.stockAction} discardAction={piles.discardAction} />
       </div>
-      <div className="relative col-start-1 row-start-4 flex flex-col gap-3 overflow-x-clip px-3 pt-5 sm:px-6 lg:row-start-3 lg:ml-8 lg:px-12 lg:pt-8">
+      <div className="relative col-start-1 row-start-4 flex flex-col gap-3 overflow-x-clip px-3 pt-5 short:gap-2 short:pt-3 sm:px-6 lg:row-start-3 lg:ml-8 lg:px-12 lg:pt-8 lg:short:pt-5">
         <span aria-hidden="true" className="absolute -inset-x-[70%] top-0 -bottom-[120%] rounded-[50%] bg-paper-light shadow-[0_-1px_0_var(--color-line)]" />
-        <div className="relative flex flex-col gap-3 lg:hidden">
-          <TurnPanel {...turnPanel} />
+        <div className="relative flex flex-col gap-3 short:gap-2 tiny:flex-row tiny:items-center lg:hidden">
+          <TurnPanel {...turnPanel} className="tiny:flex-1" />
           <TurnActions layout="row" {...screen.actions} />
         </div>
         <div className="relative">

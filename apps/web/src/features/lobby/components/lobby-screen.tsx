@@ -14,18 +14,18 @@ export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave 
   const isHost = lobby.hostId === selfId;
 
   return (
-    <div className="relative isolate overflow-x-clip">
+    <div className="relative isolate h-dvh overflow-hidden">
       <span aria-hidden="true" className="absolute -top-32 -right-36 -z-10 size-80 rounded-full bg-coral sm:-top-48 sm:-right-40 sm:size-[30rem]" />
-      <div className="mx-auto flex min-h-dvh max-w-5xl flex-col">
+      <div className="mx-auto flex h-full max-w-5xl flex-col">
         <AppHeader homeLink={false}>
           <Button variant={BUTTON_VARIANT.GHOST} onClick={onLeave} className="px-2">
             {t("lobby.leave")}
           </Button>
         </AppHeader>
-        <main className="flex flex-1 flex-col gap-8 px-4 pb-12 sm:px-8">
+        <main className="flex min-h-0 flex-1 flex-col gap-5 px-4 pb-5 short:gap-3 short:pb-3 sm:px-8">
           <div className="flex flex-col gap-2">
-            <h1 className="font-display font-semibold text-[clamp(3rem,10vw,5.5rem)] leading-[0.9] tracking-[-0.02em]">{t("lobby.heading")}</h1>
-            <p className="text-xl italic">
+            <h1 className="font-display text-[clamp(2.6rem,9vw,4.6rem)] leading-[0.9] font-semibold tracking-[-0.02em] short:text-[2.2rem]">{t("lobby.heading")}</h1>
+            <p className="text-lg italic short:hidden sm:text-xl">
               {t("lobby.tagline")} <span className="text-coral-ink">{t("lobby.playersCount", { count: lobby.seats.length, max: lobby.maxSeats })}</span>
             </p>
           </div>
@@ -42,7 +42,7 @@ export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave 
                 </Button>
               </div>
             ) : (
-              <p className="text-xl italic">{t("lobby.waitingHost")}</p>
+              <p className="text-lg italic short:hidden sm:text-xl">{t("lobby.waitingHost")}</p>
             )}
             <LiveNotice message={notice} className="text-center" />
           </div>

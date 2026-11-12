@@ -1,64 +1,56 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState } from "react";
 
 import { useTranslation } from "react-i18next";
 
-import { TextField } from "@/components";
+import { ArrowIcon, Button, BUTTON_VARIANT, LiveNotice } from "@/components";
 
-import { CREATE_FORM_ID, HOME_FIELD } from "../types";
+import { HOME_FIELD } from "../types";
 import { ModeCards } from "./mode-cards";
+import { SettingsDialog } from "./settings-dialog";
 
 import type { CreateTableFormProps } from "../types";
 
-function CreateTableFormBase({ settings, errors, onModeChange, onNumberChange, onSubmit }: CreateTableFormProps) {
+const SETTING_FIELDS = [HOME_FIELD.THRESHOLD, HOME_FIELD.TURN, HOME_FIELD.STAKE] as const;
+
+function CreateTableFormBase({ settings, errors, pending, invited, serverError, onModeChange, onNumberChange, onSubmit }: CreateTableFormProps) {
   const { t } = useTranslation();
-  const errorText = (field: keyof typeof errors) => (errors[field] ? t(`home.errors.${errors[field]}`) : undefined);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const settingsInvalid = SETTING_FIELDS.some((field) => errors[field]);
+  const stake = Number(settings.stake) > 0 ? t("common.chips", { count: Number(settings.stake) }) : t("home.stakeNone");
 
   return (
-    <form id={CREATE_FORM_ID} noValidate onSubmit={onSubmit} aria-labelledby="create-title" className="flex flex-col gap-8">
-      <h2 id="create-title" className="sr-only">
+    <form noValidate onSubmit={onSubmit} aria-labelledby="create-title" className="flex flex-col gap-4 short:gap-3">
+      <h3 id="create-title" className="sr-only">
         {t("home.create.title")}
-      </h2>
+      </h3>
       <ModeCards value={settings.mode} onChange={onModeChange} />
-      <fieldset className="flex flex-col">
-        <legend className="label-caps mb-4 flex items-center gap-4 text-[0.68rem]">
-          {t("settings.title")}
-          <span aria-hidden="true" className="h-px w-12 bg-ink/40" />
-        </legend>
-        <div className="grid gap-4 sm:grid-cols-3 sm:gap-3">
-          <TextField
-            label={t("home.thresholdLabel")}
-            hint={t("home.thresholdHint")}
-            type="number"
-            inputMode="numeric"
-            min={1}
-            value={settings.eliminationThreshold}
-            error={errorText(HOME_FIELD.THRESHOLD)}
-            onChange={(event) => onNumberChange(HOME_FIELD.THRESHOLD, event.target.value)}
-          />
-          <TextField
-            label={t("settings.turn")}
-            hint={t("settings.turnHint")}
-            type="number"
-            inputMode="numeric"
-            min={10}
-            value={settings.turnSeconds}
-            error={errorText(HOME_FIELD.TURN)}
-            onChange={(event) => onNumberChange(HOME_FIELD.TURN, event.target.value)}
-          />
-          <TextField
-            label={t("settings.stake")}
-            hint={t("settings.stakeHint")}
-            type="number"
-            inputMode="numeric"
-            min={0}
-            value={settings.stake}
-            error={errorText(HOME_FIELD.STAKE)}
-            onChange={(event) => onNumberChange(HOME_FIELD.STAKE, event.target.value)}
-          />
-        </div>
-      </fieldset>
+      <p className="flex flex-wrap items-baseline gap-x-2 text-paper/75 italic">
+        {t("home.settingsSummary", { threshold: settings.eliminationThreshold, seconds: settings.turnSeconds, stake })}
+        <button type="button" onClick={() => setSettingsOpen(true)} className="label-caps text-[0.58rem] text-coral not-italic underline-offset-4 hover:underline">
+          {t("home.settingsEdit")}
+        </button>
+      </p>
+      {settingsInvalid && <LiveNotice message={t("home.settingsInvalid")} className="text-salmon" />}
+      <Button
+        type="submit"
+        variant={invited ? BUTTON_VARIANT.LIGHT : BUTTON_VARIANT.PRIMARY}
+        disabled={pending}
+        aria-busy={pending}
+        className="w-full sm:w-auto sm:self-start"
+      >
+        {t("home.create.submit")}
+        <ArrowIcon />
+      </Button>
+      <LiveNotice message={serverError} className="text-salmon" />
+      <SettingsDialog
+        open={settingsOpen}
+        settings={settings}
+        errors={errors}
+        onNumberChange={onNumberChange}
+        onClose={() => setSettingsOpen(false)}
+      />
     </form>
   );
 }

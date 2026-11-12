@@ -117,7 +117,12 @@
       }
     },
     "thresholdLabel": "Eliminación a",
-    "thresholdHint": "En puntos"
+    "thresholdHint": "En puntos",
+    "settingsSummary": "Eliminación a {{threshold}}, turnos de {{seconds}} s, {{stake}}.",
+    "settingsEdit": "Cambiar",
+    "settingsDone": "Listo",
+    "settingsInvalid": "Revisa los ajustes de la mesa.",
+    "stakeNone": "sin apuesta"
   },
   "lobby": {
     "heading": "Sala de espera",

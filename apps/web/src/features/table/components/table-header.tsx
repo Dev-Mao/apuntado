@@ -17,7 +17,7 @@ export function TableHeader({ code, round, onShowRules, onShowScores }: TableHea
   const { t } = useTranslation();
 
   return (
-    <header className="relative z-10 flex items-center justify-between gap-3 px-4 py-3 sm:px-8 lg:col-start-1">
+    <header className="relative z-10 flex items-center justify-between gap-3 px-4 py-3 short:py-1.5 sm:px-8 lg:col-start-1">
       <h1 className="sr-only">{t("table.title", { code })}</h1>
       <div className="flex items-center gap-3">
         <SuitGlyph suit="S" className="size-6 sm:size-7" />

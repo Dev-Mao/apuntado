@@ -30,9 +30,9 @@ const POSITION_CLASSES: Readonly<Record<SeatPosition, string>> = {
 };
 
 const PILL_PLACE_CLASSES: Readonly<Record<SeatPosition, string>> = {
-  top: "self-end translate-y-1/3",
-  left: "self-end translate-y-1/3 lg:self-center lg:translate-y-0",
-  right: "self-end translate-y-1/3 lg:self-center lg:translate-y-0",
+  top: "self-end translate-y-1/3 tiny:translate-y-0",
+  left: "self-end translate-y-1/3 tiny:translate-y-0 lg:self-center lg:translate-y-0",
+  right: "self-end translate-y-1/3 tiny:translate-y-0 lg:self-center lg:translate-y-0",
 };
 
 const FAN_TURN_CLASSES: Readonly<Record<SeatPosition, string>> = {
@@ -89,7 +89,7 @@ export function OpponentSeat({ opponent, seat, position, isTurn }: OpponentSeatP
   return (
     <li className={cn("grid min-w-0 flex-1 place-items-center lg:flex-none", POSITION_CLASSES[position])}>
       <SeatDescription identity={identity} count={opponent.cardCount} isTurn={isTurn} />
-      <span className={cn("col-start-1 row-start-1 transition-opacity", !identity.isConnected && "opacity-40")}>
+      <span className={cn("col-start-1 row-start-1 transition-opacity tiny:hidden", !identity.isConnected && "opacity-40")}>
         <SeatFan playerId={opponent.playerId} count={opponent.cardCount} position={position} />
       </span>
       <SeatPill

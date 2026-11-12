@@ -13,7 +13,7 @@ import type { ProfileView } from "@apuntado/contracts";
 function ProfileIdentity({ profile }: { profile: ProfileView }) {
   const { t } = useTranslation();
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex shrink-0 items-center gap-4">
       <span
         aria-hidden="true"
         className="grid size-16 shrink-0 place-items-center rounded-full border-[1.5px] border-ink bg-coral text-3xl italic shadow-card"
@@ -33,10 +33,10 @@ export function ProfileScreen() {
   const { state, retry } = useProfile();
 
   return (
-    <div className="relative isolate mx-auto flex min-h-dvh max-w-3xl flex-col">
+    <div className="relative isolate mx-auto flex h-dvh max-w-3xl flex-col overflow-hidden">
       <span aria-hidden="true" className="fixed top-28 -right-44 -z-10 size-[26rem] rounded-full bg-coral max-md:hidden" />
       <AppHeader />
-      <main className="flex flex-1 flex-col gap-6 px-4 pt-2 pb-12 sm:px-8">
+      <main className="flex min-h-0 flex-1 flex-col gap-5 px-4 pb-5 sm:px-8">
         {state.status === "ready" ? (
           <>
             <ProfileIdentity profile={state.profile} />

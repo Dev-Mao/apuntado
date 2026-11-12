@@ -31,7 +31,7 @@ export function TableStage({ snapshot, selfName, stockAction, discardAction }: T
   const positions = POSITIONS_BY_COUNT[view.opponents.length] ?? [];
 
   return (
-    <section aria-labelledby="stage-title" className="relative flex min-h-0 flex-col gap-2 px-3 pt-4 pb-4 text-paper sm:px-8 lg:pt-6 lg:pb-0">
+    <section aria-labelledby="stage-title" className="relative flex min-h-0 flex-col gap-2 px-3 pt-4 pb-4 text-paper short:gap-1 short:pt-2 short:pb-2 sm:px-8 lg:pt-6 lg:pb-0">
       <h2 id="stage-title" className="sr-only">
         {t("table.opponents")}
       </h2>
@@ -46,14 +46,14 @@ export function TableStage({ snapshot, selfName, stockAction, discardAction }: T
           />
         ))}
       </ul>
-      <div className="relative flex flex-1 items-center justify-center py-4 lg:absolute lg:inset-x-0 lg:top-[14%] lg:bottom-[6%]">
+      <div className="relative flex min-h-0 flex-1 items-center justify-center py-4 short:py-1 lg:absolute lg:inset-x-0 lg:top-[14%] lg:bottom-[6%]">
         <span
           aria-hidden="true"
           className="pointer-events-none absolute top-1/2 left-1/2 aspect-square h-[115%] max-h-[34rem] -translate-1/2 rounded-full border border-paper/15"
         />
         <CardPiles stockSize={view.stockSize} discardTop={view.discardTop} stockAction={stockAction} discardAction={discardAction} />
       </div>
-      <div className="flex justify-center lg:absolute lg:inset-x-0 lg:bottom-3">
+      <div className="flex justify-center short:hidden lg:absolute lg:inset-x-0 lg:bottom-3 lg:short:flex">
         <SeatPill name={t("table.selfLabel", { name: selfName })} count={view.hand.length} isSelf isActive={view.currentPlayerId === view.playerId} />
       </div>
     </section>

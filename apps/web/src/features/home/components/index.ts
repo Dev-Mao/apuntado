@@ -6,3 +6,4 @@ export * from "./home-screen";
 export * from "./join-table-form";
 export * from "./linked-home-screen";
 export * from "./mode-cards";
+export * from "./settings-dialog";

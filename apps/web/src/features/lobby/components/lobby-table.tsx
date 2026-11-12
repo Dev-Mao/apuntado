@@ -21,7 +21,7 @@ export function LobbyTable({ lobby, selfId }: { lobby: LobbyView; selfId: string
   const placed = placeSeats(lobby.seats, selfId, lobby.maxSeats);
 
   return (
-    <section aria-labelledby="players-title" className="relative mx-auto aspect-[5/6] w-full max-w-[46rem] sm:aspect-[16/10]">
+    <section aria-labelledby="players-title" className="relative mx-auto min-h-[16rem] w-full max-w-[46rem] flex-1">
       <h2 id="players-title" className="sr-only">
         {t("lobby.players")}
       </h2>

@@ -64,7 +64,7 @@ function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSort
       <p id={HAND_HELP_ID} className="sr-only">
         {t("table.hand.instructions")}
       </p>
-      <ul style={fanVars} className="hand-fan flex justify-center pt-8 pb-9 sm:pt-10 lg:pb-6">
+      <ul style={fanVars} className="hand-fan flex justify-center px-3 pt-8 pb-9 short:pt-5 short:pb-7 sm:pt-10 lg:pb-6 lg:short:pt-7">
         {cards.map((card, index) => (
           <HandCard
             key={cardId(card)}

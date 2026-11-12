@@ -31,7 +31,7 @@ export function AppHeader({ className, homeLink = true, children }: AppHeaderPro
   const { t } = useTranslation();
 
   return (
-    <header className={cn("relative z-10 flex min-h-16 items-center justify-between gap-4 px-4 py-3 sm:px-8", className)}>
+    <header className={cn("relative z-10 flex min-h-16 items-center justify-between gap-4 px-4 py-3 short:min-h-12 short:py-1.5 sm:px-8", className)}>
       <div className="flex items-center gap-5">
         {homeLink ? (
           <Link href={ROUTES.HOME} aria-label={t("brand.home")} className={BRAND_CLASSES}>
