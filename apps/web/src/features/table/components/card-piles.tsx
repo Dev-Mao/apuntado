@@ -1,10 +1,15 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { useTranslation } from "react-i18next";
 
 import { CARD_SIZE, PlayingCard } from "@/components";
 import { useCardLabel } from "@/hooks/use-card-label";
 import { cn } from "@/lib";
+
+import { focusHand } from "../focus-hand";
+import { useFocusRecovery } from "../hooks";
 
 import type { PileAction } from "../types";
 import type { CardDto } from "@apuntado/contracts";
@@ -42,7 +47,7 @@ function Pile({ name, label, caption, action, children }: PileProps) {
   return (
     <button
       type="button"
-      aria-label={action.label}
+      aria-label={`${action.label}. ${label}`}
       onClick={action.onPress}
       className="flex flex-col items-center gap-3 rounded-2xl p-1 short:gap-1.5 transition-[translate] duration-200 ease-spring hover:-translate-y-1 active:translate-y-0 [&_[data-pile]]:rounded-[7%/5%] [&_[data-pile]]:shadow-[0_0_0_3px_var(--color-coral),0_0_30px_-6px_rgb(224_122_95/0.9)]"
     >
@@ -65,10 +70,17 @@ interface CardPilesProps {
 export function CardPiles({ stockSize, discardTop, stockAction, discardAction }: CardPilesProps) {
   const { t } = useTranslation();
   const cardLabel = useCardLabel();
+  const trigger = useMemo(() => [stockAction, discardAction], [stockAction, discardAction]);
+  const { groupRef, handleFocus, handleBlur } = useFocusRecovery<HTMLDivElement>(trigger, focusHand);
   const discardLabel = discardTop ? t("table.discardLabel", { card: cardLabel(discardTop) }) : t("table.discardEmpty");
 
   return (
-    <div className="relative flex items-start justify-center gap-8 sm:gap-16 lg:gap-10 xl:gap-16">
+    <div
+      ref={groupRef}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      className="relative flex items-start justify-center gap-8 sm:gap-16 lg:gap-10 xl:gap-16"
+    >
       <Pile
         name="stock"
         label={t("table.stockLabel", { count: stockSize })}

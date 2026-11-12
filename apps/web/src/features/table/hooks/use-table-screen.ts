@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useCommandNotice } from "@/hooks/use-command-notice";
 import { cardId, nicknameOf } from "@/lib";
 
+import { focusHand } from "../focus-hand";
 import { useClosurePrompt } from "./use-closure-prompt";
 import { useHand } from "./use-hand";
 import { usePileActions } from "./use-pile-actions";
@@ -15,10 +16,6 @@ import { useTablePanels } from "./use-table-panels";
 import { useTurnMessage } from "./use-turn-message";
 
 import type { TableScreenProps } from "../types";
-
-function focusHand() {
-  document.querySelector<HTMLElement>("[data-hand-index='0']")?.focus();
-}
 
 export function useTableScreen({ snapshot, pending, onDrawFromStock, onDrawFromDiscard, onDiscard }: TableScreenProps) {
   const { t } = useTranslation();
