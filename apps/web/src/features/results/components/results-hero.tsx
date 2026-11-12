@@ -27,6 +27,17 @@ function useHeadline({ summary, isSelfWinner }: ResultsHeroProps) {
   return t("results.roundTitle", { count: summary.roundNumber });
 }
 
+function PotLine({ summary, isSelfWinner }: ResultsHeroProps) {
+  const { t } = useTranslation();
+  if (!summary.isFinished || summary.pot <= 0 || !summary.winnerName) return null;
+  const chips = t("common.chips", { count: summary.pot });
+  return (
+    <p className="animate-turn-in rounded-full bg-ink px-5 pt-[0.5rem] pb-[0.4rem] text-xl text-paper italic [animation-delay:900ms]">
+      {isSelfWinner ? t("results.potWon", { chips }) : t("results.potWinner", { name: summary.winnerName, chips })}
+    </p>
+  );
+}
+
 export function ResultsHero(props: ResultsHeroProps) {
   const { t } = useTranslation();
   const { summary } = props;
@@ -53,6 +64,7 @@ export function ResultsHero(props: ResultsHeroProps) {
         {". "}
         {closure}
       </p>
+      <PotLine {...props} />
     </div>
   );
 }
