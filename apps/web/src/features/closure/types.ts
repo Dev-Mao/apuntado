@@ -1,4 +1,5 @@
 import type { ActionResult, CardDto, ClosureDeclarationDto, ClosureType } from "@apuntado/contracts";
+import type { ReactNode } from "react";
 
 export const CLOSURE_SLOT = {
   GROUP_1: "GROUP_1",
@@ -33,11 +34,12 @@ export interface ClosureDialogProps {
   cards: readonly CardDto[];
   enabledClosures: readonly ClosureType[];
   cannotDiscard: CardDto | null;
+  timer: ReactNode;
   onClose: () => void;
   onSubmit: SubmitClosure;
 }
 
-export interface ClosureFormProps extends Omit<ClosureDialogProps, "open" | "onSubmit"> {
+export interface ClosureFormProps extends Omit<ClosureDialogProps, "open" | "timer" | "onSubmit"> {
   state: SubmitState;
   onSubmit: (declaration: ClosureDeclarationDto) => void;
 }

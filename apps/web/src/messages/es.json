@@ -160,7 +160,8 @@
       "takeDiscard": "Tomar del pozo",
       "discard": "Descartar",
       "declareClosure": "Declarar cierre",
-      "lockedHint": "La carta que tomaste del pozo no se puede descartar en este turno"
+      "lockedHint": "La carta que tomaste del pozo no se puede descartar en este turno",
+      "closureExpired": "Tu turno terminó antes de enviar el cierre"
     },
     "scoreboard": {
       "title": "Marcador",
@@ -187,6 +188,7 @@
   },
   "closure": {
     "title": "Declarar cierre",
+    "timeLeft": "Tiempo de tu turno",
     "intro": "Reparte tus cartas en combinaciones, marca las sobrantes y elige la carta que descartas. El servidor revisa el cierre.",
     "type": "Tipo de cierre",
     "unassigned": "Cartas sin asignar",

@@ -1,3 +1,4 @@
+export * from "./use-closure-prompt";
 export * from "./use-focus-recovery";
 export * from "./use-hand";
 export * from "./use-hand-drag";

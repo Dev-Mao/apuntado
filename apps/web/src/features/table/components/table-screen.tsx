@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 import { useTranslation } from "react-i18next";
 
@@ -9,13 +9,14 @@ import { ClosureDialog } from "@/features/closure";
 import { useCommandNotice } from "@/hooks/use-command-notice";
 import { cardId } from "@/lib";
 
-import { useHand, useTurnMessage } from "../hooks";
+import { useClosurePrompt, useHand, useTurnMessage } from "../hooks";
 import { PlayerHand } from "./player-hand";
 import { Scoreboard } from "./scoreboard";
 import { TableFooter } from "./table-footer";
 import { TableStage } from "./table-stage";
 import { TurnActions } from "./turn-actions";
 import { TurnStatus } from "./turn-status";
+import { TurnTimer } from "./turn-timer";
 
 import type { TableScreenProps } from "../types";
 
@@ -28,8 +29,10 @@ export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDi
   const { view } = snapshot;
   const hand = useHand(view.hand);
   const turnMessage = useTurnMessage(snapshot);
-  const [closureOpen, setClosureOpen] = useState(false);
-  const { notice, run } = useCommandNotice();
+  const { notice, run, show } = useCommandNotice();
+  const closure = useClosurePrompt(view.allowedActions.includes("DECLARE_CLOSURE"), () =>
+    show(t("table.actions.closureExpired")),
+  );
   const isMyTurn = view.currentPlayerId === view.playerId;
   const lockedId = view.cannotDiscard ? cardId(view.cannotDiscard) : null;
   const selectedIsLocked = lockedId !== null && hand.selectedIds.has(lockedId);
@@ -43,8 +46,6 @@ export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDi
   }, [hand.cards, hand.selectedIds, clearSelection, run, onDiscard]);
   const handleDrawFromStock = useCallback(() => void run(onDrawFromStock), [run, onDrawFromStock]);
   const handleDrawFromDiscard = useCallback(() => void run(onDrawFromDiscard), [run, onDrawFromDiscard]);
-  const handleOpenClosure = useCallback(() => setClosureOpen(true), []);
-  const handleCloseClosure = useCallback(() => setClosureOpen(false), []);
 
   return (
     <div className="flex min-h-dvh flex-col overflow-x-clip lg:grid lg:h-dvh lg:grid-cols-[minmax(0,1fr)_23rem] lg:overflow-hidden">
@@ -89,17 +90,18 @@ export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDi
             onDrawFromStock={handleDrawFromStock}
             onDrawFromDiscard={handleDrawFromDiscard}
             onDiscard={handleDiscard}
-            onDeclareClosure={handleOpenClosure}
+            onDeclareClosure={closure.handleOpen}
           />
         </div>
         <TableFooter threshold={view.eliminationThreshold} />
       </aside>
       <ClosureDialog
-        open={closureOpen}
+        open={closure.open}
         cards={hand.cards}
         enabledClosures={view.enabledClosures}
         cannotDiscard={view.cannotDiscard}
-        onClose={handleCloseClosure}
+        timer={<TurnTimer turnDeadline={view.turnDeadline} serverTime={view.serverTime} className="text-3xl" unitClassName="text-ink-soft" />}
+        onClose={closure.handleClose}
         onSubmit={onDeclareClosure}
       />
     </div>

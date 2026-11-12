@@ -13,7 +13,7 @@ import { ClosureForm } from "./closure-form";
 import type { ClosureDialogProps } from "../types";
 import type { ClosureDeclarationDto } from "@apuntado/contracts";
 
-export function ClosureDialog({ open, cards, enabledClosures, cannotDiscard, onClose, onSubmit }: ClosureDialogProps) {
+export function ClosureDialog({ open, cards, enabledClosures, cannotDiscard, timer, onClose, onSubmit }: ClosureDialogProps) {
   const { t } = useTranslation();
   const { state, submit, reset } = useClosureSubmit(onSubmit);
   const isSubmitting = state.status === SUBMIT_STATUS.SUBMITTING;
@@ -34,14 +34,20 @@ export function ClosureDialog({ open, cards, enabledClosures, cannotDiscard, onC
       className="sm:w-[min(100%-3rem,54rem)]"
     >
       {open && state.status !== SUBMIT_STATUS.ACCEPTED && (
-        <ClosureForm
-          cards={cards}
-          enabledClosures={enabledClosures}
-          cannotDiscard={cannotDiscard}
-          state={state}
-          onClose={handleClose}
-          onSubmit={handleSubmit}
-        />
+        <>
+          <div className="mt-3 flex items-baseline gap-3">
+            <span className="label-caps text-[0.65rem] text-ink-soft">{t("closure.timeLeft")}</span>
+            {timer}
+          </div>
+          <ClosureForm
+            cards={cards}
+            enabledClosures={enabledClosures}
+            cannotDiscard={cannotDiscard}
+            state={state}
+            onClose={handleClose}
+            onSubmit={handleSubmit}
+          />
+        </>
       )}
     </Dialog>
   );

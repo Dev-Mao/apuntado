@@ -33,5 +33,5 @@ export function useCommandNotice() {
     [t],
   );
 
-  return { notice, run };
+  return { notice, run, show: setNotice };
 }
