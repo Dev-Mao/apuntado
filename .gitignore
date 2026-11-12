@@ -6,3 +6,6 @@ coverage/
 .vscode/
 .idea/
 .claude/
+.env
+.env.local
+.env.*.local
