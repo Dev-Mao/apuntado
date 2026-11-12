@@ -5,7 +5,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { AppHeader, RulesIcon } from "@/components";
-import { SessionBadge, useRoomRedirect } from "@/features/realtime";
+import { AccountMenu, useFreshWallet } from "@/features/account";
+import { useRoomRedirect } from "@/features/realtime";
 import { RulesDialog } from "@/features/table";
 import { DEFAULT_TABLE_SETTINGS } from "@/lib";
 
@@ -24,6 +25,7 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
   const [rulesOpen, setRulesOpen] = useState(false);
   const threshold = Number(form.settings.eliminationThreshold) || DEFAULT_TABLE_SETTINGS.eliminationThreshold;
   useRoomRedirect(null);
+  useFreshWallet();
 
   return (
     <div className="relative isolate h-dvh overflow-hidden">
@@ -39,7 +41,7 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
               <RulesIcon className="size-5" />
               <span className="max-sm:sr-only">{t("home.rules")}</span>
             </button>
-            <SessionBadge />
+            <AccountMenu />
           </nav>
         </AppHeader>
         <main className="grid min-h-0 w-full flex-1 gap-5 overflow-y-auto overscroll-contain px-4 pt-1 pb-4 [align-content:safe_center] short:gap-3 sm:px-8 max-lg:mx-auto max-lg:max-w-xl md:short:max-w-4xl md:short:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] md:short:gap-10 md:short:[align-items:safe_center] lg:max-w-none lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:gap-16 lg:[align-items:safe_center]">

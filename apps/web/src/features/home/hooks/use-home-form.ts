@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useTranslation } from "react-i18next";
 
@@ -34,12 +34,17 @@ export function useHomeForm(linkCode: string | null) {
   const { t } = useTranslation();
   const { session, entryNotice, commands, startSession, setEntryNotice, setLeftCode } = useRealtime();
   const [nicknameDraft, setNicknameDraft] = useState<string | null>(null);
-  const [settings, setSettings] = useState<SettingsDraft>(INITIAL_SETTINGS);
+  const [draftSettings, setSettings] = useState<SettingsDraft>(INITIAL_SETTINGS);
   const [codeDraft, setCodeDraft] = useState<string | null>(null);
   const [errors, setErrors] = useState<HomeErrors>({});
   const [pending, setPending] = useState<HomeForm | null>(null);
   const [serverError, setServerError] = useState<ServerError | null>(null);
+  const registered = session.status === "ready" && !session.session.guest;
   const nickname = nicknameDraft ?? (session.status === "ready" ? session.session.nickname : "");
+  const settings = useMemo(
+    () => (registered ? draftSettings : { ...draftSettings, stake: INITIAL_SETTINGS.stake }),
+    [registered, draftSettings],
+  );
   const code = codeDraft ?? linkCode?.toUpperCase() ?? "";
 
   const enter = useCallback(
@@ -101,6 +106,7 @@ export function useHomeForm(linkCode: string | null) {
   const errorFor = (form: HomeForm) => (serverError?.form === form ? serverError.message : undefined);
 
   return {
+    registered,
     nickname,
     settings,
     code,
