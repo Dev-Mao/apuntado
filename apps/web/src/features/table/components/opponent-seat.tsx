@@ -25,8 +25,8 @@ export type SeatPosition = (typeof SEAT_POSITION)[keyof typeof SEAT_POSITION];
 
 const POSITION_CLASSES: Readonly<Record<SeatPosition, string>> = {
   top: "lg:absolute lg:top-0 lg:left-1/2 lg:-translate-x-1/2",
-  left: "lg:absolute lg:top-[38%] lg:left-[4%] lg:-translate-y-1/2",
-  right: "lg:absolute lg:top-[38%] lg:right-[4%] lg:-translate-y-1/2",
+  left: "lg:absolute lg:top-[38%] lg:left-[7%] lg:w-28 lg:-translate-y-1/2 xl:left-[4%]",
+  right: "lg:absolute lg:top-[38%] lg:right-[7%] lg:w-28 lg:-translate-y-1/2 xl:right-[4%]",
 };
 
 const PILL_PLACE_CLASSES: Readonly<Record<SeatPosition, string>> = {
