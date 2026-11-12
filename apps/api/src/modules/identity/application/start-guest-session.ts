@@ -14,7 +14,7 @@ export class StartGuestSession {
   ) {}
 
   execute(rawNickname: unknown, existing: Player | null = null): GuestSessionResult {
-    if (existing && rawNickname === undefined) return { ok: true, player: existing, token: null };
+    if (existing && (rawNickname === undefined || existing.kind === "REGISTRADO")) return { ok: true, player: existing, token: null };
     const nickname = normalizeNickname(rawNickname);
     if (!nickname) return { ok: false, reason: "El apodo debe tener entre 2 y 16 caracteres" };
     if (existing?.nickname === nickname) return { ok: true, player: existing, token: null };

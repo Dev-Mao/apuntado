@@ -46,6 +46,11 @@ describe("Sesión de invitado", () => {
     if (renamed.ok) expect(read.fromToken(renamed.token ?? "")?.nickname).toBe("Anita");
   });
 
+  it("una cuenta registrada no se convierte en invitado ni cambia de apodo por esta vía", () => {
+    const registered = { id: "reg-1", nickname: "Eva", kind: "REGISTRADO" as const };
+    expect(start.execute("Otro", registered)).toEqual({ ok: true, player: registered, token: null });
+  });
+
   it("sin token no hay sesión", () => {
     expect(read.fromToken(undefined)).toBeNull();
   });
