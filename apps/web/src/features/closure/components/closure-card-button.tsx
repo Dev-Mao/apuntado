@@ -32,7 +32,7 @@ function ClosureCardButtonBase({ card, label, isSelected, isLocked, onPress }: C
       {isLocked && (
         <span
           aria-hidden="true"
-          className="absolute inset-x-0 -bottom-1.5 mx-auto w-fit rounded-full label-caps bg-ink px-1.5 pt-[0.15rem] text-[0.5rem] whitespace-nowrap text-paper"
+          className="absolute inset-x-0 -bottom-1.5 mx-auto w-fit rounded-full label-caps bg-ink px-1.5 pt-[0.15rem] text-[0.65rem] whitespace-nowrap text-paper"
         >
           {t("table.hand.lockedTag")}
         </span>

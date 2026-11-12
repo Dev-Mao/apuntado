@@ -11,7 +11,7 @@ function StatusAlert({ title, message }: { title: string; message: string }) {
     <div role="alert" className="flex animate-turn-in gap-3 rounded-2xl border-[1.5px] border-coral-ink bg-paper p-4">
       <span aria-hidden="true" className="mt-1.5 size-2.5 shrink-0 rounded-full bg-coral-ink" />
       <div>
-        <p className="label-caps text-[0.62rem] text-coral-ink">{title}</p>
+        <p className="label-caps text-[0.65rem] text-coral-ink">{title}</p>
         <p className="mt-1 text-lg">{message}</p>
       </div>
     </div>

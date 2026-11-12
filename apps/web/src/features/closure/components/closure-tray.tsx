@@ -31,7 +31,7 @@ export function ClosureTray({ cards, selectedIds, lockedId, isSubmitting, onTogg
   return (
     <div className="sticky bottom-0 -mx-5 -mb-6 flex flex-col gap-3 border-t border-line bg-paper-light/95 px-5 pt-3 pb-4 backdrop-blur-sm sm:-mx-9 sm:px-9">
       <section aria-labelledby="closure-unassigned" className="flex flex-col gap-2">
-        <h3 id="closure-unassigned" className="label-caps text-[0.6rem] text-ink-soft">
+        <h3 id="closure-unassigned" className="label-caps text-[0.65rem] text-ink-soft">
           {t("closure.unassigned")}
         </h3>
         {cards.length === 0 ? (

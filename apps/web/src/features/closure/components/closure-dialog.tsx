@@ -45,6 +45,7 @@ export function ClosureDialog({ open, cards, enabledClosures, cannotDiscard, tim
             cannotDiscard={cannotDiscard}
             state={state}
             onClose={handleClose}
+            onEdit={reset}
             onSubmit={handleSubmit}
           />
         </>
