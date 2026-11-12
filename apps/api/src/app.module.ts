@@ -4,7 +4,7 @@ import type { AppConfig } from "./config.js";
 import { HealthController } from "./health/health.controller.js";
 import { GameModule } from "./modules/game/index.js";
 import { HistoryModule } from "./modules/history/index.js";
-import { IDENTITY_FOR_GAME, IdentityModule } from "./modules/identity/index.js";
+import { IDENTITY_FOR_MODULES, IdentityModule } from "./modules/identity/index.js";
 import { closeDatabase, type Database } from "./shared/database/database.js";
 import { InProcessEventBus } from "./shared/in-process-event-bus.js";
 
@@ -30,8 +30,8 @@ export class AppModule {
     const { sessionSecret: secret, secureCookies, allowedOrigins, timing } = config;
     const events = new InProcessEventBus();
     const identity = IdentityModule.register({ secret, secureCookies, allowedOrigins, database });
-    const game = GameModule.register({ imports: [identity], playerIdentity: IDENTITY_FOR_GAME, timing, allowedOrigins, events, database });
-    const history = HistoryModule.register({ imports: [identity], playerIdentity: IDENTITY_FOR_GAME, events, database });
+    const game = GameModule.register({ imports: [identity], playerIdentity: IDENTITY_FOR_MODULES, timing, allowedOrigins, events, database });
+    const history = HistoryModule.register({ imports: [identity], playerIdentity: IDENTITY_FOR_MODULES, events, database });
     return {
       module: AppModule,
       controllers: [HealthController],

@@ -1,5 +1,5 @@
 import type { Seat } from "../domain/room/room.types.js";
-import type { GameEvent, SessionConfig, SessionIds } from "../domain/session/game-session.types.js";
+import type { SessionConfig, SessionIds } from "../domain/session/game-session.types.js";
 
 export interface MatchStarted extends SessionIds {
   readonly name: "PartidaIniciada";
@@ -8,5 +8,3 @@ export interface MatchStarted extends SessionIds {
   readonly stake: number;
   readonly seats: readonly Seat[];
 }
-
-export type TableEvent = MatchStarted | GameEvent;
