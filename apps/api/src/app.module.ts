@@ -28,7 +28,7 @@ export class AppModule {
   static register(config: AppConfig, database: Database | null = null): DynamicModule {
     const { sessionSecret: secret, secureCookies, allowedOrigins, timing } = config;
     const events = new InProcessEventBus();
-    const identity = IdentityModule.register({ secret, secureCookies, allowedOrigins });
+    const identity = IdentityModule.register({ secret, secureCookies, allowedOrigins, database });
     const game = GameModule.register({ imports: [identity], playerIdentity: IDENTITY_FOR_GAME, timing, allowedOrigins, events, database });
     return {
       module: AppModule,
