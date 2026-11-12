@@ -2,16 +2,15 @@
 
 import { useTranslation } from "react-i18next";
 
-import { AppHeader, BUTTON_VARIANT, ButtonLink } from "@/components";
-import { ROUTES } from "@/lib";
+import { AppHeader, Button, LiveNotice } from "@/components";
 
 import { useResultsSummary } from "../hooks";
 import { ResultsHero } from "./results-hero";
 import { ResultsTable } from "./results-table";
 
-import type { TableSnapshot } from "@apuntado/contracts";
+import type { ResultsScreenProps } from "../types";
 
-export function ResultsScreen({ snapshot }: { snapshot: TableSnapshot }) {
+export function ResultsScreen({ snapshot, notice, onLeave }: ResultsScreenProps) {
   const { t } = useTranslation();
   const summary = useResultsSummary(snapshot);
   const eliminated = summary.rows.filter((row) => row.eliminated);
@@ -42,15 +41,19 @@ export function ResultsScreen({ snapshot }: { snapshot: TableSnapshot }) {
               </ul>
             )}
           </section>
-          <div className="flex flex-col gap-3 border-t border-line pt-6 sm:flex-row">
+          <div className="flex flex-col gap-3 border-t border-line pt-6">
             {summary.isFinished ? (
-              <ButtonLink href={ROUTES.LOBBY}>{t("results.newGame")}</ButtonLink>
+              <>
+                <Button onClick={onLeave} className="sm:self-start">
+                  {t("results.backHome")}
+                </Button>
+                <LiveNotice message={notice} />
+              </>
             ) : (
-              <ButtonLink href={ROUTES.TABLE}>{t("results.nextRound")}</ButtonLink>
+              <p role="status" className="font-display text-lg italic">
+                {t("results.nextRoundSoon")}
+              </p>
             )}
-            <ButtonLink href={ROUTES.HOME} variant={BUTTON_VARIANT.OUTLINE}>
-              {t("results.backHome")}
-            </ButtonLink>
           </div>
         </div>
       </main>

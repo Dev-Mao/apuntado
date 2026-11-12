@@ -1,5 +1,12 @@
-import { MockTableScreen } from "@/features/table";
+import { Suspense } from "react";
+
+import { RoomLoading } from "@/features/realtime";
+import { TableContainer } from "@/features/table";
 
 export default function TablePage() {
-  return <MockTableScreen />;
+  return (
+    <Suspense fallback={<RoomLoading />}>
+      <TableContainer />
+    </Suspense>
+  );
 }

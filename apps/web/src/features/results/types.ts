@@ -1,4 +1,4 @@
-import type { ClosureType, GameMode } from "@apuntado/contracts";
+import type { ClosureType, GameMode, TableSnapshot } from "@apuntado/contracts";
 
 export const RESULT_STATUS = {
   WINNER: "winner",
@@ -27,4 +27,10 @@ export interface ResultsSummary {
   readonly roundWinnerName: string | null;
   readonly closureType: ClosureType | null;
   readonly rows: readonly ResultRow[];
+}
+
+export interface ResultsScreenProps {
+  snapshot: TableSnapshot;
+  notice: string | null;
+  onLeave: () => void;
 }

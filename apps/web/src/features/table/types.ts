@@ -2,9 +2,9 @@ import type { ActionResult, CardDto, ClosureDeclarationDto, PlayerAction, TableS
 import type { CSSProperties, KeyboardEvent, PointerEvent } from "react";
 
 export interface TableActions {
-  onDrawFromStock: () => void;
-  onDrawFromDiscard: () => void;
-  onDiscard: (card: CardDto) => void;
+  onDrawFromStock: () => Promise<ActionResult>;
+  onDrawFromDiscard: () => Promise<ActionResult>;
+  onDiscard: (card: CardDto) => Promise<ActionResult>;
   onDeclareClosure: (declaration: ClosureDeclarationDto) => Promise<ActionResult>;
 }
 
@@ -48,6 +48,7 @@ export interface TurnActionsProps {
   allowedActions: readonly PlayerAction[];
   canDiscard: boolean;
   showLockedHint: boolean;
+  notice: string | null;
   onFocusLost: () => void;
   onDrawFromStock: () => void;
   onDrawFromDiscard: () => void;

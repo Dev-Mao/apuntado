@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { AppHeader, Pill } from "@/components";
 import { ClosureDialog } from "@/features/closure";
+import { useCommandNotice } from "@/hooks/use-command-notice";
 import { cardId } from "@/lib";
 
 import { useHand, useTurnMessage } from "../hooks";
@@ -28,6 +29,7 @@ export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDi
   const hand = useHand(view.hand);
   const turnMessage = useTurnMessage(snapshot);
   const [closureOpen, setClosureOpen] = useState(false);
+  const { notice, run } = useCommandNotice();
   const isMyTurn = view.currentPlayerId === view.playerId;
   const lockedId = view.cannotDiscard ? cardId(view.cannotDiscard) : null;
   const selectedIsLocked = lockedId !== null && hand.selectedIds.has(lockedId);
@@ -37,8 +39,10 @@ export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDi
     const card = hand.cards.find((held) => hand.selectedIds.has(cardId(held)));
     if (!card) return;
     clearSelection();
-    onDiscard(card);
-  }, [hand.cards, hand.selectedIds, clearSelection, onDiscard]);
+    void run(() => onDiscard(card));
+  }, [hand.cards, hand.selectedIds, clearSelection, run, onDiscard]);
+  const handleDrawFromStock = useCallback(() => void run(onDrawFromStock), [run, onDrawFromStock]);
+  const handleDrawFromDiscard = useCallback(() => void run(onDrawFromDiscard), [run, onDrawFromDiscard]);
   const handleOpenClosure = useCallback(() => setClosureOpen(true), []);
   const handleCloseClosure = useCallback(() => setClosureOpen(false), []);
 
@@ -80,9 +84,10 @@ export function TableScreen({ snapshot, onDrawFromStock, onDrawFromDiscard, onDi
             allowedActions={view.allowedActions}
             canDiscard={hand.selectedIds.size === 1 && !selectedIsLocked}
             showLockedHint={selectedIsLocked}
+            notice={notice}
             onFocusLost={focusHand}
-            onDrawFromStock={onDrawFromStock}
-            onDrawFromDiscard={onDrawFromDiscard}
+            onDrawFromStock={handleDrawFromStock}
+            onDrawFromDiscard={handleDrawFromDiscard}
             onDiscard={handleDiscard}
             onDeclareClosure={handleOpenClosure}
           />

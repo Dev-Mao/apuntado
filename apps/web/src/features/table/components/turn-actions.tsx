@@ -15,6 +15,7 @@ function TurnActionsBase({
   allowedActions,
   canDiscard,
   showLockedHint,
+  notice,
   onFocusLost,
   onDrawFromStock,
   onDrawFromDiscard,
@@ -49,7 +50,7 @@ function TurnActionsBase({
         </Button>
       </div>
       <p aria-live="polite" className="font-display text-sm text-ink-soft italic not-empty:mt-3">
-        {showLockedHint ? t("table.actions.lockedHint") : ""}
+        {showLockedHint ? t("table.actions.lockedHint") : notice}
       </p>
     </div>
   );

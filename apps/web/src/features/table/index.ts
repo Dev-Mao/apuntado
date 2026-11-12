@@ -1,3 +1,2 @@
-export { MockTableScreen, TableScreen } from "./components";
-export { MOCK_TABLE_SNAPSHOT } from "./mock-data";
+export { TableContainer, TableScreen } from "./components";
 export type { TableActions, TableScreenProps } from "./types";

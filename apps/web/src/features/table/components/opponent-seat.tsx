@@ -35,19 +35,36 @@ interface OpponentSeatProps {
   isTurn: boolean;
 }
 
+interface OpponentDescriptionProps {
+  name: string;
+  count: number;
+  isBot: boolean;
+  isTurn: boolean;
+  isConnected: boolean;
+}
+
+function OpponentDescription({ name, count, isBot, isTurn, isConnected }: OpponentDescriptionProps) {
+  const { t } = useTranslation();
+  return (
+    <span className="sr-only">
+      {t("table.opponentLabel", { name, count })}
+      {isBot && ` ${t("table.opponentBot")}`}
+      {isTurn && ` ${t("table.opponentTurn")}`}
+      {!isConnected && ` ${t("table.opponentDisconnected")}`}
+    </span>
+  );
+}
+
 export function OpponentSeat({ opponent, seat, position, isTurn }: OpponentSeatProps) {
   const { t } = useTranslation();
   const styles = useMemo(() => fanStyles(opponent.cardCount, FAN_SPREAD_DEG, FAN_ARC_PX), [opponent.cardCount]);
   const name = seat?.nickname ?? "";
   const isConnected = seat?.connected ?? false;
+  const isBot = seat?.isBot ?? false;
 
   return (
     <li className={cn("flex min-w-0 flex-col items-center gap-3", POSITION_CLASSES[position])}>
-      <span className="sr-only">
-        {t("table.opponentLabel", { name, count: opponent.cardCount })}
-        {isTurn && ` ${t("table.opponentTurn")}`}
-        {!isConnected && ` ${t("table.opponentDisconnected")}`}
-      </span>
+      <OpponentDescription name={name} count={opponent.cardCount} isBot={isBot} isTurn={isTurn} isConnected={isConnected} />
       <span aria-hidden="true" className={cn("flex pt-1", !isConnected && "opacity-40")}>
         {styles.map((style, index) => (
           <span key={index} style={style} className="origin-bottom first:ml-0 -ml-[1.4rem] sm:-ml-[1.9rem]">
@@ -59,6 +76,11 @@ export function OpponentSeat({ opponent, seat, position, isTurn }: OpponentSeatP
         <span aria-hidden="true" className="truncate">
           {name}
         </span>
+        {isBot && (
+          <span aria-hidden="true" className="rounded-full border border-current px-1.5 pt-[0.15rem] pb-[0.05rem] text-[0.5rem]">
+            {t("table.botTag")}
+          </span>
+        )}
         <span aria-hidden="true" className="font-display text-sm tracking-normal">
           {opponent.cardCount}
         </span>

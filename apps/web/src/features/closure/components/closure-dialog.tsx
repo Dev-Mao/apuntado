@@ -9,7 +9,6 @@ import { Dialog } from "@/components";
 import { useClosureSubmit } from "../hooks";
 import { SUBMIT_STATUS } from "../types";
 import { ClosureForm } from "./closure-form";
-import { ClosureSuccess } from "./closure-status";
 
 import type { ClosureDialogProps } from "../types";
 import type { ClosureDeclarationDto } from "@apuntado/contracts";
@@ -34,7 +33,6 @@ export function ClosureDialog({ open, cards, enabledClosures, cannotDiscard, onC
       onClose={handleClose}
       className="sm:w-[min(100%-3rem,54rem)]"
     >
-      {open && state.status === SUBMIT_STATUS.ACCEPTED && <ClosureSuccess />}
       {open && state.status !== SUBMIT_STATUS.ACCEPTED && (
         <ClosureForm
           cards={cards}

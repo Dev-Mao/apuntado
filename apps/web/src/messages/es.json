@@ -128,7 +128,9 @@
     "opponentLabel_one": "{{name}}, {{count}} carta.",
     "opponentLabel_other": "{{name}}, {{count}} cartas.",
     "opponentTurn": "Está jugando.",
+    "opponentBot": "Es un bot.",
     "opponentDisconnected": "Desconectado.",
+    "botTag": "Bot",
     "selfLabel": "Tú · {{name}}",
     "hand": {
       "label": "Tu mano",
@@ -200,12 +202,7 @@
     "submitting": "Enviando",
     "rejectedTitle": "El servidor rechazó el cierre",
     "failedTitle": "No pudimos enviar el cierre",
-    "failedBody": "Revisa tu conexión e inténtalo de nuevo.",
-    "accepted": {
-      "title": "Cierre aceptado",
-      "body": "El servidor validó tu cierre y la ronda terminó.",
-      "cta": "Ver resultados"
-    }
+    "failedBody": "Revisa tu conexión e inténtalo de nuevo."
   },
   "results": {
     "eyebrow": "{{stage}} · {{mode}}",
@@ -232,8 +229,7 @@
     "threshold": "Umbral de eliminación: {{count}} puntos",
     "eliminatedTitle": "Eliminados",
     "noEliminated": "Nadie quedó eliminado en esta ronda",
-    "nextRound": "Siguiente ronda",
-    "newGame": "Nueva partida",
+    "nextRoundSoon": "La siguiente ronda empieza sola en unos segundos",
     "backHome": "Volver al inicio",
     "roundPoints": "+{{count}}"
   }
