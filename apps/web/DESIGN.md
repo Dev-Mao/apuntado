@@ -27,7 +27,7 @@ Las líneas finas son tinta al 15 %.
 
 ## Pantallas
 
-- **Inicio:** a la izquierda el título «Apuntado» enorme, el lema en cursiva y una línea fina; detrás, un círculo coral que se sale por la esquina. A la derecha un panel claro con el apodo y dos pestañas: crear mesa o unirse con código.
+- **Inicio:** a la izquierda el título «Apuntado» enorme, el lema en cursiva y una línea fina; detrás, un círculo coral que se sale por la esquina. A la derecha el panel negro con el apodo, la modalidad, el botón de crear mesa y la opción de unirse con código.
 - **Sala:** la mesa negra ovalada con los puestos alrededor (tú abajo) y el código en el centro.
 - **Mesa:** en escritorio, la mesa negra al centro con rivales arriba y a los lados (abanicos de dorsos coral y una píldora con nombre y número de cartas), mazo y pozo en el centro dentro de un círculo fino, y tu mano en abanico sobre un arco claro abajo. A la derecha, la barra lateral: ronda, marcador con el umbral, banda coral «Tu turno» con el reloj, modalidad y cierres habilitados, y los botones de acción. En el teléfono, una franja de puntajes arriba, la mesa en el medio, el turno y las acciones encima de la mano.
 - **Resultados:** panel claro sobre el papel; los puntos se cuentan solos y las barras avanzan hacia el umbral. Al final, el nombre del ganador en el título gigante con un abanico de cartas.
@@ -44,6 +44,10 @@ Mesa, escritorio
 │        ╭── arco claro: tu mano ──╮    │ (POZO)      │
 └──────────────────────────────────────┴─────────────┘
 ```
+
+## Una sola pantalla
+
+Ninguna vista hace scroll de página: cada pantalla ocupa `100dvh` y las regiones que pueden crecer (marcador lateral, tabla de resultados, historial del perfil, diálogos) tienen scroll interno con un leve desvanecido abajo. Las variantes `short` (alto < 704 px) y `tiny` (alto < 480 px) compactan la mesa: cartas más pequeñas, menos aire, abanicos de rivales ocultos en horizontal. En inicio, el umbral, el turno y la apuesta se editan en un diálogo para que el panel quepa entero.
 
 ## La mano en el teléfono
 
