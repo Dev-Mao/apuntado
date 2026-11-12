@@ -7,7 +7,7 @@ export type SessionState =
   | { readonly status: "offline" }
   | { readonly status: "ready"; readonly session: SessionView };
 
-export type ConnectionStatus = "idle" | "connecting" | "connected" | "reconnecting";
+export type ConnectionStatus = "idle" | "connecting" | "connected" | "reconnecting" | "failed";
 
 export interface RoomState {
   readonly lobby: LobbyView | null;

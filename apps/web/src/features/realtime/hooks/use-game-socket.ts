@@ -8,7 +8,7 @@ import { EMPTY_ROOM, withLobby, withSnapshot } from "../room-state";
 
 import type { ConnectionStatus, RoomState } from "../types";
 
-export function useGameSocket(onRejected: () => void) {
+export function useGameSocket(onRejected: () => void, onConnected: () => void) {
   const [link] = useState(createGameConnection);
   const [connection, setConnection] = useState<ConnectionStatus>("idle");
   const [connectCount, setConnectCount] = useState(0);
@@ -26,6 +26,7 @@ export function useGameSocket(onRejected: () => void) {
         freshRef.current = false;
         setConnection("connected");
         setConnectCount((count) => count + 1);
+        onConnected();
       },
       onLost: () => setConnection("reconnecting"),
       onRejected: () => {
@@ -42,7 +43,7 @@ export function useGameSocket(onRejected: () => void) {
       },
     });
     if (opened) setConnection("connecting");
-  }, [link, onRejected]);
+  }, [link, onRejected, onConnected]);
 
   const receivedSinceConnect = useCallback(() => freshRef.current, []);
 

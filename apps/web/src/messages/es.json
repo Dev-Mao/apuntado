@@ -21,6 +21,7 @@
   },
   "realtime": {
     "reconnecting": "Reconectando con el servidor",
+    "rejected": "No pudimos conectarte. Recarga la página",
     "loading": "Preparando la mesa"
   },
   "gameMode": {
