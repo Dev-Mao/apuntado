@@ -90,6 +90,31 @@ export interface SessionState {
   readonly session: SessionView | null;
 }
 
+export interface RegisterRequest {
+  readonly email: string;
+  readonly password: string;
+  readonly nickname: string;
+}
+
+export interface LoginRequest {
+  readonly email: string;
+  readonly password: string;
+}
+
+export type MovementReason = "BONO_BIENVENIDA" | "APUESTA_RETENIDA" | "BOTE_GANADO" | "APUESTA_DEVUELTA" | "RECARGA";
+
+export interface WalletMovement {
+  readonly amount: number;
+  readonly reason: MovementReason;
+  readonly matchId: string | null;
+  readonly at: string;
+}
+
+export interface WalletView {
+  readonly balance: number;
+  readonly movements: readonly WalletMovement[];
+}
+
 export interface ProfileMatch {
   readonly matchId: string;
   readonly finishedAt: string;

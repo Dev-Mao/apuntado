@@ -6,15 +6,8 @@ import type { OriginPolicy } from "../../../../shared/origin-policy.js";
 import { type ReadSession, SESSION_COOKIE } from "../../application/read-session.js";
 import type { StartGuestSession } from "../../application/start-guest-session.js";
 import type { Player } from "../../domain/player.js";
+import { setSessionCookie, toView } from "./session-cookie.js";
 import { ORIGIN_POLICY, READ_SESSION, SECURE_COOKIES, START_GUEST_SESSION } from "./tokens.js";
-
-const SESSION_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
-
-const toView = (player: Player): SessionView => ({
-  playerId: player.id,
-  nickname: player.nickname,
-  guest: player.kind === "INVITADO",
-});
 
 @Controller("api/session")
 export class SessionController {
@@ -38,13 +31,7 @@ export class SessionController {
     const result = this.startGuest.execute(nickname, existing);
     if (!result.ok) throw new BadRequestException(result.reason);
     if (!result.token) return toView(result.player);
-    res.cookie(SESSION_COOKIE, result.token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: this.secureCookies,
-      maxAge: SESSION_MAX_AGE_MS,
-      path: "/",
-    });
+    setSessionCookie(res, result.token, this.secureCookies);
     return toView(result.player);
   }
 
