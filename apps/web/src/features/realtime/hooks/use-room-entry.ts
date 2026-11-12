@@ -13,15 +13,16 @@ export function useRoomCode(): string | null {
 
 export function useRoomEntry(code: string | null) {
   const router = useRouter();
-  const { session, connection, connectCount, commands, receivedSinceConnect, clearRoom, setEntryNotice } = useRealtime();
+  const { session, connection, connectCount, commands, leftCode, receivedSinceConnect, clearRoom, setEntryNotice } = useRealtime();
+  const left = code !== null && code === leftCode;
 
   useEffect(() => {
-    if (code === null) router.replace(ROUTES.HOME);
+    if (code === null || left) router.replace(ROUTES.HOME);
     else if (session.status === "none") router.replace(homeHref(code));
-  }, [session.status, code, router]);
+  }, [session.status, code, left, router]);
 
   useEffect(() => {
-    if (connection !== "connected" || code === null) return;
+    if (connection !== "connected" || code === null || left) return;
     let active = true;
     commands.joinRoom(code).then(
       (result) => {
@@ -36,5 +37,5 @@ export function useRoomEntry(code: string | null) {
     return () => {
       active = false;
     };
-  }, [connection, connectCount, code, commands, receivedSinceConnect, clearRoom, setEntryNotice, router]);
+  }, [connection, connectCount, code, left, commands, receivedSinceConnect, clearRoom, setEntryNotice, router]);
 }

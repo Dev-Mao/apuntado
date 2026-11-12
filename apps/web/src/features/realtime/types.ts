@@ -20,9 +20,11 @@ export interface RealtimeContextValue {
   readonly connectCount: number;
   readonly room: RoomState;
   readonly entryNotice: string | null;
+  readonly leftCode: string | null;
   readonly commands: GameCommands;
   readonly startSession: (nickname: string) => Promise<GuestSessionResult>;
   readonly receivedSinceConnect: () => boolean;
   readonly clearRoom: () => void;
   readonly setEntryNotice: (notice: string | null) => void;
+  readonly setLeftCode: (code: string | null) => void;
 }

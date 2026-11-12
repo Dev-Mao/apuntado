@@ -7,17 +7,20 @@ import { useCommandNotice } from "@/hooks/use-command-notice";
 import { ROUTES } from "@/lib";
 
 import { useRealtime } from "../context";
+import { useRoomCode } from "./use-room-entry";
 
 export function useLeaveRoom(evenIfRejected = false) {
   const router = useRouter();
-  const { commands, clearRoom } = useRealtime();
+  const code = useRoomCode();
+  const { commands, clearRoom, setLeftCode } = useRealtime();
   const { notice, run } = useCommandNotice();
 
   const leave = useCallback(async () => {
     if (!(await run(commands.leaveRoom)) && !evenIfRejected) return;
+    setLeftCode(code);
     clearRoom();
-    router.push(ROUTES.HOME);
-  }, [run, commands, clearRoom, router, evenIfRejected]);
+    router.replace(ROUTES.HOME);
+  }, [run, commands, code, setLeftCode, clearRoom, router, evenIfRejected]);
 
   return { notice, leave };
 }
