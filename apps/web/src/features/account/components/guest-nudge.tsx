@@ -17,7 +17,7 @@ export function GuestNudge({ className }: { className?: string | undefined }) {
   return (
     <p className={cn("text-paper/75 italic", className)}>
       {t("account.guestNudge")}{" "}
-      <button type="button" onClick={() => openAuth(AUTH_MODE.REGISTER)} className="label-caps text-[0.58rem] text-coral not-italic underline-offset-4 hover:underline">
+      <button type="button" onClick={() => openAuth(AUTH_MODE.REGISTER)} className="label-caps text-[0.65rem] text-coral not-italic underline-offset-4 hover:underline">
         {t("account.guestNudgeAction")}
       </button>
     </p>

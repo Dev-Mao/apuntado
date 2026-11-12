@@ -25,7 +25,7 @@ export function SettingsSummary({ settings }: { settings: TableSettings }) {
       <dl className="grid grid-cols-4 gap-x-3 sm:gap-x-6">
         {rows.map((row) => (
           <div key={row.label} className="flex flex-col gap-1 border-t border-line pt-2">
-            <dt className="label-caps truncate text-[0.5rem] text-ink-soft sm:text-[0.55rem]">{row.label}</dt>
+            <dt className="label-caps truncate text-[0.65rem] text-ink-soft sm:text-[0.65rem]">{row.label}</dt>
             <dd className="text-sm sm:text-xl">{row.value}</dd>
           </div>
         ))}

@@ -27,7 +27,7 @@ export function HomeEntry({ form, linkCode }: HomeEntryProps) {
       className="relative flex flex-col gap-5 rounded-[2rem] bg-ink px-5 pt-6 pb-6 text-paper shadow-sheet short:gap-3.5 short:pt-5 short:pb-5 sm:px-9 sm:pt-8 sm:pb-8"
     >
       <div>
-        <p className="label-caps flex items-center gap-4 text-[0.62rem] text-paper/75 short:hidden">
+        <p className="label-caps flex items-center gap-4 text-[0.65rem] text-paper/75 short:hidden">
           {t("home.entry.eyebrow")}
           <span aria-hidden="true" className="h-px w-12 bg-paper/40" />
         </p>

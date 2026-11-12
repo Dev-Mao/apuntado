@@ -36,7 +36,7 @@ export function ResultsRow({ row, index, threshold, showPlace }: ResultsRowProps
       )}
       <th scope="row" className="py-3 pr-3 text-left font-normal">
         <span className={cn("block text-xl leading-7", row.eliminated && "line-through")}>{row.name}</span>
-        <span className={cn("label-caps block text-[0.52rem] sm:hidden", isWinner ? "text-coral-ink" : "text-ink-soft")}>{status}</span>
+        <span className={cn("label-caps block text-[0.65rem] sm:hidden", isWinner ? "text-coral-ink" : "text-ink-soft")}>{status}</span>
       </th>
       <td className="py-3 text-right text-xl leading-7 text-ink-soft tabular-nums lining-nums">
         {t("results.roundPoints", { count: roundPoints })}
@@ -47,7 +47,7 @@ export function ResultsRow({ row, index, threshold, showPlace }: ResultsRowProps
           <ThresholdBar value={row.total} max={threshold} className="w-16 sm:w-28" />
         </span>
       </td>
-      <td className={cn("label-caps hidden py-3 pl-6 text-[0.55rem] leading-7 sm:table-cell", isWinner ? "text-coral-ink" : "text-ink-soft")}>{status}</td>
+      <td className={cn("label-caps hidden py-3 pl-6 text-[0.65rem] leading-7 sm:table-cell", isWinner ? "text-coral-ink" : "text-ink-soft")}>{status}</td>
     </tr>
   );
 }

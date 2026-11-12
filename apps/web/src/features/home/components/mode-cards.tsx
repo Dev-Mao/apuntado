@@ -23,7 +23,7 @@ export function ModeCards({ value, onChange }: ModeCardsProps) {
 
   return (
     <fieldset className="flex flex-col">
-      <legend className="label-caps mb-2 text-[0.62rem] text-paper/70">{t("settings.mode")}</legend>
+      <legend className="label-caps mb-2 text-[0.65rem] text-paper/70">{t("settings.mode")}</legend>
       <div className="grid grid-cols-3 gap-2">
         {GAME_MODES.map((mode) => {
           const checked = mode === value;
@@ -38,7 +38,7 @@ export function ModeCards({ value, onChange }: ModeCardsProps) {
               <input type="radio" name="mode" value={mode} checked={checked} onChange={() => onChange(mode)} className="sr-only" />
               <SuitGlyph suit={MODE_SUIT[mode]} className={cn("size-4", checked ? "text-coral" : "text-paper/80")} />
               <span className="text-lg leading-tight italic">{t(`home.modes.${mode}.title`)}</span>
-              <span className="label-caps text-[0.48rem] leading-relaxed text-paper/60 short:hidden">{t(`home.modes.${mode}.detail`)}</span>
+              <span className="label-caps text-[0.65rem] leading-relaxed text-paper/60 short:hidden">{t(`home.modes.${mode}.detail`)}</span>
             </label>
           );
         })}

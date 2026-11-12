@@ -36,7 +36,7 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
             <button
               type="button"
               onClick={() => setRulesOpen(true)}
-              className="label-caps flex items-center gap-2 rounded-full py-2 text-[0.62rem] transition-colors hover:text-coral-ink"
+              className="label-caps flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full py-2 text-[0.65rem] transition-colors hover:text-coral-ink"
             >
               <RulesIcon className="size-5" />
               <span className="max-sm:sr-only">{t("home.rules")}</span>
@@ -44,7 +44,7 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
             <AccountMenu />
           </nav>
         </AppHeader>
-        <main className="grid min-h-0 w-full flex-1 gap-5 overflow-y-auto overscroll-contain px-4 pt-1 pb-4 [align-content:safe_center] short:gap-3 sm:px-8 max-lg:mx-auto max-lg:max-w-xl md:short:max-w-4xl md:short:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] md:short:gap-10 md:short:[align-items:safe_center] lg:max-w-none lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:gap-16 lg:[align-items:safe_center]">
+        <main className="grid min-h-0 w-full flex-1 gap-5 overflow-y-auto overscroll-contain px-4 pt-1 pb-4 short:[mask-image:linear-gradient(to_bottom,black_calc(100%-1.5rem),transparent)] [align-content:safe_center] short:gap-3 sm:px-8 max-lg:mx-auto max-lg:max-w-xl md:short:max-w-4xl md:short:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] md:short:gap-10 md:short:[align-items:safe_center] lg:max-w-none lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:gap-16 lg:[align-items:safe_center]">
           <HomeHero />
           <div className="flex flex-col gap-4">
             <EntryNotice message={form.entryNotice} />

@@ -40,7 +40,7 @@ export function TableSidebar({ round, mode, code, enabledClosures, scoreboard, t
         <dl className="flex flex-col">
           {facts.map((fact) => (
             <div key={fact.label} className="flex items-baseline justify-between gap-4 border-b border-line py-2 last:border-b-0">
-              <dt className="label-caps text-[0.58rem] text-ink-soft">{fact.label}</dt>
+              <dt className="label-caps text-[0.65rem] text-ink-soft">{fact.label}</dt>
               <dd className="text-right">{fact.value}</dd>
             </div>
           ))}

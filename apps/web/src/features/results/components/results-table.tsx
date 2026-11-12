@@ -11,7 +11,7 @@ import { ResultsRow } from "./results-row";
 
 import type { ResultsSummary } from "../types";
 
-const HEADER_CLASSES = "label-caps pb-3 text-left text-[0.55rem] font-semibold text-ink-soft";
+const HEADER_CLASSES = "label-caps pb-3 text-left text-[0.65rem] font-semibold text-ink-soft";
 
 export function ResultsTable({ summary }: { summary: ResultsSummary }) {
   const { t } = useTranslation();

@@ -28,7 +28,7 @@ export function TextField({ label, hint, error, tone = "paper", className, id, .
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
-      <label htmlFor={inputId} className={cn("label-caps text-[0.62rem]", LABEL_CLASSES[tone])}>
+      <label htmlFor={inputId} className={cn("label-caps text-[0.65rem]", LABEL_CLASSES[tone])}>
         {label}
       </label>
       <input

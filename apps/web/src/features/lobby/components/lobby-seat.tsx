@@ -17,7 +17,7 @@ function SeatTags({ seat, isSelf, isHost }: { seat: SeatView; isSelf: boolean; i
   const { t } = useTranslation();
   const tags = [isSelf && t("lobby.selfTag"), isHost && t("lobby.host"), seat.isBot && t("lobby.bot")].filter(Boolean);
   return (
-    <span className="label-caps flex flex-wrap justify-center gap-x-2 text-[0.52rem] text-ink-soft">
+    <span className="label-caps flex flex-wrap justify-center gap-x-2 text-[0.65rem] text-ink-soft">
       {tags.map((tag) => (
         <span key={String(tag)}>{tag}</span>
       ))}

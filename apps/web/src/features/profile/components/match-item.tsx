@@ -22,9 +22,9 @@ export function MatchItem({ match }: { match: ProfileMatch }) {
       </p>
       <p className="row-span-2 self-center text-right">
         <span className="block font-display font-semibold text-[2rem] leading-none tabular-nums lining-nums">{match.points}</span>
-        <span className="label-caps text-[0.5rem] text-ink-soft">{t("profile.match.pointsUnit", { count: match.points })}</span>
+        <span className="label-caps text-[0.65rem] text-ink-soft">{t("profile.match.pointsUnit", { count: match.points })}</span>
       </p>
-      <p className="label-caps text-[0.55rem] leading-relaxed text-ink-soft">
+      <p className="label-caps text-[0.65rem] leading-relaxed text-ink-soft">
         <time dateTime={match.finishedAt}>{format.date(match.finishedAt)}</time>
         {", "}
         {t(`gameMode.${match.mode}`)}

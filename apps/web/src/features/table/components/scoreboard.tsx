@@ -29,7 +29,7 @@ function SelfRow({ entry, name, threshold, isTurn, srLabel, bandClassName }: Sco
   return (
     <li className={cn("flex flex-col gap-1 bg-coral py-4", bandClassName)}>
       <span className="sr-only">{srLabel}</span>
-      <span aria-hidden="true" className="label-caps flex items-center gap-2 text-[0.62rem]">
+      <span aria-hidden="true" className="label-caps flex items-center gap-2 text-[0.65rem]">
         {isTurn && <span className="size-1.5 rounded-full bg-ink" />}
         {t("table.scoreboard.self", { name })}
       </span>
@@ -49,7 +49,7 @@ function RivalRow({ entry, name, threshold, isTurn, srLabel }: ScoreRowProps) {
       <span className="sr-only">{srLabel}</span>
       <span aria-hidden="true" className="flex items-end justify-between gap-3">
         <span className="flex min-w-0 flex-col">
-          <span className="label-caps flex items-center gap-2 text-[0.58rem] text-ink-soft">
+          <span className="label-caps flex items-center gap-2 text-[0.65rem] text-ink-soft">
             {isTurn && <span className="size-1.5 rounded-full bg-coral-ink" />}
             {entry.eliminated ? t("table.scoreboard.eliminated") : t("table.scoreboard.rival")}
           </span>

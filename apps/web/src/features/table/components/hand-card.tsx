@@ -64,7 +64,7 @@ function HandCardBase({
         {isLocked && (
           <span
             aria-hidden="true"
-            className="label-caps absolute -top-2.5 -left-1 rounded-full bg-ink px-1.5 pt-[0.2rem] pb-[0.1rem] text-[0.5rem] whitespace-nowrap text-paper"
+            className="label-caps absolute -top-2.5 -left-1 rounded-full bg-ink px-1.5 pt-[0.2rem] pb-[0.1rem] text-[0.65rem] whitespace-nowrap text-paper"
           >
             {t("table.hand.lockedTag")}
           </span>
