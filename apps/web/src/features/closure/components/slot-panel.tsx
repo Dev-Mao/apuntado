@@ -31,7 +31,7 @@ function SlotPanelBase({ slot, title, cards, canAssign, onAssign, onReturn }: Sl
         disabled={!canAssign}
         onClick={() => onAssign(slot)}
         aria-label={t("closure.moveToSlot", { slot: title })}
-        className="flex min-h-11 items-center justify-between gap-2 label-caps rounded-t-2xl px-3 text-left text-[0.58rem] tracking-[0.12em] enabled:hover:bg-coral/15 disabled:cursor-default"
+        className="flex min-h-11 items-center justify-between gap-2 label-caps rounded-t-2xl px-3 text-left text-[0.65rem] tracking-[0.12em] enabled:hover:bg-coral/15 disabled:cursor-default"
       >
         <span>{title}</span>
         {canAssign && (

@@ -41,6 +41,7 @@ export interface ClosureDialogProps {
 
 export interface ClosureFormProps extends Omit<ClosureDialogProps, "open" | "timer" | "onSubmit"> {
   state: SubmitState;
+  onEdit: () => void;
   onSubmit: (declaration: ClosureDeclarationDto) => void;
 }
 

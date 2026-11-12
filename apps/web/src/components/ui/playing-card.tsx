@@ -15,7 +15,7 @@ export const CARD_ART = {
 
 type CardArt = (typeof CARD_ART)[keyof typeof CARD_ART];
 
-const ART = CARD_ART.CSS as CardArt;
+const ART: CardArt = process.env.NEXT_PUBLIC_CARD_ART === CARD_ART.IMAGES ? CARD_ART.IMAGES : CARD_ART.CSS;
 
 export const CARD_SIZE = {
   XS: "xs",

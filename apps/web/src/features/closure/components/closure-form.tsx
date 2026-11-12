@@ -17,7 +17,7 @@ import type { ClosureFormProps, ClosureSlot } from "../types";
 
 const ALL_SLOTS: readonly ClosureSlot[] = [...GROUP_SLOTS, CLOSURE_SLOT.LEFTOVERS, CLOSURE_SLOT.DISCARD];
 
-export function ClosureForm({ cards, enabledClosures, cannotDiscard, state, onClose, onSubmit }: ClosureFormProps) {
+export function ClosureForm({ cards, enabledClosures, cannotDiscard, state, onClose, onEdit, onSubmit }: ClosureFormProps) {
   const { t } = useTranslation();
   const lockedId = cannotDiscard ? cardId(cannotDiscard) : null;
   const draft = useClosureDraft(cards, enabledClosures, lockedId);
@@ -33,6 +33,12 @@ export function ClosureForm({ cards, enabledClosures, cannotDiscard, state, onCl
   };
   const canAssign = (slot: ClosureSlot) => (slot === CLOSURE_SLOT.DISCARD ? draft.canDiscardSelection : draft.hasSelection);
   const isSubmitting = state.status === SUBMIT_STATUS.SUBMITTING;
+  const edited =
+    <A extends unknown[]>(action: (...args: A) => void) =>
+    (...args: A) => {
+      action(...args);
+      onEdit();
+    };
   const handleSubmit = () => {
     if (!isSubmitting) onSubmit(draft.declaration);
   };
@@ -41,7 +47,7 @@ export function ClosureForm({ cards, enabledClosures, cannotDiscard, state, onCl
     <div className="mt-4 flex flex-col gap-5 short:mt-3 short:gap-3">
       <p className="max-w-xl text-lg leading-snug text-ink-soft italic short:hidden">{t("closure.intro")}</p>
       {typeOptions.length > 1 && (
-        <ChoicePills legend={t("closure.type")} name="closure-type" options={typeOptions} value={draft.type} onChange={draft.setType} />
+        <ChoicePills legend={t("closure.type")} name="closure-type" options={typeOptions} value={draft.type} onChange={edited(draft.setType)} />
       )}
       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5">
         {ALL_SLOTS.map((slot) => (
@@ -51,8 +57,8 @@ export function ClosureForm({ cards, enabledClosures, cannotDiscard, state, onCl
             title={slotTitle(slot)}
             cards={draft.cardsIn(slot)}
             canAssign={canAssign(slot)}
-            onAssign={draft.assign}
-            onReturn={draft.unassign}
+            onAssign={edited(draft.assign)}
+            onReturn={edited(draft.unassign)}
           />
         ))}
       </div>
