@@ -6,6 +6,7 @@ const MODES: readonly string[] = ["CLASICA", "APUNTADO", "AMBAS"];
 const MIN_TURN_SECONDS = 10;
 const MAX_TURN_SECONDS = 600;
 const MAX_THRESHOLD = 500;
+const MAX_STAKE = 100_000;
 const BOT_PREFIX = "bot:";
 
 const isWhole = (value: number, min: number): boolean => Number.isInteger(value) && value >= min;
@@ -18,7 +19,7 @@ export const invalidSettings = (s: RoomSettings): string | null => {
   if (!isWhole(s.turnSeconds, MIN_TURN_SECONDS) || s.turnSeconds > MAX_TURN_SECONDS) {
     return `La duración del turno debe estar entre ${MIN_TURN_SECONDS} y ${MAX_TURN_SECONDS} segundos`;
   }
-  return isWhole(s.stake, 0) ? null : "La apuesta debe ser un entero mayor o igual a cero";
+  return isWhole(s.stake, 0) && s.stake <= MAX_STAKE ? null : `La apuesta debe estar entre 0 y ${MAX_STAKE} fichas`;
 };
 
 export class Room {
@@ -88,6 +89,7 @@ export class Room {
     const denied = this.hostOnlyInLobby(requesterId);
     if (denied) return denied;
     if (this.seated.length >= MAX_PLAYERS) return rejected("La mesa está llena");
+    if (this.settings.stake > 0) return rejected("La máquina no juega en mesas con apuesta");
     this.botCount += 1;
     this.seated.push({ playerId: `${BOT_PREFIX}${this.botCount}`, nickname: `Máquina ${this.botCount}`, isBot: true });
     return OK;

@@ -1,10 +1,14 @@
-import type { StakeGuard } from "../../game/application/ports/index.js";
-import { ChipLedger } from "../domain/chip-ledger.js";
+import type { StakeGuard } from "../../game/index.js";
+import type { ChipBank, HoldResult } from "../application/chip-bank.js";
 
 export class StakeGuardAdapter implements StakeGuard {
-  constructor(private readonly ledger: ChipLedger) {}
+  constructor(private readonly bank: ChipBank) {}
 
-  hasSufficientBalance(playerId: string, stake: number): boolean {
-    return this.ledger.availableBalance(playerId) >= stake;
+  canCover(playerId: string, stake: number): boolean {
+    return this.bank.canCover(playerId, stake);
+  }
+
+  hold(matchId: string, playerIds: readonly string[], stake: number): HoldResult {
+    return this.bank.hold(matchId, playerIds, stake);
   }
 }

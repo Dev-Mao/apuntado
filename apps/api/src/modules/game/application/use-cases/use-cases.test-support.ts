@@ -3,9 +3,26 @@ import { SeededRandom } from "../../../../shared/random.js";
 import type { Card } from "../../domain/entities/card.js";
 import type { GameMode } from "../../domain/match/match.js";
 import type { Seat } from "../../domain/room/room.types.js";
+import { OK, type Outcome, rejected } from "../../domain/round/round.types.js";
 import { GameSession } from "../../domain/session/game-session.js";
 import { InMemoryGameRepository } from "../../infrastructure/repositories/in-memory-game-repository.js";
-import type { EventBus, IdGenerator, PlayJournal, PlayJournalEntry } from "../ports/index.js";
+import type { EventBus, IdGenerator, PlayJournal, PlayJournalEntry, StakeGuard } from "../ports/index.js";
+
+export class FakeStakes implements StakeGuard {
+  readonly holds: { matchId: string; playerIds: readonly string[]; stake: number }[] = [];
+
+  constructor(private readonly balances: Readonly<Record<string, number>> = {}) {}
+
+  canCover(playerId: string, stake: number): boolean {
+    return (this.balances[playerId] ?? 0) >= stake;
+  }
+
+  hold(matchId: string, playerIds: readonly string[], stake: number): Outcome {
+    if (playerIds.some((id) => !this.canCover(id, stake))) return rejected("Sin fichas suficientes");
+    this.holds.push({ matchId, playerIds, stake });
+    return OK;
+  }
+}
 
 export const seatsOf = (playerIds: readonly string[]): Seat[] =>
   playerIds.map((playerId) => ({ playerId, nickname: playerId.toUpperCase(), isBot: false }));

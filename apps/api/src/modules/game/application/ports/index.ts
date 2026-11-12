@@ -1,3 +1,4 @@
+import type { Outcome } from "../../domain/round/round.types.js";
 import type { GameSession } from "../../domain/session/game-session.js";
 import type { Room } from "../../domain/room/room.js";
 
@@ -8,7 +9,8 @@ export interface GameRepository {
 }
 
 export interface StakeGuard {
-  hasSufficientBalance(playerId: string, stake: number): boolean;
+  canCover(playerId: string, stake: number): boolean;
+  hold(matchId: string, playerIds: readonly string[], stake: number): Outcome;
 }
 
 export interface PlayJournal {

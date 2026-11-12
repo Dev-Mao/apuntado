@@ -10,6 +10,7 @@ export const MIGRATIONS: readonly Migration[] = [
   { id: "001-esquema-e2", file: new URL("../../../../../models/er/schema.sql", import.meta.url) },
   { id: "002-catalogo-de-cartas", file: new URL("../../../migrations/002-catalogo-de-cartas.sql", import.meta.url) },
   { id: "003-ronda-sin-ganador", file: new URL("../../../migrations/003-ronda-sin-ganador.sql", import.meta.url) },
+  { id: "004-devolucion-de-apuestas", file: new URL("../../../migrations/004-devolucion-de-apuestas.sql", import.meta.url) },
 ];
 
 const LEDGER = `CREATE TABLE IF NOT EXISTS migracion_aplicada (

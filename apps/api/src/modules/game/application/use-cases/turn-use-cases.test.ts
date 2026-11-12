@@ -9,10 +9,10 @@ import { DrawCard } from "./draw-card.js";
 import { StartGame } from "./start-game.js";
 import { StartNextRound } from "./start-next-round.js";
 import { TimeOutTurn } from "./time-out-turn.js";
-import { EventSpy, harness, seatsOf, sequentialIds } from "./use-cases.test-support.js";
+import { EventSpy, FakeStakes, harness, seatsOf, sequentialIds } from "./use-cases.test-support.js";
 
-const startGame = (games: InMemoryGameRepository, events = new EventSpy()) =>
-  new StartGame({ games, random: new SeededRandom(1), clock: new ManualClock(), ids: sequentialIds(), events });
+const startGame = (games: InMemoryGameRepository, events = new EventSpy(), stakes = new FakeStakes()) =>
+  new StartGame({ games, random: new SeededRandom(1), clock: new ManualClock(), ids: sequentialIds(), events, stakes });
 
 const playUntilLastStockDraw = (session: GameSession) => {
   let stockEmptiedOnce = false;
@@ -84,6 +84,33 @@ describe("Iniciar partida", () => {
     const start = startGame(games);
     start.execute({ gameId: "g9", seats: seatsOf(["ana", "luis"]), config, stake: 0 });
     expect(start.execute({ gameId: "g9", seats: seatsOf(["ana", "luis"]), config, stake: 0 }).ok).toBe(false);
+  });
+});
+
+describe("Iniciar partida con apuesta", () => {
+  const config = { mode: "CLASICA" as const, eliminationThreshold: 101, turnSeconds: 60 };
+
+  it("retiene la apuesta de los jugadores con el identificador de la partida", () => {
+    const games = new InMemoryGameRepository();
+    const stakes = new FakeStakes({ ana: 200, luis: 200 });
+    expect(startGame(games, new EventSpy(), stakes).execute({ gameId: "g9", seats: seatsOf(["ana", "luis"]), config, stake: 150 }).ok).toBe(true);
+    expect(stakes.holds).toEqual([{ matchId: games.find("g9")?.matchId, playerIds: ["ana", "luis"], stake: 150 }]);
+  });
+
+  it("si la retención falla no crea la partida ni anuncia nada", () => {
+    const games = new InMemoryGameRepository();
+    const events = new EventSpy();
+    const result = startGame(games, events, new FakeStakes({ ana: 200, luis: 10 })).execute({ gameId: "g9", seats: seatsOf(["ana", "luis"]), config, stake: 150 });
+    expect(result).toEqual({ ok: false, reason: "Sin fichas suficientes" });
+    expect(games.find("g9")).toBeNull();
+    expect(events.names).toEqual([]);
+  });
+
+  it("no inicia una partida con apuesta en la que se sienta la máquina", () => {
+    const games = new InMemoryGameRepository();
+    const seats = [...seatsOf(["ana"]), { playerId: "bot:1", nickname: "Máquina 1", isBot: true }];
+    const result = startGame(games, new EventSpy(), new FakeStakes({ ana: 500 })).execute({ gameId: "g9", seats, config, stake: 50 });
+    expect(result).toEqual({ ok: false, reason: "La máquina no juega en mesas con apuesta" });
   });
 });
 

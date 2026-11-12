@@ -26,7 +26,8 @@ describe("Sala · apertura", () => {
     ["un umbral en cero", { ...SETTINGS, eliminationThreshold: 0 }, "El umbral debe estar entre 1 y 500 puntos"],
     ["un umbral desmedido", { ...SETTINGS, eliminationThreshold: 1e15 }, "El umbral debe estar entre 1 y 500 puntos"],
     ["un turno de 5 segundos", { ...SETTINGS, turnSeconds: 5 }, "La duración del turno debe estar entre 10 y 600 segundos"],
-    ["una apuesta negativa", { ...SETTINGS, stake: -1 }, "La apuesta debe ser un entero mayor o igual a cero"],
+    ["una apuesta negativa", { ...SETTINGS, stake: -1 }, "La apuesta debe estar entre 0 y 100000 fichas"],
+    ["una apuesta desmedida", { ...SETTINGS, stake: 100_001 }, "La apuesta debe estar entre 0 y 100000 fichas"],
   ])("rechaza %s", (_caso, settings, reason) => {
     expect(Room.open("K7Q2", ANA, settings)).toBe(reason);
   });
@@ -56,6 +57,12 @@ describe("Sala · asientos", () => {
   it("un invitado no se une a una mesa con apuesta", () => {
     const room = openRoom({ ...SETTINGS, stake: 50 }, EVA);
     expect(room.join(LUIS)).toEqual({ ok: false, reason: "Un invitado no puede unirse a una mesa con apuesta" });
+  });
+
+  it("la máquina no se sienta en una mesa con apuesta", () => {
+    const room = openRoom({ ...SETTINGS, stake: 50 }, EVA);
+    expect(room.addBot("eva")).toEqual({ ok: false, reason: "La máquina no juega en mesas con apuesta" });
+    expect(room.playerIds).toEqual(["eva"]);
   });
 
   it("si el anfitrión sale, el anfitrión pasa al siguiente humano", () => {
