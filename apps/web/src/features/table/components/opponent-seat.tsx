@@ -25,14 +25,14 @@ export type SeatPosition = (typeof SEAT_POSITION)[keyof typeof SEAT_POSITION];
 
 const POSITION_CLASSES: Readonly<Record<SeatPosition, string>> = {
   top: "lg:absolute lg:top-0 lg:left-1/2 lg:-translate-x-1/2",
-  left: "lg:absolute lg:top-[38%] lg:left-[7%] lg:w-28 lg:-translate-y-1/2 xl:left-[4%]",
-  right: "lg:absolute lg:top-[38%] lg:right-[7%] lg:w-28 lg:-translate-y-1/2 xl:right-[4%]",
+  left: "lg:absolute lg:top-[38%] lg:left-[7%] lg:w-36 lg:-translate-y-1/2 xl:left-[4%]",
+  right: "lg:absolute lg:top-[38%] lg:right-[7%] lg:w-36 lg:-translate-y-1/2 xl:right-[4%]",
 };
 
 const PILL_PLACE_CLASSES: Readonly<Record<SeatPosition, string>> = {
-  top: "self-end translate-y-1/3 tiny:translate-y-0",
-  left: "self-end translate-y-1/3 tiny:translate-y-0 lg:self-center lg:translate-y-0",
-  right: "self-end translate-y-1/3 tiny:translate-y-0 lg:self-center lg:translate-y-0",
+  top: "self-end translate-y-1/3 tiny:translate-y-0 lg:max-w-[13rem]",
+  left: "self-end translate-y-1/3 tiny:translate-y-0 lg:max-w-full lg:self-center lg:translate-y-0",
+  right: "self-end translate-y-1/3 tiny:translate-y-0 lg:max-w-full lg:self-center lg:translate-y-0",
 };
 
 const FAN_TURN_CLASSES: Readonly<Record<SeatPosition, string>> = {
@@ -97,7 +97,7 @@ export function OpponentSeat({ opponent, seat, position, isTurn }: OpponentSeatP
         count={opponent.cardCount}
         isActive={isTurn}
         isConnected={identity.isConnected}
-        className={cn("col-start-1 row-start-1 max-w-full sm:max-w-[11rem]", PILL_PLACE_CLASSES[position], "lg:max-w-[13rem]")}
+        className={cn("col-start-1 row-start-1 max-w-full sm:max-w-[11rem]", PILL_PLACE_CLASSES[position])}
       />
     </li>
   );
