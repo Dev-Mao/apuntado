@@ -24,7 +24,7 @@ models/bpmn/          Procesos As-Is y To-Be (BPMN 2.0 editable)
 models/uml/           Casos de uso, componentes y clases (PlantUML y draw.io)
 models/er/            Modelo entidad-relación y esquema SQL
 tests/architecture/   Fitness functions ejecutables (TSArch)
-tests/integration/    Esquema SQL probado sobre PostgreSQL (PGlite)
+tests/integration/    Esquema, migraciones e historial probados sobre PostgreSQL (PGlite)
 tests/e2e/            Servidor real jugado con clientes Socket.IO
 ```
 
@@ -39,11 +39,11 @@ apps/api/src/modules/
 ├── game/        Juego: reglas, turnos, mesa          ← el único que cambia seguido
 │   ├── domain/           entidades, ronda, partida, sesión y servicios puros
 │   ├── application/      casos de uso, puertos, vista filtrada y oponente virtual
-│   ├── infrastructure/   repositorios, temporizadores y bitácora
+│   ├── infrastructure/   repositorios, temporizadores y bitácora asíncrona en PostgreSQL
 │   └── interfaces/       gateway de Socket.IO
-├── identity/    Identidad: sesión de invitado con token firmado
+├── identity/    Identidad: sesión de invitado con token firmado; registra al jugador
 ├── economy/     Economía: fichas, apuestas, movimientos
-└── history/     Historial: resultados y estadísticas
+└── history/     Historial: archiva cada partida a partir de los eventos del juego y expone el perfil
 ```
 
 ---
@@ -55,7 +55,7 @@ npm install
 npm test                  # todas las pruebas: servidor, arquitectura, esquema y punta a punta
 npm run test:domain       # dominio y aplicación del servidor
 npm run test:arch         # fitness functions
-npm run test:integration  # esquema SQL sobre PostgreSQL (PGlite, sin Docker)
+npm run test:integration  # esquema, migraciones e historial sobre PostgreSQL (PGlite, sin Docker)
 npm run typecheck         # TypeScript estricto del servidor y los contratos
 npm run lint              # incluye el límite de complejidad ciclomática (CC ≤ 10)
 npm run arch:deps         # reglas de dependencia (dependency-cruiser)
@@ -67,7 +67,8 @@ npm run build             # compila la interfaz web y el servidor
 npm start                 # arranca el servidor en http://localhost:3000 con la interfaz incluida
 ```
 
-Para desarrollar con recarga automática, en dos terminales:
+Para desarrollar con recarga automática, en dos terminales. El servidor de desarrollo lee
+`.env.local` de la raíz si existe; ese archivo no se sube al repositorio.
 
 ```bash
 npm run dev -w @apuntado/api   # servidor en http://localhost:3000
@@ -83,9 +84,14 @@ Variables de entorno del servidor:
 | `SESSION_SECRET` | Clave con que se firman las sesiones | clave de desarrollo |
 | `WEB_DIR` | Carpeta de la interfaz compilada | `apps/web/out` |
 | `ALLOWED_ORIGINS` | Orígenes adicionales aceptados, separados por comas; en desarrollo se suman a `http://localhost:3001` | ninguno |
+| `DATABASE_URL` | Conexión a PostgreSQL. Al arrancar se aplican las migraciones pendientes | sin definir: el juego funciona, pero no guarda historial ni bitácora |
+
+Para tener PostgreSQL local sin una cuenta en la nube: `docker compose up -d` y
+`DATABASE_URL=postgres://apuntado:apuntado@localhost:5432/apuntado`.
 
 El despliegue en Render está descrito en `render.yaml`: un solo servicio que compila todo, sirve la
 interfaz, la API y el socket desde el mismo origen, y genera `SESSION_SECRET` automáticamente.
+`DATABASE_URL` se configura a mano en Render con la cadena de conexión de Neon.
 
 El flujo `.github/workflows/gobernanza.yml` ejecuta esas mismas etapas en cada subida a `main` y en
 cada solicitud de integración, y marca la construcción en rojo si alguna regla de arquitectura se
@@ -133,8 +139,9 @@ violadas. Se reescribieron con `matchingPattern` explícito. El análisis está 
 
 ## Estado actual
 
-Fase 3 del [plan de construcción](docs/entregable-3/plan-de-construccion.md) completa: el juego se
-puede jugar de punta a punta desde varios navegadores.
+Fases 3 y 4 del [plan de construcción](docs/entregable-3/plan-de-construccion.md) completas: el
+juego se puede jugar de punta a punta desde varios navegadores, y cada partida terminada queda
+archivada en PostgreSQL y aparece en el perfil del jugador (`GET /api/profile`).
 
 - Dominio completo: ronda, partida en las modalidades Clásica, Apuntado y Ambas, acumulación y
   eliminación por umbral, vencimiento del turno.
@@ -145,11 +152,13 @@ puede jugar de punta a punta desde varios navegadores.
 - Sesión de invitado con token firmado en una cookie `httpOnly`.
 - Servidor NestJS con Socket.IO: cada jugador recibe solo su vista; el reloj de turno y el bot juegan
   solos cuando corresponde.
+- Persistencia en PostgreSQL (Neon en producción) con migraciones al arrancar, bitácora de jugadas
+  asíncrona e historial archivado por eventos.
 - La interfaz web está conectada al servidor: inicio, sala de espera en vivo, mesa, resultados de
   ronda y finales. Al recargar cualquier página recupera el estado desde el servidor, y avisa cuando
   se pierde la conexión.
 
 ```
-237 pruebas  ·  211 de servidor + 6 de arquitectura + 10 de esquema + 10 de punta a punta
+263 pruebas  ·  226 de servidor + 6 de arquitectura + 18 de esquema e historial + 13 de punta a punta
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```
