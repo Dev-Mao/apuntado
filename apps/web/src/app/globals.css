@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@custom-variant short (@media (max-height: 44rem));
+@custom-variant tiny (@media (max-height: 30rem));
+
 @theme inline {
   --font-display: var(--font-face-display), Georgia, serif;
   --font-serif: var(--font-face-text), Georgia, serif;
@@ -102,6 +105,14 @@
     --card-w: 7rem;
   }
 
+  @media (height < 44rem) {
+    --card-w: 4rem;
+  }
+
+  @media (height < 30rem) {
+    --card-w: 3.1rem;
+  }
+
   & > li {
     flex: none;
     width: min(calc(var(--card-w) * 0.62), calc((100cqw - var(--card-w)) / max(var(--n) - 1, 1)));
@@ -124,7 +135,8 @@
   }
 
   body {
-    min-height: 100dvh;
+    height: 100dvh;
+    overflow: hidden;
     font-family: var(--font-serif);
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;

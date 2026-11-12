@@ -37,13 +37,13 @@ export function ResultsHero(props: ResultsHeroProps) {
       : t("results.noClosure");
 
   return (
-    <div className="flex flex-col items-center gap-4 text-center">
-      {summary.isFinished && <CardFan cards={WINNING_HAND} spreadDeg={7} delayMs={150} className="mb-8" />}
+    <div className="flex shrink-0 flex-col items-center gap-3 text-center">
+      {summary.isFinished && <CardFan cards={WINNING_HAND} spreadDeg={7} delayMs={150} className="mb-8 max-sm:-my-6 max-sm:scale-[0.7] [@media(max-height:46rem)]:hidden" />}
       <h1
         className={
           summary.isFinished
-            ? "animate-turn-in font-display font-semibold text-[clamp(3rem,11vw,6.5rem)] leading-[0.9] tracking-[-0.02em] [animation-delay:650ms]"
-            : "font-display font-semibold text-[clamp(2.8rem,9vw,5rem)] leading-[0.9] tracking-[-0.02em]"
+            ? "animate-turn-in font-display font-semibold tiny:text-[2.2rem] text-[clamp(3rem,11vw,6.5rem)] leading-[0.9] tracking-[-0.02em] [animation-delay:650ms]"
+            : "font-display font-semibold tiny:text-[2.2rem] text-[clamp(2.8rem,9vw,5rem)] leading-[0.9] tracking-[-0.02em]"
         }
       >
         {headline}

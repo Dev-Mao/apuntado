@@ -9,7 +9,6 @@ import { SessionBadge, useRoomRedirect } from "@/features/realtime";
 import { RulesDialog } from "@/features/table";
 import { DEFAULT_TABLE_SETTINGS } from "@/lib";
 
-import { CreateTableForm } from "./create-table-form";
 import { EntryNotice } from "./entry-notice";
 import { HomeEntry } from "./home-entry";
 import { HomeHero } from "./home-hero";
@@ -27,9 +26,9 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
   useRoomRedirect(null);
 
   return (
-    <div className="relative isolate overflow-x-clip">
+    <div className="relative isolate h-dvh overflow-hidden">
       <span aria-hidden="true" className="absolute -top-44 -left-48 -z-10 size-[26rem] rounded-full bg-coral sm:-top-56 sm:-left-40 sm:size-[38rem]" />
-      <div className="mx-auto flex min-h-dvh max-w-6xl flex-col">
+      <div className="mx-auto flex h-full max-w-6xl flex-col">
         <AppHeader>
           <nav aria-label={t("home.nav")} className="flex items-center gap-2 sm:gap-6">
             <button
@@ -43,19 +42,12 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
             <SessionBadge />
           </nav>
         </AppHeader>
-        <main className="grid flex-1 content-start gap-12 px-4 pt-6 pb-16 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,31rem)] lg:gap-x-16 lg:gap-y-14 lg:pt-10">
+        <main className="grid min-h-0 flex-1 content-center gap-6 overflow-y-auto overscroll-contain px-4 pb-6 short:gap-3 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,30rem)] lg:items-center lg:gap-16">
           <HomeHero />
-          <div className="flex flex-col gap-4 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+          <div className="flex flex-col gap-4">
             <EntryNotice message={form.entryNotice} />
             <HomeEntry form={form} linkCode={linkCode} />
           </div>
-          <CreateTableForm
-            settings={form.settings}
-            errors={form.errors}
-            onModeChange={form.handleModeChange}
-            onNumberChange={form.handleNumberChange}
-            onSubmit={form.handleCreate}
-          />
         </main>
         <RulesDialog open={rulesOpen} threshold={threshold} onClose={() => setRulesOpen(false)} />
       </div>

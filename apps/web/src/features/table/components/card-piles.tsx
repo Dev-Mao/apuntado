@@ -10,7 +10,7 @@ import type { PileAction } from "../types";
 import type { CardDto } from "@apuntado/contracts";
 import type { ReactNode } from "react";
 
-const SLOT_CLASSES = "relative block aspect-[5/7] w-[4.6rem] sm:w-[5.75rem] lg:w-[7rem]";
+const SLOT_CLASSES = "relative block aspect-[5/7] w-[4.6rem] short:w-[3.6rem] tiny:w-[2.9rem] sm:w-[5.75rem] sm:short:w-[3.6rem] lg:w-[7rem] lg:short:w-[5.5rem]";
 const GHOST_CLASSES = "absolute inset-0 rounded-[7%/5%] bg-card shadow-card";
 
 interface PileProps {
@@ -34,7 +34,7 @@ function Pile({ name, label, caption, action, children }: PileProps) {
   );
   if (!action) {
     return (
-      <figure role="img" aria-label={label} className="flex flex-col items-center gap-3">
+      <figure role="img" aria-label={label} className="flex flex-col items-center gap-3 short:gap-1.5">
         {body}
       </figure>
     );
@@ -44,7 +44,7 @@ function Pile({ name, label, caption, action, children }: PileProps) {
       type="button"
       aria-label={action.label}
       onClick={action.onPress}
-      className="flex flex-col items-center gap-3 rounded-2xl p-1 transition-[translate] duration-200 ease-spring hover:-translate-y-1 active:translate-y-0 [&_[data-pile]]:rounded-[7%/5%] [&_[data-pile]]:shadow-[0_0_0_3px_var(--color-coral),0_0_30px_-6px_rgb(224_122_95/0.9)]"
+      className="flex flex-col items-center gap-3 rounded-2xl p-1 short:gap-1.5 transition-[translate] duration-200 ease-spring hover:-translate-y-1 active:translate-y-0 [&_[data-pile]]:rounded-[7%/5%] [&_[data-pile]]:shadow-[0_0_0_3px_var(--color-coral),0_0_30px_-6px_rgb(224_122_95/0.9)]"
     >
       {body}
     </button>

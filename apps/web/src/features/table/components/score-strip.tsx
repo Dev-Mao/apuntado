@@ -22,7 +22,7 @@ export function ScoreStrip({ entries, seats, selfId, turnPlayerId, onOpen }: Sco
       type="button"
       onClick={onOpen}
       aria-label={t("table.scoreboard.open")}
-      className="flex w-full items-center gap-1.5 overflow-x-auto px-3 pb-2 lg:hidden"
+      className="flex w-full items-center gap-1.5 overflow-x-auto px-3 pb-2 tiny:hidden lg:hidden"
     >
       {entries.map((entry) => (
         <span

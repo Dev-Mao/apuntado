@@ -11,7 +11,7 @@ export function RoomLoading() {
   const { t } = useTranslation();
   const { room } = useRealtime();
   return (
-    <div className="mx-auto flex min-h-dvh max-w-[90rem] flex-col">
+    <div className="mx-auto flex h-dvh max-w-[90rem] flex-col overflow-hidden">
       <AppHeader homeLink={!hasActiveRoom(room)} />
       <main aria-busy="true" className="grid flex-1 place-items-center px-5 pb-10 sm:px-8">
         <div className="flex flex-col items-center gap-5">
