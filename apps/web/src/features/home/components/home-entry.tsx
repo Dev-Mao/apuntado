@@ -3,6 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import { TextField } from "@/components";
+import { GuestNudge } from "@/features/account";
 import { cn } from "@/lib";
 
 import { CreateTableForm } from "./create-table-form";
@@ -51,11 +52,14 @@ export function HomeEntry({ form, linkCode }: HomeEntryProps) {
           autoComplete="nickname"
           autoFocus={invited}
           maxLength={16}
+          disabled={form.registered}
+          hint={form.registered ? t("account.registeredNickname") : undefined}
           value={form.nickname}
           error={form.errors.nickname ? t(`home.errors.${form.errors.nickname}`) : undefined}
           onChange={(event) => form.handleNicknameChange(event.target.value)}
         />
       </form>
+      <GuestNudge className="-mt-2 short:hidden" />
       <CreateTableForm
         settings={form.settings}
         errors={form.errors}

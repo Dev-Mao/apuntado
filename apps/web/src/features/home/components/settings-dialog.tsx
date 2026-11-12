@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Dialog, TextField } from "@/components";
 
 import { HOME_FIELD } from "../types";
+import { StakeField } from "./stake-field";
 
 import type { HomeErrors, NumericSettingField, SettingsDraft } from "../types";
 
@@ -43,16 +44,7 @@ export function SettingsDialog({ open, settings, errors, onNumberChange, onClose
           error={errorText(HOME_FIELD.TURN)}
           onChange={(event) => onNumberChange(HOME_FIELD.TURN, event.target.value)}
         />
-        <TextField
-          label={t("settings.stake")}
-          hint={t("settings.stakeHint")}
-          type="number"
-          inputMode="numeric"
-          min={0}
-          value={settings.stake}
-          error={errorText(HOME_FIELD.STAKE)}
-          onChange={(event) => onNumberChange(HOME_FIELD.STAKE, event.target.value)}
-        />
+        <StakeField value={settings.stake} error={errorText(HOME_FIELD.STAKE)} onChange={(value) => onNumberChange(HOME_FIELD.STAKE, value)} />
         <Button onClick={onClose} className="self-start">
           {t("home.settingsDone")}
         </Button>
