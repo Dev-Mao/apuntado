@@ -90,6 +90,29 @@ export interface SessionState {
   readonly session: SessionView | null;
 }
 
+export interface ProfileMatch {
+  readonly matchId: string;
+  readonly finishedAt: string;
+  readonly mode: GameMode;
+  readonly won: boolean;
+  readonly points: number;
+  readonly rounds: number;
+  readonly rivals: readonly string[];
+}
+
+export interface ProfileStats {
+  readonly played: number;
+  readonly won: number;
+  readonly roundsWon: number;
+  readonly apuntadoClosures: number;
+  readonly recent: readonly ProfileMatch[];
+}
+
+export interface ProfileView extends ProfileStats {
+  readonly nickname: string;
+  readonly guest: boolean;
+}
+
 export interface RoomSettings {
   readonly mode: GameMode;
   readonly eliminationThreshold: number;
