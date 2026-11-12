@@ -42,7 +42,7 @@ export function ProfileMessage({ status, onRetry }: ProfileMessageProps) {
 
   return (
     <div role={status === "loading" ? "status" : undefined} className="flex flex-col items-center gap-3 py-16 text-center">
-      <p className="text-[2.4rem] leading-tight">{t(keys.title)}</p>
+      <p className="font-display font-semibold text-[2.4rem] leading-tight">{t(keys.title)}</p>
       {keys.body && <p className="max-w-md text-xl text-ink-soft italic">{t(keys.body)}</p>}
       <div className="mt-3 empty:hidden">
         <MessageAction status={status} onRetry={onRetry} />

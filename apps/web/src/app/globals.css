@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-serif: var(--font-bodoni), "Didot", "Bodoni 72", Georgia, serif;
-  --font-display: var(--font-bodoni), "Didot", "Bodoni 72", Georgia, serif;
-  --font-sans: var(--font-josefin), "Futura", system-ui, sans-serif;
+  --font-display: var(--font-face-display), Georgia, serif;
+  --font-serif: var(--font-face-text), Georgia, serif;
+  --font-sans: var(--font-face-label), "Futura", system-ui, sans-serif;
 }
 
 @theme {
@@ -85,9 +85,9 @@
 
 @utility label-caps {
   font-family: var(--font-sans);
-  font-weight: 600;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
 }
 
 @utility hand-fan {

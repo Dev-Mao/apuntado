@@ -41,7 +41,7 @@ export function TurnPanel({ isMine, message, waitingFor, notice, turnKey, turnDe
           {isMine ? t("table.turn.yours") : t("table.turn.waiting", { name: waitingFor })}
         </p>
         <span className="grid min-w-14 place-items-center bg-ink px-2 text-paper">
-          <TurnTimer turnDeadline={turnDeadline} serverTime={serverTime} className="text-xl" unitClassName="text-paper/60" />
+          <TurnTimer turnDeadline={turnDeadline} serverTime={serverTime} className="font-display text-xl font-semibold" unitClassName="text-paper/60" />
         </span>
       </div>
       <p aria-live="polite" className="min-h-5 text-[0.95rem] leading-snug text-ink-soft italic">

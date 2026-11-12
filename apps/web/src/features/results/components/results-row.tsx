@@ -43,7 +43,7 @@ export function ResultsRow({ row, index, threshold, showPlace }: ResultsRowProps
       </td>
       <td className="py-3 pl-4 sm:pl-6">
         <span className="flex flex-col items-end gap-1.5">
-          <span className="text-[2.2rem] leading-7 tabular-nums">{total}</span>
+          <span className="font-display font-semibold text-[2.2rem] leading-7 tabular-nums">{total}</span>
           <ThresholdBar value={row.total} max={threshold} className="w-16 sm:w-28" />
         </span>
       </td>

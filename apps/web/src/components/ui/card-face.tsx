@@ -10,7 +10,7 @@ function CardIndex({ card, className }: { card: CardDto; className: string }) {
     <span className={cn("absolute flex w-[18%] flex-col items-center", className)}>
       <span
         className={cn(
-          "font-display text-[length:24cqw] leading-[0.85] font-medium",
+          "font-display text-[length:24cqw] leading-[0.85] font-bold",
           card.rank === "10" ? "-translate-x-[0.06em] tracking-[-0.12em]" : "tracking-tight",
         )}
       >
@@ -48,7 +48,7 @@ function AcePip({ card }: { card: CardDto }) {
 function CourtHalf({ card, flipped }: { card: CardDto; flipped?: boolean }) {
   return (
     <span className={cn("absolute inset-0 flex flex-col items-start p-[8%]", flipped && "rotate-180")}>
-      <span className="font-display text-[length:32cqw] leading-[0.8] font-medium italic">{card.rank}</span>
+      <span className="font-display text-[length:32cqw] leading-[0.8] font-semibold italic">{card.rank}</span>
       <SuitGlyph suit={card.suit} className="mt-[3cqw] ml-[2cqw] size-[12cqw]" />
     </span>
   );
