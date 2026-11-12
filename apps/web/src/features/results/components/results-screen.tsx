@@ -35,7 +35,9 @@ export function ResultsScreen({ snapshot, onLeave }: ResultsScreenProps) {
             <h2 id="sheet-title" className="label-caps text-[0.68rem]">
               {summary.isFinished ? t("results.finalSheet") : t("results.roundSheet", { count: summary.roundNumber })}
             </h2>
-            <p className="mt-1 mb-4 text-ink-soft italic">{t("results.threshold", { count: summary.threshold })}</p>
+            {summary.mode !== "CLASICA" && (
+              <p className="mt-1 mb-4 text-ink-soft italic">{t("results.threshold", { count: summary.threshold })}</p>
+            )}
             <div className="-ml-12 min-h-0 overflow-y-auto overscroll-contain [mask-image:linear-gradient(to_bottom,black_calc(100%-1.25rem),transparent)] pl-12 sm:-ml-16 sm:pl-16">
               <ResultsTable summary={summary} />
             </div>
