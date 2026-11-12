@@ -12,11 +12,23 @@ export interface RoomDestination {
 
 export const EMPTY_ROOM: RoomState = { lobby: null, snapshot: null };
 
+function activeCode(room: RoomState): string | null {
+  const destination = roomDestination(room);
+  return destination && !destination.finished ? destination.code : null;
+}
+
+function belongsToOldRoom(room: RoomState, code: string, finished: boolean): boolean {
+  const active = activeCode(room);
+  return finished && active !== null && active !== code;
+}
+
 export function withLobby(room: RoomState, lobby: LobbyView): RoomState {
+  if (belongsToOldRoom(room, lobby.code, lobby.status === "FINISHED")) return room;
   return { lobby, snapshot: room.snapshot?.code === lobby.code ? room.snapshot : null };
 }
 
 export function withSnapshot(room: RoomState, snapshot: TableSnapshot): RoomState {
+  if (belongsToOldRoom(room, snapshot.code, snapshot.view.status === "FINISHED")) return room;
   return { lobby: room.lobby?.code === snapshot.code ? room.lobby : null, snapshot };
 }
 
