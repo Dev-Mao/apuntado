@@ -13,7 +13,7 @@ export function TableContainer() {
   const code = useRoomCode();
   const { room } = useRealtime();
   const { actions, pending } = useTableCommands();
-  const { notice, leave } = useLeaveRoom(true);
+  const { leave } = useLeaveRoom(true);
   const handleLeave = useCallback(() => void leave(), [leave]);
   useRoomEntry(code);
   useRoomRedirect(ROUTES.TABLE, code);
@@ -21,5 +21,5 @@ export function TableContainer() {
 
   if (!snapshot || snapshot.code !== code) return <RoomLoading />;
   if (snapshot.view.status === "PLAYING") return <TableScreen snapshot={snapshot} pending={pending} {...actions} />;
-  return <ResultsScreen snapshot={snapshot} notice={notice} onLeave={handleLeave} />;
+  return <ResultsScreen snapshot={snapshot} onLeave={handleLeave} />;
 }

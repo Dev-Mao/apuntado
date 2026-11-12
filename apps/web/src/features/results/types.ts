@@ -31,6 +31,5 @@ export interface ResultsSummary {
 
 export interface ResultsScreenProps {
   snapshot: TableSnapshot;
-  notice: string | null;
   onLeave: () => void;
 }

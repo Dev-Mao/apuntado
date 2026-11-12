@@ -2,7 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 
-import { AppHeader, Button, LiveNotice } from "@/components";
+import { AppHeader, Button } from "@/components";
 
 import { useResultsSummary } from "../hooks";
 import { ResultsHero } from "./results-hero";
@@ -10,7 +10,7 @@ import { ResultsTable } from "./results-table";
 
 import type { ResultsScreenProps } from "../types";
 
-export function ResultsScreen({ snapshot, notice, onLeave }: ResultsScreenProps) {
+export function ResultsScreen({ snapshot, onLeave }: ResultsScreenProps) {
   const { t } = useTranslation();
   const summary = useResultsSummary(snapshot);
   const eliminated = summary.rows.filter((row) => row.eliminated);
@@ -43,12 +43,9 @@ export function ResultsScreen({ snapshot, notice, onLeave }: ResultsScreenProps)
           </section>
           <div className="flex flex-col gap-3 border-t border-line pt-6">
             {summary.isFinished ? (
-              <>
-                <Button onClick={onLeave} className="sm:self-start">
-                  {t("results.backHome")}
-                </Button>
-                <LiveNotice message={notice} />
-              </>
+              <Button onClick={onLeave} className="sm:self-start">
+                {t("results.backHome")}
+              </Button>
             ) : (
               <p role="status" className="font-display text-lg italic">
                 {t("results.nextRoundSoon")}
