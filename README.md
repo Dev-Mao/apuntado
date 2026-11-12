@@ -65,7 +65,13 @@ npm run web:check         # tipos, estilo y build de la interfaz web
 npm run verificar         # todo lo anterior: exactamente lo que corre el pipeline
 npm run build             # compila la interfaz web y el servidor
 npm start                 # arranca el servidor en http://localhost:3000 con la interfaz incluida
-npm run dev -w @apuntado/web  # interfaz web en modo desarrollo
+```
+
+Para desarrollar con recarga automática, en dos terminales:
+
+```bash
+npm run dev -w @apuntado/api   # servidor en http://localhost:3000
+npm run dev -w @apuntado/web   # interfaz en http://localhost:3001, conectada al servidor
 ```
 
 Variables de entorno del servidor:
@@ -76,7 +82,7 @@ Variables de entorno del servidor:
 | `NODE_ENV` | `production` activa las cookies seguras y exige `SESSION_SECRET` | sin definir |
 | `SESSION_SECRET` | Clave con que se firman las sesiones | clave de desarrollo |
 | `WEB_DIR` | Carpeta de la interfaz compilada | `apps/web/out` |
-| `ALLOWED_ORIGINS` | Orígenes adicionales aceptados, separados por comas (por ejemplo, la interfaz en modo desarrollo) | ninguno |
+| `ALLOWED_ORIGINS` | Orígenes adicionales aceptados, separados por comas | en desarrollo, `http://localhost:3001`; en producción, ninguno |
 
 El despliegue en Render está descrito en `render.yaml`: un solo servicio que compila todo, sirve la
 interfaz, la API y el socket desde el mismo origen, y genera `SESSION_SECRET` automáticamente.
@@ -127,8 +133,8 @@ violadas. Se reescribieron con `matchingPattern` explícito. El análisis está 
 
 ## Estado actual
 
-Fase 3 del [plan de construcción](docs/entregable-3/plan-de-construccion.md): el servidor en tiempo
-real funciona de punta a punta.
+Fase 3 del [plan de construcción](docs/entregable-3/plan-de-construccion.md) completa: el juego se
+puede jugar de punta a punta desde varios navegadores.
 
 - Dominio completo: ronda, partida en las modalidades Clásica, Apuntado y Ambas, acumulación y
   eliminación por umbral, vencimiento del turno.
@@ -138,9 +144,11 @@ real funciona de punta a punta.
 - Sesión de invitado con token firmado en una cookie `httpOnly`.
 - Servidor NestJS con Socket.IO: cada jugador recibe solo su vista; el reloj de turno y el bot juegan
   solos cuando corresponde.
-- La interfaz web tiene el sistema de diseño y sus pantallas; falta conectarla al servidor.
+- La interfaz web está conectada al servidor: inicio, sala de espera en vivo, mesa, resultados de
+  ronda y finales. Al recargar cualquier página recupera el estado desde el servidor, y avisa cuando
+  se pierde la conexión.
 
 ```
-235 pruebas  ·  210 de servidor + 6 de arquitectura + 10 de esquema + 9 de punta a punta
+237 pruebas  ·  211 de servidor + 6 de arquitectura + 10 de esquema + 10 de punta a punta
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```
