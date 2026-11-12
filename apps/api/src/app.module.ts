@@ -2,6 +2,7 @@ import { type DynamicModule, Inject, Injectable, Module, type OnApplicationShutd
 import { ServeStaticModule } from "@nestjs/serve-static";
 import type { AppConfig } from "./config.js";
 import { HealthController } from "./health/health.controller.js";
+import { composeEconomy, EconomyModule } from "./modules/economy/index.js";
 import { GameModule } from "./modules/game/index.js";
 import { HistoryModule } from "./modules/history/index.js";
 import { IDENTITY_FOR_MODULES, IdentityModule } from "./modules/identity/index.js";
@@ -29,13 +30,16 @@ export class AppModule {
   static register(config: AppConfig, database: Database | null = null): DynamicModule {
     const { sessionSecret: secret, secureCookies, allowedOrigins, timing } = config;
     const events = new InProcessEventBus();
+    const playerIdentity = IDENTITY_FOR_MODULES;
     const identity = IdentityModule.register({ secret, secureCookies, allowedOrigins, database, events });
-    const game = GameModule.register({ imports: [identity], playerIdentity: IDENTITY_FOR_MODULES, timing, allowedOrigins, events, database });
-    const history = HistoryModule.register({ imports: [identity], playerIdentity: IDENTITY_FOR_MODULES, events, database });
+    const history = HistoryModule.register({ imports: [identity], playerIdentity, events, database });
+    const economy = composeEconomy(database, events);
+    const wallet = EconomyModule.register({ imports: [identity], playerIdentity, economy });
+    const game = GameModule.register({ imports: [identity], playerIdentity, timing, allowedOrigins, events, stakes: economy.stakes, database });
     return {
       module: AppModule,
       controllers: [HealthController],
-      imports: [identity, game, history, ...webModules(config.webDir)],
+      imports: [identity, history, wallet, game, ...webModules(config.webDir)],
       providers: [{ provide: DATABASE, useValue: database }, DatabaseShutdown],
     };
   }

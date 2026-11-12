@@ -4,7 +4,7 @@ import { SeededRandom } from "../../../../shared/random.js";
 import { composeGame } from "../../game.composition.js";
 import { InMemoryPlayJournal } from "../../infrastructure/journal/in-memory-play-journal.js";
 import type { AuthenticatedPlayer, Presence, TableNotifier, TaskScheduler } from "../ports/index.js";
-import { sequentialIds } from "../use-cases/use-cases.test-support.js";
+import { FakeStakes, sequentialIds } from "../use-cases/use-cases.test-support.js";
 
 export class FakeScheduler implements TaskScheduler {
   readonly tasks = new Map<string, { at: Date; task: () => void }>();
@@ -53,12 +53,13 @@ export const player = (id: string, guest = true): AuthenticatedPlayer => ({ id, 
 
 export const SETTINGS = { mode: "CLASICA", eliminationThreshold: 101, turnSeconds: 60, stake: 0 } as const;
 
-export const tableHarness = (seed = 7) => {
+export const tableHarness = (seed = 7, balances: Readonly<Record<string, number>> = {}) => {
   const clock = new ManualClock();
   const scheduler = new FakeScheduler(clock);
   const notifier = new NotifierSpy();
   const presence = new FakePresence();
   const journal = new InMemoryPlayJournal();
+  const stakes = new FakeStakes(balances);
   const components = composeGame({
     clock,
     random: new SeededRandom(seed),
@@ -68,7 +69,8 @@ export const tableHarness = (seed = 7) => {
     presence,
     journal,
     events: new InProcessEventBus(),
+    stakes,
     timing: { botDelayMs: 1200, roundPauseMs: 8000, cleanupMs: 60_000 },
   });
-  return { clock, scheduler, notifier, presence, journal, ...components };
+  return { clock, scheduler, notifier, presence, journal, stakes, ...components };
 };

@@ -1,7 +1,7 @@
 import type { RandomSource } from "../../../../shared/random.js";
 import { Room } from "../../domain/room/room.js";
 import { OK, type Outcome, rejected } from "../../domain/round/round.types.js";
-import type { AuthenticatedPlayer, RoomRepository, TableNotifier } from "../ports/index.js";
+import type { AuthenticatedPlayer, RoomRepository, StakeGuard, TableNotifier } from "../ports/index.js";
 import type { StartGame } from "../use-cases/start-game.js";
 import { parseCode, parseSettings } from "./payload-parser.js";
 import type { TableCoordinator } from "./table-coordinator.js";
@@ -13,6 +13,7 @@ const CODE_LENGTH = 4;
 const CODE_ATTEMPTS = 50;
 const ALREADY_SEATED = "Ya está sentado en otra mesa";
 const NOT_SEATED = "No está sentado en ninguna mesa";
+const INSUFFICIENT_BALANCE = "No tiene fichas suficientes para la apuesta de esta mesa";
 
 export interface LobbyDependencies {
   readonly rooms: RoomRepository;
@@ -20,6 +21,7 @@ export interface LobbyDependencies {
   readonly coordinator: TableCoordinator;
   readonly notifier: TableNotifier;
   readonly random: RandomSource;
+  readonly stakes: StakeGuard;
 }
 
 export class LobbyCommands {
@@ -32,6 +34,7 @@ export class LobbyCommands {
     const code = this.freeCode();
     const room = Room.open(code, player, settings);
     if (typeof room === "string") return { ok: false, reason: room };
+    if (!this.canCover(player, settings.stake)) return { ok: false, reason: INSUFFICIENT_BALANCE };
     this.saveAndAnnounce(room);
     return { ok: true, code };
   }
@@ -43,6 +46,7 @@ export class LobbyCommands {
     const current = this.deps.rooms.findActiveByPlayer(player.id);
     if (current && current.code !== room.code) return { ok: false, reason: ALREADY_SEATED };
     if (room.hasPlayer(player.id)) return { ok: true, code: room.code };
+    if (!this.canCover(player, room.settings.stake)) return { ok: false, reason: INSUFFICIENT_BALANCE };
     const outcome = room.join(player);
     if (!outcome.ok) return outcome;
     this.saveAndAnnounce(room);
@@ -88,6 +92,10 @@ export class LobbyCommands {
     this.saveAndAnnounce(room);
     this.deps.coordinator.refresh(room.code);
     return OK;
+  }
+
+  private canCover(player: AuthenticatedPlayer, stake: number): boolean {
+    return stake === 0 || player.guest || this.deps.stakes.canCover(player.id, stake);
   }
 
   private saveAndAnnounce(room: Room): void {

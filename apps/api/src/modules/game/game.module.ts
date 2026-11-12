@@ -4,7 +4,7 @@ import type { Database } from "../../shared/database/database.js";
 import { RandomIds } from "../../shared/ids.js";
 import { OriginPolicy } from "../../shared/origin-policy.js";
 import { SystemRandom } from "../../shared/random.js";
-import type { EventBus, PlayJournal } from "./application/ports/index.js";
+import type { EventBus, PlayJournal, StakeGuard } from "./application/ports/index.js";
 import type { TableTiming } from "./application/table/table-coordinator.js";
 import { composeGame } from "./game.composition.js";
 import { InMemoryPlayJournal } from "./infrastructure/journal/in-memory-play-journal.js";
@@ -21,6 +21,7 @@ export interface GameModuleOptions {
   readonly timing: TableTiming;
   readonly allowedOrigins: readonly string[];
   readonly events: EventBus;
+  readonly stakes: StakeGuard;
   readonly database: Database | null;
 }
 
@@ -54,6 +55,7 @@ export class GameModule {
       presence: registry,
       journal: journalFor(options.database),
       events: options.events,
+      stakes: options.stakes,
       timing: options.timing,
     });
     notifier.connect(components.queries);

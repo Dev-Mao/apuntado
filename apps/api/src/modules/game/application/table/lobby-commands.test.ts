@@ -56,6 +56,44 @@ describe("Sala de espera", () => {
 
 });
 
+describe("Sala de espera · apuestas", () => {
+  const STAKED = { ...SETTINGS, stake: 100 };
+  const EVA = player("eva", false);
+  const TOM = player("tom", false);
+  const NO_FUNDS = "No tiene fichas suficientes para la apuesta de esta mesa";
+
+  it("sin fichas suficientes no se crea una mesa con apuesta", () => {
+    const h = tableHarness(7, { eva: 99 });
+    expect(h.lobby.create(EVA, STAKED)).toEqual({ ok: false, reason: NO_FUNDS });
+    expect(h.lobby.create(EVA, SETTINGS).ok).toBe(true);
+  });
+
+  it("sin fichas suficientes no se une a una mesa con apuesta, con fichas sí", () => {
+    const h = tableHarness(7, { eva: 500, tom: 100, ian: 99 });
+    const created = h.lobby.create(EVA, STAKED);
+    const code = created.ok ? created.code : "";
+    expect(h.lobby.join(player("ian", false), code)).toEqual({ ok: false, reason: NO_FUNDS });
+    expect(h.lobby.join(TOM, code)).toEqual({ ok: true, code });
+  });
+
+  it("al iniciar retiene la apuesta de cada jugador para esa partida", () => {
+    const h = tableHarness(7, { eva: 500, tom: 300 });
+    const created = h.lobby.create(EVA, STAKED);
+    const code = created.ok ? created.code : "";
+    h.lobby.join(TOM, code);
+    expect(h.lobby.start("eva")).toEqual({ ok: true });
+    expect(h.stakes.holds).toEqual([{ matchId: "match-1", playerIds: ["eva", "tom"], stake: 100 }]);
+  });
+
+  it("una mesa sin apuesta no consulta saldos ni retiene nada", () => {
+    const h = tableHarness();
+    const code = created(h);
+    h.lobby.join(LUIS, code);
+    expect(h.lobby.start("ana")).toEqual({ ok: true });
+    expect(h.stakes.holds).toEqual([]);
+  });
+});
+
 describe("Sala de espera · inicio y ciclo de vida", () => {
   it("si el último humano sale, la mesa desaparece", () => {
     const h = tableHarness();
