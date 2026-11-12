@@ -76,7 +76,7 @@ export function CardPiles({ stockSize, discardTop, stockAction, discardAction }:
         caption={
           <>
             {t("table.stock")}
-            <span className="font-serif text-sm tracking-normal text-paper normal-case tabular-nums">{stockSize}</span>
+            <span className="font-serif text-sm tracking-normal text-paper normal-case tabular-nums lining-nums">{stockSize}</span>
           </>
         }
       >

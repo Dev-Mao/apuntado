@@ -38,12 +38,12 @@ export function ResultsRow({ row, index, threshold, showPlace }: ResultsRowProps
         <span className={cn("block text-xl leading-7", row.eliminated && "line-through")}>{row.name}</span>
         <span className={cn("label-caps block text-[0.52rem] sm:hidden", isWinner ? "text-coral-ink" : "text-ink-soft")}>{status}</span>
       </th>
-      <td className="py-3 text-right text-xl leading-7 text-ink-soft tabular-nums">
+      <td className="py-3 text-right text-xl leading-7 text-ink-soft tabular-nums lining-nums">
         {t("results.roundPoints", { count: roundPoints })}
       </td>
       <td className="py-3 pl-4 sm:pl-6">
         <span className="flex flex-col items-end gap-1.5">
-          <span className="font-display font-semibold text-[2.2rem] leading-7 tabular-nums">{total}</span>
+          <span className="font-display font-semibold text-[2.2rem] leading-7 tabular-nums lining-nums">{total}</span>
           <ThresholdBar value={row.total} max={threshold} className="w-16 sm:w-28" />
         </span>
       </td>

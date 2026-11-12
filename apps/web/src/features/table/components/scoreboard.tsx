@@ -34,7 +34,7 @@ function SelfRow({ entry, name, threshold, isTurn, srLabel, bandClassName }: Sco
         {t("table.scoreboard.self", { name })}
       </span>
       <span aria-hidden="true" className="flex items-end justify-between gap-3">
-        <span className={cn("font-display font-semibold text-[4.25rem] leading-[0.85] tabular-nums", entry.eliminated && "line-through")}>{entry.total}</span>
+        <span className={cn("font-display font-semibold text-[4.25rem] leading-[0.85] tabular-nums lining-nums", entry.eliminated && "line-through")}>{entry.total}</span>
         <SuitGlyph suit="S" className="mb-1 size-9" />
       </span>
       <ThresholdBar value={entry.total} max={threshold} className="mt-2 [&>span]:bg-ink" />
@@ -55,7 +55,7 @@ function RivalRow({ entry, name, threshold, isTurn, srLabel }: ScoreRowProps) {
           </span>
           <span className={cn("truncate text-xl", entry.eliminated && "text-ink-soft line-through")}>{name}</span>
         </span>
-        <span className="font-display font-semibold text-[2.4rem] leading-none tabular-nums">{entry.total}</span>
+        <span className="font-display font-semibold text-[2.4rem] leading-none tabular-nums lining-nums">{entry.total}</span>
       </span>
       <ThresholdBar value={entry.total} max={threshold} />
     </li>

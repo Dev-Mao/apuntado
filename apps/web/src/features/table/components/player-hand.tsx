@@ -41,7 +41,7 @@ function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSort
             {t("table.hand.label")}
           </h2>
           {selectedIds.size > 0 && (
-            <span aria-hidden="true" className="grid size-5 animate-spark place-items-center rounded-full bg-coral text-sm leading-none tabular-nums">
+            <span aria-hidden="true" className="grid size-5 animate-spark place-items-center rounded-full bg-coral text-sm leading-none tabular-nums lining-nums">
               {selectedIds.size}
             </span>
           )}

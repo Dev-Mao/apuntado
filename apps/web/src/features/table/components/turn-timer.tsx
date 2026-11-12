@@ -26,7 +26,7 @@ export function TurnTimer({ turnDeadline, serverTime, className, unitClassName, 
     <p
       role="timer"
       aria-label={t("table.turn.secondsLeft", { count: left })}
-      className={cn("leading-none tabular-nums", urgent && cn("animate-urgent", urgentClassName), className)}
+      className={cn("leading-none tabular-nums lining-nums", urgent && cn("animate-urgent", urgentClassName), className)}
     >
       <span>{left}</span>
       <span className={cn("ml-0.5 text-[0.6em] italic", unitClassName)}>{t("table.turn.secondsUnit")}</span>
