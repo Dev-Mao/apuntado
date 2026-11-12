@@ -76,6 +76,19 @@ describe("Partida · Apuntado a 101", () => {
     expect(m.winnerId).toBe("luis");
   });
 
+  it("si también empatan en rondas ganadas, gana quien está primero en el orden de la mesa", () => {
+    const m = match("APUNTADO", ["luis", "ana"]);
+    m.recordRound(scores({ luis: 105, ana: 105 }), null);
+    expect(m.winnerId).toBe("luis");
+    expect(m.isEliminated("ana")).toBe(true);
+  });
+
+  it("en Clásica, una ronda sin ganador la gana quien quedó con menos puntos en la mano", () => {
+    const m = match("CLASICA");
+    m.recordRound(scores({ ana: 30, luis: 12, eva: 12 }), null);
+    expect(m.winnerId).toBe("luis");
+  });
+
   it("los eliminados ya no suman ni juegan las rondas siguientes", () => {
     const m = match("APUNTADO");
     m.recordRound(scores({ ana: 0, luis: 30, eva: 130 }), "ana");
