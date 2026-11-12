@@ -25,6 +25,12 @@ describe("Configuración del servidor", () => {
       .toEqual(["https://a.example"]);
   });
 
+  it("usa la base de datos solo cuando DATABASE_URL tiene un valor", () => {
+    expect(loadConfig({}).databaseUrl).toBeNull();
+    expect(loadConfig({ DATABASE_URL: "" }).databaseUrl).toBeNull();
+    expect(loadConfig({ DATABASE_URL: "postgres://u:p@h/db" }).databaseUrl).toBe("postgres://u:p@h/db");
+  });
+
   it("toma el puerto del entorno e ignora una carpeta web inexistente", () => {
     const config = loadConfig({ PORT: "8080", WEB_DIR: "no-existe" });
     expect(config.port).toBe(8080);

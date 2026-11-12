@@ -10,6 +10,7 @@ export interface AppConfig {
   readonly webDir: string | null;
   readonly timing: TableTiming;
   readonly allowedOrigins: readonly string[];
+  readonly databaseUrl: string | null;
 }
 
 const DEFAULT_PORT = 3000;
@@ -35,5 +36,6 @@ export const loadConfig = (env: Record<string, string | undefined>): AppConfig =
     webDir: existsSync(webDir) ? webDir : null,
     timing: DEFAULT_TIMING,
     allowedOrigins: allowedOrigins(env["ALLOWED_ORIGINS"], production),
+    databaseUrl: env["DATABASE_URL"] || null,
   };
 };

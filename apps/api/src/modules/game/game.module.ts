@@ -1,12 +1,14 @@
 import { type DynamicModule, Inject, Injectable, type InjectionToken, Logger, Module, type ModuleMetadata, type OnModuleDestroy } from "@nestjs/common";
 import { SystemClock } from "../../shared/clock.js";
+import type { Database } from "../../shared/database/database.js";
 import { RandomIds } from "../../shared/ids.js";
-import { InProcessEventBus } from "../../shared/in-process-event-bus.js";
 import { OriginPolicy } from "../../shared/origin-policy.js";
 import { SystemRandom } from "../../shared/random.js";
+import type { EventBus, PlayJournal } from "./application/ports/index.js";
 import type { TableTiming } from "./application/table/table-coordinator.js";
 import { composeGame } from "./game.composition.js";
 import { InMemoryPlayJournal } from "./infrastructure/journal/in-memory-play-journal.js";
+import { PgPlayJournal } from "./infrastructure/journal/pg-play-journal.js";
 import { TimeoutScheduler } from "./infrastructure/timers/timeout-scheduler.js";
 import { SocketRegistry } from "./interfaces/realtime/socket-registry.js";
 import { SocketTableNotifier } from "./interfaces/realtime/socket-table-notifier.js";
@@ -18,7 +20,11 @@ export interface GameModuleOptions {
   readonly playerIdentity: InjectionToken;
   readonly timing: TableTiming;
   readonly allowedOrigins: readonly string[];
+  readonly events: EventBus;
+  readonly database: Database | null;
 }
+
+const journalFor = (database: Database | null): PlayJournal => (database ? new PgPlayJournal(database) : new InMemoryPlayJournal());
 
 const SCHEDULER = Symbol("SCHEDULER");
 
@@ -46,8 +52,8 @@ export class GameModule {
       scheduler,
       notifier,
       presence: registry,
-      journal: new InMemoryPlayJournal(),
-      events: new InProcessEventBus(),
+      journal: journalFor(options.database),
+      events: options.events,
       timing: options.timing,
     });
     notifier.connect(components.queries);
