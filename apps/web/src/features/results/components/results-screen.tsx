@@ -29,9 +29,9 @@ export function ResultsScreen({ snapshot, onLeave }: ResultsScreenProps) {
       />
       <div className="mx-auto flex h-full max-w-3xl flex-col">
         <AppHeader homeLink={summary.isFinished} />
-        <main className="flex min-h-0 flex-1 flex-col gap-5 px-4 pb-5 short:gap-3 tiny:gap-2 tiny:pb-2 sm:px-8">
+        <main className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain px-4 pb-5 short:gap-3 tiny:gap-2 tiny:pb-2 sm:px-8">
           <ResultsHero summary={summary} isSelfWinner={isSelfWinner} />
-          <section aria-labelledby="sheet-title" className="flex min-h-0 animate-sheet-rise flex-col rounded-[1.75rem] bg-paper-light py-5 pr-5 pl-12 shadow-sheet [animation-delay:200ms] tiny:py-3 sm:py-7 sm:tiny:py-3 sm:pr-9 sm:pl-16">
+          <section aria-labelledby="sheet-title" className="flex min-h-[13rem] animate-sheet-rise flex-col short:min-h-[10rem] tiny:min-h-0 rounded-[1.75rem] bg-paper-light py-5 pr-5 pl-12 shadow-sheet [animation-delay:200ms] tiny:py-3 sm:py-7 sm:tiny:py-3 sm:pr-9 sm:pl-16">
             <h2 id="sheet-title" className="label-caps text-[0.68rem]">
               {summary.isFinished ? t("results.finalSheet") : t("results.roundSheet", { count: summary.roundNumber })}
             </h2>

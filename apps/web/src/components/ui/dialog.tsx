@@ -38,7 +38,7 @@ export function Dialog({ open, title, closeLabel, dismissible = true, onClose, c
         className,
       )}
     >
-      <div className="relative px-5 pt-6 pb-6 sm:px-9 sm:pt-8">
+      <div className="relative px-5 pt-6 pb-6 short:pt-4 sm:px-9 sm:pt-8 sm:short:pt-5">
         <button
           type="button"
           onClick={onClose}
@@ -48,7 +48,7 @@ export function Dialog({ open, title, closeLabel, dismissible = true, onClose, c
         >
           <CloseIcon className="size-4" />
         </button>
-        <h2 id={titleId} className="pr-14 font-display font-semibold text-[2rem] leading-tight sm:text-[2.6rem]">
+        <h2 id={titleId} className="pr-14 font-display font-semibold text-[2rem] leading-tight short:text-[1.6rem] sm:text-[2.6rem] sm:short:text-[1.9rem]">
           {title}
         </h2>
         {children}
