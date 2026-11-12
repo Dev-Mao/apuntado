@@ -31,7 +31,7 @@ export function LobbySeat({ seat, isSelf, isHost, className }: LobbySeatProps) {
 
   if (!seat) {
     return (
-      <li className={cn("flex w-20 flex-col items-center gap-1.5 text-center sm:w-32", className)}>
+      <li className={cn("flex w-24 flex-col items-center gap-1.5 text-center sm:w-32", className)}>
         <span aria-hidden="true" className="size-12 rounded-full border-[1.5px] border-dashed border-ink/30 bg-paper/60 sm:size-14" />
         <span className="rounded-full bg-paper/90 px-2 text-ink-soft italic">{t("lobby.emptySeat")}</span>
       </li>
@@ -39,7 +39,7 @@ export function LobbySeat({ seat, isSelf, isHost, className }: LobbySeatProps) {
   }
 
   return (
-    <li className={cn("flex w-20 animate-seat-in flex-col items-center gap-1 text-center sm:w-32", className)}>
+    <li className={cn("flex w-24 animate-seat-in flex-col items-center gap-1 text-center sm:w-32", className)}>
       <span
         aria-hidden="true"
         className={cn(
@@ -50,7 +50,7 @@ export function LobbySeat({ seat, isSelf, isHost, className }: LobbySeatProps) {
       >
         {seat.nickname.slice(0, 1).toUpperCase()}
       </span>
-      <span className="w-full truncate rounded-full bg-paper-light/90 px-2 text-lg">{seat.nickname}</span>
+      <span className="w-full truncate rounded-full bg-paper-light/90 px-2 sm:text-lg">{seat.nickname}</span>
       <SeatTags seat={seat} isSelf={isSelf} isHost={isHost} />
     </li>
   );

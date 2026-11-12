@@ -44,7 +44,7 @@ export function TableScreen(props: TableScreenProps) {
   };
 
   return (
-    <div className="relative isolate grid min-h-dvh grid-rows-[auto_auto_minmax(0,1fr)_auto] overflow-clip lg:grid-cols-[minmax(0,1fr)_22rem] lg:grid-rows-[auto_minmax(0,1fr)_auto] [@media(min-height:34rem)]:h-dvh">
+    <div className="relative isolate grid min-h-dvh grid-rows-[auto_auto_minmax(0,1fr)_auto] overflow-clip lg:grid-cols-[minmax(0,1fr)_22rem] lg:grid-rows-[auto_minmax(0,1fr)_auto] [@media(min-height:44rem)]:h-dvh">
       <TableBackdrop />
       <TableHeader code={snapshot.code} round={view.roundNumber} onShowRules={panels.showRules} />
       <ScoreStrip entries={view.scoreboard} seats={seats} selfId={view.playerId} turnPlayerId={view.currentPlayerId} onOpen={panels.showScores} />

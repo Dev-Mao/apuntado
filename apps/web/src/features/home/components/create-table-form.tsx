@@ -26,9 +26,10 @@ function CreateTableFormBase({ settings, errors, onModeChange, onNumberChange, o
           {t("settings.title")}
           <span aria-hidden="true" className="h-px w-12 bg-ink/40" />
         </legend>
-        <div className="grid gap-4 sm:grid-cols-3 sm:gap-3 sm:[&_label]:flex sm:[&_label]:min-h-[2.6em] sm:[&_label]:items-end">
+        <div className="grid gap-4 sm:grid-cols-3 sm:gap-3">
           <TextField
-            label={t("settings.threshold")}
+            label={t("home.thresholdLabel")}
+            hint={t("home.thresholdHint")}
             type="number"
             inputMode="numeric"
             min={1}
