@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { fetchSession, startGuestSession } from "@/lib";
+import { fetchSession, logOutAccount, startGuestSession } from "@/lib";
 
 import { useGameSocket } from "./use-game-socket";
 
@@ -66,6 +66,24 @@ export function useRealtimeStore(): RealtimeContextValue {
     [session, close, applySession],
   );
 
+  const adoptSession = useCallback(
+    (view: SessionView) => {
+      if (session.status === "ready" && session.session.playerId !== view.playerId) clearRoom();
+      close();
+      setRejections(0);
+      applySession(view);
+    },
+    [session, close, clearRoom, applySession],
+  );
+
+  const endSession = useCallback(async () => {
+    await logOutAccount();
+    setRejections(0);
+    setEntryNotice(null);
+    setLeftCode(null);
+    applySession(null);
+  }, [applySession]);
+
   return useMemo(
     () => ({
       session,
@@ -76,11 +94,13 @@ export function useRealtimeStore(): RealtimeContextValue {
       leftCode,
       commands,
       startSession,
+      adoptSession,
+      endSession,
       receivedSinceConnect,
       clearRoom,
       setEntryNotice,
       setLeftCode,
     }),
-    [session, connection, connectCount, room, entryNotice, leftCode, commands, startSession, receivedSinceConnect, clearRoom],
+    [session, connection, connectCount, room, entryNotice, leftCode, commands, startSession, adoptSession, endSession, receivedSinceConnect, clearRoom],
   );
 }
