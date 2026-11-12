@@ -21,7 +21,7 @@ function ProfileIdentity({ profile }: { profile: ProfileView }) {
         {profile.nickname.slice(0, 1).toUpperCase()}
       </span>
       <div className="min-w-0">
-        <h1 className="truncate text-[clamp(2.6rem,9vw,4.5rem)] leading-[0.95] tracking-[-0.02em]">{profile.nickname}</h1>
+        <h1 className="truncate font-display font-semibold text-[clamp(2.6rem,9vw,4.5rem)] leading-[0.95] tracking-[-0.02em]">{profile.nickname}</h1>
         <p className="label-caps mt-1 text-[0.6rem] text-ink-soft">{profile.guest ? t("profile.guest") : t("profile.member")}</p>
       </div>
     </div>

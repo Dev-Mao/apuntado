@@ -25,7 +25,7 @@ export function HomeEntry({ form, linkCode }: HomeEntryProps) {
         {t("home.entry.eyebrow")}
         <span aria-hidden="true" className="h-px w-12 bg-paper/40" />
       </p>
-      <h2 id="entry-title" className="mt-3 text-[2.9rem] leading-[0.95] italic sm:text-[3.6rem]">
+      <h2 id="entry-title" className="mt-3 font-display font-semibold text-[2.6rem] leading-[0.95] italic sm:text-[3.2rem]">
         {invited ? t("home.entry.invitedTitle", { code: linkCode.toUpperCase() }) : t("home.entry.title")}
       </h2>
       <p className="mt-3 max-w-sm text-lg leading-snug text-paper/75 italic">{t("home.intro")}</p>

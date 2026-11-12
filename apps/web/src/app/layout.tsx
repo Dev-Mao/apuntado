@@ -1,4 +1,4 @@
-import { Bodoni_Moda, Josefin_Sans } from "next/font/google";
+import { Jost, Playfair_Display, Source_Serif_4 } from "next/font/google";
 
 import { AppProviders } from "@/components";
 import { ConnectionBanner, RealtimeProvider, RoomNotice } from "@/features/realtime";
@@ -9,18 +9,24 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
-const display = Bodoni_Moda({
+const display = Playfair_Display({
   subsets: ["latin"],
   style: ["normal", "italic"],
-  axes: ["opsz"],
-  variable: "--font-bodoni",
+  variable: "--font-face-display",
   display: "swap",
 });
 
-const sans = Josefin_Sans({
+const text = Source_Serif_4({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-josefin",
+  style: ["normal", "italic"],
+  axes: ["opsz"],
+  variable: "--font-face-text",
+  display: "swap",
+});
+
+const label = Jost({
+  subsets: ["latin"],
+  variable: "--font-face-label",
   display: "swap",
 });
 
@@ -35,7 +41,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es" className={`${display.variable} ${sans.variable}`}>
+    <html lang="es" className={`${display.variable} ${text.variable} ${label.variable}`}>
       <body>
         <AppProviders>
           <RealtimeProvider>
