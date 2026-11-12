@@ -166,6 +166,6 @@ para apostar.
   se pierde la conexión.
 
 ```
-304 pruebas  ·  256 de servidor + 6 de arquitectura + 25 de esquema, historial y fichas + 17 de punta a punta
+311 pruebas  ·  259 de servidor + 6 de arquitectura + 29 de esquema, historial y fichas + 17 de punta a punta
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```

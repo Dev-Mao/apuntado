@@ -101,7 +101,8 @@ Otras decisiones de operación:
   `JugadorRegistrado`.
 - El saldo no se guarda en ningún lado: se deriva de `movimiento_ficha`. Al arrancar, Economía lo
   reconstruye desde el libro y devuelve las retenciones de partidas que una caída dejó sin liquidar
-  (RF-EC-05). La migración 004 agrega el motivo `APUESTA_DEVUELTA`.
+  (RF-EC-05). La migración 004 agrega el motivo `APUESTA_DEVUELTA`, y la 005 impide en la base que
+  una partida se retenga o se liquide dos veces para el mismo jugador.
 - Reglas: un invitado no apuesta; sin saldo suficiente no se crea ni se une a una mesa con apuesta
   (RF-EC-06); la máquina no juega en mesas con apuesta (el bot no tiene economía, como dice el E1);
   la apuesta va de 0 a 100 000 fichas.
@@ -119,7 +120,17 @@ Decisiones y límites de esta fase:
   (RF-EC-09, que el E1 deja como interfaz).
 - El E1 pedía historial solo para registrados (RF-HI-04). El MVP también lo guarda para invitados
   mientras dure su sesión, y así se conserva cuando el invitado se registra.
-- El inicio de sesión no limita intentos por tiempo.
+- Durante un despliegue, Render levanta el servidor nuevo antes de apagar el viejo. El nuevo
+  devuelve al arrancar las retenciones de las partidas que siguen vivas en el viejo; si después el
+  viejo intenta pagar el bote, la base rechaza esa segunda liquidación. Las fichas no se duplican,
+  pero esas partidas terminan con la apuesta devuelta en lugar de pagada.
+- El inicio de sesión no limita intentos por tiempo. Responde igual, y tarda lo mismo, ante un
+  correo desconocido y ante una contraseña equivocada; el registro sí avisa si un correo ya tiene
+  cuenta.
+- Cerrar sesión borra la cookie, pero el token firmado sigue siendo válido hasta que vence (7 días)
+  y un socket ya abierto sigue conectado con la identidad anterior hasta que se recarga la página.
+- Cualquiera puede crear muchas cuentas para recibir el bono, porque no se verifica el correo. Las
+  fichas no tienen valor en dinero.
 
 ## Interfaz
 
