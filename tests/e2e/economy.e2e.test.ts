@@ -110,8 +110,11 @@ describe("Economía · el libro cuadra con el saldo", () => {
     expect(evaWallet.movements.map((m) => m.reason)).toEqual(
       evaWon ? ["BOTE_GANADO", "APUESTA_RETENIDA", "BONO_BIENVENIDA"] : ["APUESTA_RETENIDA", "BONO_BIENVENIDA"],
     );
+    const ids = [final.view.playerId, ...final.view.opponents.map((o) => o.playerId)];
     const view = await sql.query<{ jugador_id: string; saldo: number }>("SELECT jugador_id, saldo::int AS saldo FROM saldo_jugador");
-    expect(view.reduce((total, row) => total + row.saldo, 0)).toBe(2000);
+    const ours = view.filter((row) => ids.includes(row.jugador_id));
+    expect(ours).toHaveLength(2);
+    expect(ours.reduce((total, row) => total + row.saldo, 0)).toBe(2000);
     expect(writeErrors).toEqual([]);
   }, 60_000);
 

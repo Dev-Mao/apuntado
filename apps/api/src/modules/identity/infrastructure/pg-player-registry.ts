@@ -4,7 +4,8 @@ import type { Player } from "../domain/player.js";
 
 const UPSERT_GUEST = `
 INSERT INTO jugador (id, apodo, tipo) VALUES ($1, $2, 'INVITADO')
-ON CONFLICT (id) DO UPDATE SET apodo = EXCLUDED.apodo`;
+ON CONFLICT (id) DO UPDATE SET apodo = EXCLUDED.apodo
+WHERE jugador.tipo = 'INVITADO'`;
 
 export class PgPlayerRegistry implements PlayerRegistry {
   constructor(private readonly database: Database) {}

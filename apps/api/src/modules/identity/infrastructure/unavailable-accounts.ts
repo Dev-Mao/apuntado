@@ -3,6 +3,10 @@ import type { AccountCreation, AccountStore, StoredAccount } from "../applicatio
 export class UnavailableAccounts implements AccountStore {
   readonly available = false;
 
+  emailInUse(): Promise<boolean> {
+    return Promise.resolve(false);
+  }
+
   register(): Promise<AccountCreation> {
     return Promise.reject(new Error("Accounts need a database"));
   }

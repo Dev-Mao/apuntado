@@ -18,10 +18,11 @@ export interface StoredAccount {
   readonly passwordHash: string;
 }
 
-export type AccountCreation = "CREATED" | "EMAIL_TAKEN";
+export type AccountCreation = "CREATED" | "EMAIL_TAKEN" | "PLAYER_TAKEN";
 
 export interface AccountStore {
   readonly available: boolean;
+  emailInUse(email: string): Promise<boolean>;
   register(player: Player, email: string, passwordHash: string): Promise<AccountCreation>;
   findByEmail(email: string): Promise<StoredAccount | null>;
 }
