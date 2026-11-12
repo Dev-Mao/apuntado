@@ -1,10 +1,14 @@
+import { randomInt } from "node:crypto";
+
+const RESOLUTION = 2 ** 48 - 1;
+
 export interface RandomSource {
   next(): number;
 }
 
 export class SystemRandom implements RandomSource {
   next(): number {
-    return Math.random();
+    return randomInt(0, RESOLUTION) / RESOLUTION;
   }
 }
 
