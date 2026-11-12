@@ -9,7 +9,10 @@ import { DrawCard } from "./draw-card.js";
 import { StartGame } from "./start-game.js";
 import { StartNextRound } from "./start-next-round.js";
 import { TimeOutTurn } from "./time-out-turn.js";
-import { harness } from "./use-cases.test-support.js";
+import { EventSpy, harness, seatsOf, sequentialIds } from "./use-cases.test-support.js";
+
+const startGame = (games: InMemoryGameRepository, events = new EventSpy()) =>
+  new StartGame({ games, random: new SeededRandom(1), clock: new ManualClock(), ids: sequentialIds(), events });
 
 const playUntilLastStockDraw = (session: GameSession) => {
   let stockEmptiedOnce = false;
@@ -40,8 +43,8 @@ describe("Iniciar partida", () => {
 
   it("crea la sesión y la guarda", () => {
     const games = new InMemoryGameRepository();
-    const start = new StartGame(games, new SeededRandom(1), new ManualClock());
-    expect(start.execute({ gameId: "g9", playerIds: ["ana", "luis"], config })).toEqual({ ok: true });
+    const start = startGame(games);
+    expect(start.execute({ gameId: "g9", seats: seatsOf(["ana", "luis"]), config, stake: 0 })).toEqual({ ok: true });
     expect(games.find("g9")?.currentStatus).toBe("PLAYING");
   });
 
@@ -53,16 +56,34 @@ describe("Iniciar partida", () => {
     ["turno sin duración", ["ana", "luis"], { ...config, turnSeconds: 0 }, "La duración del turno debe ser un entero positivo"],
   ])("rechaza con motivo, sin lanzar errores, una partida con %s", (_caso, playerIds, cfg, reason) => {
     const games = new InMemoryGameRepository();
-    const start = new StartGame(games, new SeededRandom(1), new ManualClock());
-    expect(start.execute({ gameId: "g9", playerIds, config: cfg })).toEqual({ ok: false, reason });
+    const start = startGame(games);
+    expect(start.execute({ gameId: "g9", seats: seatsOf(playerIds), config: cfg, stake: 0 })).toEqual({ ok: false, reason });
     expect(games.find("g9")).toBeNull();
+  });
+
+  it("anuncia la partida con sus asientos y configuración, y luego la primera ronda", () => {
+    const games = new InMemoryGameRepository();
+    const events = new EventSpy();
+    const seats = [...seatsOf(["ana"]), { playerId: "bot:1", nickname: "Máquina 1", isBot: true }];
+    startGame(games, events).execute({ gameId: "g9", seats, config, stake: 0 });
+    expect(events.names).toEqual(["PartidaIniciada", "RondaIniciada"]);
+    const matchId = games.find("g9")?.matchId;
+    expect(matchId).toBe("match-1");
+    expect(events.published[0]?.payload).toMatchObject({ gameId: "g9", matchId, config, stake: 0, seats });
+    expect(events.published[1]?.payload).toMatchObject({ matchId, roundNumber: 1 });
+  });
+
+  it("una partida rechazada no anuncia nada", () => {
+    const events = new EventSpy();
+    startGame(new InMemoryGameRepository(), events).execute({ gameId: "g9", seats: seatsOf(["ana"]), config, stake: 0 });
+    expect(events.names).toEqual([]);
   });
 
   it("no crea dos partidas con el mismo identificador", () => {
     const games = new InMemoryGameRepository();
-    const start = new StartGame(games, new SeededRandom(1), new ManualClock());
-    start.execute({ gameId: "g9", playerIds: ["ana", "luis"], config });
-    expect(start.execute({ gameId: "g9", playerIds: ["ana", "luis"], config }).ok).toBe(false);
+    const start = startGame(games);
+    start.execute({ gameId: "g9", seats: seatsOf(["ana", "luis"]), config, stake: 0 });
+    expect(start.execute({ gameId: "g9", seats: seatsOf(["ana", "luis"]), config, stake: 0 }).ok).toBe(false);
   });
 });
 
@@ -72,6 +93,12 @@ describe("Robar y descartar", () => {
     const draw = new DrawCard(h.games, h.journal, h.events, h.clock);
     expect(draw.execute({ gameId: "g1", playerId: "ana", source: "STOCK" })).toEqual({ ok: true });
     expect(h.journal.entries).toMatchObject([{ action: "ROBAR_MAZO", playerId: "ana", cardId: "AC" }]);
+  });
+
+  it("cada jugada registrada identifica la partida, la ronda y el asiento de quien juega", () => {
+    const h = harness(DECK);
+    new DrawCard(h.games, h.journal, h.events, h.clock).execute({ gameId: "g1", playerId: "ana", source: "STOCK" });
+    expect(h.journal.entries).toMatchObject([{ gameId: "g1", matchId: "m1", roundNumber: 1, seat: 2 }]);
   });
 
   it("tomar del pozo registra la carta tomada", () => {
@@ -148,6 +175,15 @@ describe("Mazo agotado", () => {
 describe("Siguiente ronda", () => {
   it("solo procede cuando la ronda actual terminó", () => {
     const h = harness(DECK);
-    expect(new StartNextRound(h.games).execute("g1").ok).toBe(false);
+    expect(new StartNextRound(h.games, h.events).execute("g1").ok).toBe(false);
+    expect(h.events.names).toEqual([]);
+  });
+
+  it("al empezar la siguiente ronda la anuncia", () => {
+    const h = harness(DECK, "APUNTADO");
+    exhaustRound(h.session);
+    h.session.pullEvents();
+    expect(new StartNextRound(h.games, h.events).execute("g1")).toEqual({ ok: true });
+    expect(h.events.published).toMatchObject([{ name: "RondaIniciada", payload: { matchId: "m1", roundNumber: 2 } }]);
   });
 });

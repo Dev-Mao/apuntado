@@ -2,7 +2,7 @@ import type { Clock } from "../../shared/clock.js";
 import type { RandomSource } from "../../shared/random.js";
 import { BotPlayer } from "./application/bot/bot-player.js";
 import { SimpleBotStrategy } from "./application/bot/simple-bot-strategy.js";
-import type { EventBus, PlayJournal, Presence, TableNotifier, TaskScheduler } from "./application/ports/index.js";
+import type { EventBus, IdGenerator, PlayJournal, Presence, TableNotifier, TaskScheduler } from "./application/ports/index.js";
 import { LobbyCommands } from "./application/table/lobby-commands.js";
 import { TableCommands } from "./application/table/table-commands.js";
 import { TableCoordinator, type TableTiming } from "./application/table/table-coordinator.js";
@@ -20,6 +20,7 @@ import { InMemoryRoomRepository } from "./infrastructure/repositories/in-memory-
 export interface GameInfrastructure {
   readonly clock: Clock;
   readonly random: RandomSource;
+  readonly ids: IdGenerator;
   readonly scheduler: TaskScheduler;
   readonly notifier: TableNotifier;
   readonly presence: Presence;
@@ -35,17 +36,17 @@ export interface GameComponents {
 }
 
 export const composeGame = (infra: GameInfrastructure): GameComponents => {
-  const { clock, random, scheduler, notifier, presence, journal, events, timing } = infra;
+  const { clock, random, ids, scheduler, notifier, presence, journal, events, timing } = infra;
   const games = new InMemoryGameRepository();
   const rooms = new InMemoryRoomRepository();
   const draw = new DrawCard(games, journal, events, clock);
   const discard = new DiscardCard(games, journal, events, clock);
   const declare = new DeclareClosure(games, new RuleResolver(), journal, events, clock);
-  const nextRound = new StartNextRound(games);
+  const nextRound = new StartNextRound(games, events);
   const bot = new BotPlayer(games, new SimpleBotStrategy(), { draw, discard, declare }, clock);
   const timeOut = new TimeOutTurn(games, journal, events, clock);
   const coordinator = new TableCoordinator({ games, rooms, notifier, scheduler, presence, clock, timeOut, nextRound, bot, timing });
-  const startGame = new StartGame(games, random, clock);
+  const startGame = new StartGame({ games, random, clock, ids, events });
   return {
     lobby: new LobbyCommands({ rooms, startGame, coordinator, notifier, random }),
     table: new TableCommands({ rooms, draw, discard, declare, coordinator }),

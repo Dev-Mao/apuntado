@@ -1,13 +1,13 @@
 import type { Clock } from "../../../../shared/clock.js";
 import type { RandomSource } from "../../../../shared/random.js";
-import type { Card } from "../entities/card.js";
+import { type Card, cardId } from "../entities/card.js";
 import { createDeck, shuffle } from "../entities/deck.js";
 import { Match } from "../match/match.js";
 import { Round } from "../round/round.js";
 import { OK, type Outcome, rejected } from "../round/round.types.js";
 import { type ClosureDeclaration, type ClosureType, type GameRule, type ValidationResult, invalid } from "../rules/game-rule.js";
 import { settleRound } from "../services/round-settler.js";
-import type { GameEvent, RoundState, RoundSummary, ScoreLine, SessionConfig, SessionStatus } from "./game-session.types.js";
+import type { GameEvent, RoundState, RoundSummary, ScoreLine, SessionConfig, SessionIds, SessionStatus } from "./game-session.types.js";
 
 export interface SessionDependencies {
   readonly random: RandomSource;
@@ -24,20 +24,26 @@ export class GameSession {
   private pending: GameEvent[] = [];
   private turnStartedAt: Date;
 
+  readonly id: string;
+  readonly matchId: string;
+
   private constructor(
-    readonly id: string,
+    ids: SessionIds,
     readonly config: SessionConfig,
     private readonly match: Match,
     private round: Round,
     private readonly deps: Required<SessionDependencies>,
   ) {
+    this.id = ids.gameId;
+    this.matchId = ids.matchId;
     this.turnStartedAt = deps.clock.now();
+    this.announceRound();
   }
 
-  static start(id: string, playerIds: readonly string[], config: SessionConfig, deps: SessionDependencies): GameSession {
+  static start(ids: SessionIds, playerIds: readonly string[], config: SessionConfig, deps: SessionDependencies): GameSession {
     const resolved = { newDeck: () => shuffle(createDeck(), deps.random), ...deps };
     const match = Match.create(playerIds, { mode: config.mode, eliminationThreshold: config.eliminationThreshold });
-    return new GameSession(id, config, match, GameSession.deal(match, resolved), resolved);
+    return new GameSession(ids, config, match, GameSession.deal(match, resolved), resolved);
   }
 
   private static deal(match: Match, deps: Required<SessionDependencies>): Round {
@@ -80,6 +86,10 @@ export class GameSession {
     }));
   }
 
+  seatOf(playerId: string): number {
+    return this.match.playerIds.indexOf(playerId) + 1;
+  }
+
   isTurnExpired(): boolean {
     return this.status === "PLAYING" && this.deps.clock.now() >= this.turnDeadline;
   }
@@ -116,6 +126,7 @@ export class GameSession {
     this.roundNumber += 1;
     this.status = "PLAYING";
     this.turnStartedAt = this.deps.clock.now();
+    this.announceRound();
     return OK;
   }
 
@@ -140,13 +151,22 @@ export class GameSession {
     const winnerId = this.round.result?.winnerId ?? null;
     this.match.recordRound(scores, winnerId);
     this.summary = { roundNumber: this.roundNumber, winnerId, closureType: this.round.result?.type ?? null, scores };
-    this.pending.push({ name: "RondaCerrada", gameId: this.id, summary: this.summary });
+    this.pending.push({ name: "RondaCerrada", ...this.stamp(), summary: this.summary, scoreboard: this.scoreboard });
     if (this.match.currentStatus === "FINISHED") return this.finish();
     this.status = "ROUND_OVER";
   }
 
   private finish(): void {
     this.status = "FINISHED";
-    this.pending.push({ name: "PartidaFinalizada", gameId: this.id, winnerId: this.match.winnerId!, scoreboard: this.scoreboard });
+    this.pending.push({ name: "PartidaFinalizada", ...this.stamp(), winnerId: this.match.winnerId!, scoreboard: this.scoreboard });
+  }
+
+  private announceRound(): void {
+    const hands = this.round.playerIds.map((playerId) => ({ playerId, cards: this.round.handOf(playerId).map(cardId) }));
+    this.pending.push({ name: "RondaIniciada", ...this.stamp(), roundNumber: this.roundNumber, hands });
+  }
+
+  private stamp(): SessionIds & { readonly at: Date } {
+    return { gameId: this.id, matchId: this.matchId, at: this.deps.clock.now() };
   }
 }

@@ -2,9 +2,18 @@ import { ManualClock } from "../../../../shared/manual-clock.test-support.js";
 import { SeededRandom } from "../../../../shared/random.js";
 import type { Card } from "../../domain/entities/card.js";
 import type { GameMode } from "../../domain/match/match.js";
+import type { Seat } from "../../domain/room/room.types.js";
 import { GameSession } from "../../domain/session/game-session.js";
 import { InMemoryGameRepository } from "../../infrastructure/repositories/in-memory-game-repository.js";
-import type { EventBus, PlayJournal, PlayJournalEntry } from "../ports/index.js";
+import type { EventBus, IdGenerator, PlayJournal, PlayJournalEntry } from "../ports/index.js";
+
+export const seatsOf = (playerIds: readonly string[]): Seat[] =>
+  playerIds.map((playerId) => ({ playerId, nickname: playerId.toUpperCase(), isBot: false }));
+
+export const sequentialIds = (): IdGenerator => {
+  let n = 0;
+  return { next: () => `match-${++n}` };
+};
 
 export class JournalSpy implements PlayJournal {
   readonly entries: PlayJournalEntry[] = [];
@@ -26,11 +35,12 @@ export class EventSpy implements EventBus {
 export const harness = (deck: readonly Card[], mode: GameMode = "AMBAS", players = ["luis", "ana"]) => {
   const clock = new ManualClock();
   const games = new InMemoryGameRepository();
-  const session = GameSession.start("g1", players, { mode, eliminationThreshold: 101, turnSeconds: 60 }, {
+  const session = GameSession.start({ gameId: "g1", matchId: "m1" }, players, { mode, eliminationThreshold: 101, turnSeconds: 60 }, {
     random: new SeededRandom(3),
     clock,
     newDeck: () => [...deck],
   });
+  session.pullEvents();
   games.save(session);
   return { clock, games, session, journal: new JournalSpy(), events: new EventSpy() };
 };

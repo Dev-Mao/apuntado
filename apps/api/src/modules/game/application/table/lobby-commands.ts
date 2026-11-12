@@ -76,11 +76,12 @@ export class LobbyCommands {
     if (!room) return rejected(NOT_SEATED);
     const allowed = room.canStart(playerId);
     if (!allowed.ok) return allowed;
-    const { mode, eliminationThreshold, turnSeconds } = room.settings;
+    const { mode, eliminationThreshold, turnSeconds, stake } = room.settings;
     const started = this.deps.startGame.execute({
       gameId: room.code,
-      playerIds: room.playerIds,
+      seats: room.seats,
       config: { mode, eliminationThreshold, turnSeconds },
+      stake,
     });
     if (!started.ok) return started;
     room.markStarted();

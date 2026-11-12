@@ -4,6 +4,7 @@ import { SeededRandom } from "../../../../shared/random.js";
 import { composeGame } from "../../game.composition.js";
 import { InMemoryPlayJournal } from "../../infrastructure/journal/in-memory-play-journal.js";
 import type { AuthenticatedPlayer, Presence, TableNotifier, TaskScheduler } from "../ports/index.js";
+import { sequentialIds } from "../use-cases/use-cases.test-support.js";
 
 export class FakeScheduler implements TaskScheduler {
   readonly tasks = new Map<string, { at: Date; task: () => void }>();
@@ -61,6 +62,7 @@ export const tableHarness = (seed = 7) => {
   const components = composeGame({
     clock,
     random: new SeededRandom(seed),
+    ids: sequentialIds(),
     scheduler,
     notifier,
     presence,

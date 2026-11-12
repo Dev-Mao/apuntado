@@ -1,18 +1,31 @@
 import type { Clock } from "../../../../shared/clock.js";
 import type { RandomSource } from "../../../../shared/random.js";
+import type { Seat } from "../../domain/room/room.types.js";
 import { MAX_PLAYERS, MIN_PLAYERS } from "../../domain/round/round.js";
 import { OK, type Outcome, rejected } from "../../domain/round/round.types.js";
 import { GameSession } from "../../domain/session/game-session.js";
 import type { SessionConfig } from "../../domain/session/game-session.types.js";
-import type { GameRepository } from "../ports/index.js";
+import type { MatchStarted } from "../events.js";
+import type { EventBus, GameRepository, IdGenerator } from "../ports/index.js";
+import { publishEvents } from "./session-effects.js";
 
 export interface StartGameCommand {
   readonly gameId: string;
-  readonly playerIds: readonly string[];
+  readonly seats: readonly Seat[];
   readonly config: SessionConfig;
+  readonly stake: number;
 }
 
-const invalidSetup = ({ playerIds, config }: StartGameCommand): string | null => {
+export interface StartGameDependencies {
+  readonly games: GameRepository;
+  readonly random: RandomSource;
+  readonly clock: Clock;
+  readonly ids: IdGenerator;
+  readonly events: EventBus;
+}
+
+const invalidSetup = ({ seats, config }: StartGameCommand): string | null => {
+  const playerIds = seats.map((s) => s.playerId);
   if (playerIds.length < MIN_PLAYERS || playerIds.length > MAX_PLAYERS) return "Una partida necesita de 2 a 4 jugadores";
   if (new Set(playerIds).size !== playerIds.length) return "Los jugadores de una partida deben ser distintos";
   if (!Number.isInteger(config.eliminationThreshold) || config.eliminationThreshold < 1) return "El umbral debe ser un entero positivo";
@@ -21,21 +34,19 @@ const invalidSetup = ({ playerIds, config }: StartGameCommand): string | null =>
 };
 
 export class StartGame {
-  constructor(
-    private readonly games: GameRepository,
-    private readonly random: RandomSource,
-    private readonly clock: Clock,
-  ) {}
+  constructor(private readonly deps: StartGameDependencies) {}
 
   execute(command: StartGameCommand): Outcome {
-    if (this.games.find(command.gameId)) return rejected("La partida ya existe");
+    const { games, random, clock, ids, events } = this.deps;
+    if (games.find(command.gameId)) return rejected("La partida ya existe");
     const reason = invalidSetup(command);
     if (reason) return rejected(reason);
-    const session = GameSession.start(command.gameId, command.playerIds, command.config, {
-      random: this.random,
-      clock: this.clock,
-    });
-    this.games.save(session);
+    const sessionIds = { gameId: command.gameId, matchId: ids.next() };
+    const session = GameSession.start(sessionIds, command.seats.map((s) => s.playerId), command.config, { random, clock });
+    games.save(session);
+    const started: MatchStarted = { name: "PartidaIniciada", ...sessionIds, at: clock.now(), config: command.config, stake: command.stake, seats: command.seats };
+    events.publish(started.name, { ...started });
+    publishEvents(session, events);
     return OK;
   }
 }

@@ -17,8 +17,10 @@ export interface PlayJournal {
 
 export interface PlayJournalEntry {
   readonly gameId: string;
+  readonly matchId: string;
   readonly roundNumber: number;
   readonly playerId: string;
+  readonly seat: number;
   readonly action: "ROBAR_MAZO" | "ROBAR_POZO" | "DESCARTAR" | "DECLARAR_CIERRE";
   readonly cardId: string | null;
   readonly occurredAt: Date;
@@ -26,6 +28,10 @@ export interface PlayJournalEntry {
 
 export interface EventBus {
   publish(eventName: string, payload: Record<string, unknown>): void;
+}
+
+export interface IdGenerator {
+  next(): string;
 }
 
 export interface RoomRepository {
