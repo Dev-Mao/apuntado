@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 
 import { AppHeader, Button, BUTTON_VARIANT, LiveNotice } from "@/components";
 
-import { MAX_SEATS } from "../types";
 import { PlayerList } from "./player-list";
 import { SettingsSummary } from "./settings-summary";
 import { ShareCode } from "./share-code";
@@ -28,7 +27,7 @@ export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave 
           <ShareCode code={lobby.code} />
         </div>
         <div className="flex flex-col gap-10 lg:pt-4">
-          <PlayerList seats={lobby.seats} hostId={lobby.hostId} selfId={selfId} maxPlayers={MAX_SEATS} />
+          <PlayerList seats={lobby.seats} hostId={lobby.hostId} selfId={selfId} maxPlayers={lobby.maxSeats} />
           <SettingsSummary settings={lobby.settings} />
           <div className="flex flex-col gap-4 border-t border-line pt-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
