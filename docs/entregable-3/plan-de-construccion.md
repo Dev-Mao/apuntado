@@ -33,6 +33,15 @@ Cada fase deja algo verificable y no se avanza sin que la anterior funcione.
 | 5. Identidad y economía | Registro e inicio de sesión, saldo, retención de la apuesta con `StakeGuard`, bote al ganador, libro de movimientos | El libro cuadra con el saldo y un invitado no puede apostar |
 | 6. Gobernanza ampliada | Reglas para `web` y `contracts`, reporte de Ce, Ca, inestabilidad, abstracción y distancia a la secuencia principal, aproximación a Deméter, cobertura, un flujo E2E | Todo corre en el pipeline |
 
+## Reglas precisadas al construir el MVP
+
+- **Terna:** tres cartas del mismo valor, o tres cartas seguidas del mismo palo. En las escaleras el
+  as va abajo (A-2-3 vale, Q-K-A no). El reglamento del E1 solo aceptaba el mismo valor.
+- **Desempate:** cuando hay que elegir un ganador entre varios jugadores, gana quien tenga menos
+  puntos acumulados; si empatan, quien haya ganado más rondas; si siguen empatados, quien esté
+  primero en el orden de la mesa (el anfitrión y después por orden de llegada). Aplica cuando los
+  últimos jugadores cruzan juntos el umbral y cuando una ronda de la Clásica termina sin cierre.
+
 ## Cómo quedó la persistencia (fase 4)
 
 - La partida en curso sigue en memoria (ADR-04). La base de datos registra lo jugado, fuera del

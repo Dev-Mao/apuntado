@@ -161,6 +161,6 @@ archivada en PostgreSQL y aparece en el perfil del jugador (`GET /api/profile`).
   se pierde la conexión.
 
 ```
-267 pruebas  ·  228 de servidor + 6 de arquitectura + 20 de esquema e historial + 13 de punta a punta
+269 pruebas  ·  230 de servidor + 6 de arquitectura + 20 de esquema e historial + 13 de punta a punta
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```
