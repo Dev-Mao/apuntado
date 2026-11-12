@@ -5,7 +5,8 @@ import { StartGuestSession } from "./start-guest-session.js";
 
 const tokens = new JwtSessionTokens("test-secret");
 const ids = { next: () => "id-1" };
-const start = new StartGuestSession(tokens, ids);
+const remembered: string[] = [];
+const start = new StartGuestSession(tokens, ids, { remember: (player) => remembered.push(player.nickname) });
 const read = new ReadSession(tokens);
 
 describe("Sesión de invitado", () => {
@@ -33,11 +34,14 @@ describe("Sesión de invitado", () => {
   });
 
   it("con una sesión activa conserva al jugador y solo emite un token nuevo si cambia el apodo", () => {
+    remembered.length = 0;
     const first = start.execute("Ana");
     if (!first.ok) throw new Error(first.reason);
+    expect(remembered).toEqual(["Ana"]);
     expect(start.execute("Ana", first.player)).toEqual({ ok: true, player: first.player, token: null });
     expect(start.execute(undefined, first.player)).toEqual({ ok: true, player: first.player, token: null });
     const renamed = start.execute("Anita", first.player);
+    expect(remembered).toEqual(["Ana", "Anita"]);
     expect(renamed).toMatchObject({ ok: true, player: { id: "id-1", nickname: "Anita", kind: "INVITADO" } });
     if (renamed.ok) expect(read.fromToken(renamed.token ?? "")?.nickname).toBe("Anita");
   });

@@ -8,3 +8,7 @@ export interface SessionTokens {
 export interface IdGenerator {
   next(): string;
 }
+
+export interface PlayerRegistry {
+  remember(player: Player): void;
+}
