@@ -20,15 +20,19 @@ function ClosureCardButtonBase({ card, label, isSelected, isLocked, onPress }: C
       aria-pressed={isSelected}
       onClick={() => onPress(id)}
       className={cn(
-        "relative rounded-[10%/7%] transition-transform focus-visible:outline-offset-2",
-        isSelected && "-translate-y-2 outline-[3px] outline-coral outline-solid",
+        "relative block rounded-[7%/5%] transition-[translate] duration-300 ease-spring focus-visible:outline-offset-2",
+        isSelected ? "-translate-y-2.5 outline-[3px] outline-coral outline-solid" : "hover:-translate-y-1",
       )}
     >
-      <PlayingCard card={card} size={CARD_SIZE.SM} />
+      <PlayingCard
+        card={card}
+        size={CARD_SIZE.SM}
+        className={cn("transition-shadow duration-200", isSelected && "shadow-lift")}
+      />
       {isLocked && (
         <span
           aria-hidden="true"
-          className="label-caps absolute inset-x-0 bottom-1 mx-auto w-fit rounded-full bg-ink px-1.5 pt-[0.2rem] pb-[0.1rem] text-[0.5rem] whitespace-nowrap text-paper"
+          className="absolute inset-x-0 -bottom-1.5 mx-auto w-fit rounded-full label-caps bg-ink px-1.5 pt-[0.15rem] text-[0.5rem] whitespace-nowrap text-paper"
         >
           {t("table.hand.lockedTag")}
         </span>

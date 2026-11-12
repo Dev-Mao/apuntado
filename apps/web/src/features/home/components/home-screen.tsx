@@ -1,14 +1,18 @@
 "use client";
 
+import { useState } from "react";
+
 import { useTranslation } from "react-i18next";
 
-import { AppHeader, TextField } from "@/components";
-import { useRoomRedirect } from "@/features/realtime";
+import { AppHeader, RulesIcon } from "@/components";
+import { SessionBadge, useRoomRedirect } from "@/features/realtime";
+import { RulesDialog } from "@/features/table";
+import { DEFAULT_TABLE_SETTINGS } from "@/lib";
 
 import { CreateTableForm } from "./create-table-form";
 import { EntryNotice } from "./entry-notice";
+import { HomeEntry } from "./home-entry";
 import { HomeHero } from "./home-hero";
-import { JoinTableForm } from "./join-table-form";
 import { useHomeForm } from "../hooks";
 
 interface HomeScreenProps {
@@ -18,54 +22,43 @@ interface HomeScreenProps {
 export function HomeScreen({ linkCode }: HomeScreenProps) {
   const { t } = useTranslation();
   const form = useHomeForm(linkCode);
+  const [rulesOpen, setRulesOpen] = useState(false);
+  const threshold = Number(form.settings.eliminationThreshold) || DEFAULT_TABLE_SETTINGS.eliminationThreshold;
   useRoomRedirect(null);
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-[90rem] flex-col">
-      <AppHeader />
-      <main className="grid flex-1 gap-10 px-5 pb-10 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-8">
-        <HomeHero />
-        <div className="flex flex-col divide-y divide-line border-y border-line lg:self-start">
-          <EntryNotice message={form.entryNotice} />
-          <form noValidate onSubmit={form.handleNicknameSubmit} aria-labelledby="nickname-title" className="flex flex-col gap-5 py-7">
-            <h2 id="nickname-title" className="font-display text-2xl sm:text-3xl">
-              {t("home.nickname.title")}
-            </h2>
-            <TextField
-              label={t("home.nickname.label")}
-              placeholder={t("home.nickname.placeholder")}
-              hint={t("home.nickname.hint")}
-              autoComplete="nickname"
-              autoFocus={linkCode !== null}
-              maxLength={16}
-              value={form.nickname}
-              error={form.errors.nickname ? t(`home.errors.${form.errors.nickname}`) : undefined}
-              onChange={(event) => form.handleNicknameChange(event.target.value)}
-            />
-          </form>
-          <div className="py-7">
-            <CreateTableForm
-              settings={form.settings}
-              errors={form.errors}
-              pending={form.pending !== null}
-              serverError={form.createError}
-              onModeChange={form.handleModeChange}
-              onNumberChange={form.handleNumberChange}
-              onSubmit={form.handleCreate}
-            />
+    <div className="relative isolate overflow-x-clip">
+      <span aria-hidden="true" className="absolute -top-44 -left-48 -z-10 size-[26rem] rounded-full bg-coral sm:-top-56 sm:-left-40 sm:size-[38rem]" />
+      <div className="mx-auto flex min-h-dvh max-w-6xl flex-col">
+        <AppHeader>
+          <nav aria-label={t("home.nav")} className="flex items-center gap-2 sm:gap-6">
+            <button
+              type="button"
+              onClick={() => setRulesOpen(true)}
+              className="label-caps flex items-center gap-2 rounded-full py-2 text-[0.62rem] transition-colors hover:text-coral-ink"
+            >
+              <RulesIcon className="size-5" />
+              <span className="max-sm:sr-only">{t("home.rules")}</span>
+            </button>
+            <SessionBadge />
+          </nav>
+        </AppHeader>
+        <main className="grid flex-1 content-start gap-12 px-4 pt-6 pb-16 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,31rem)] lg:gap-x-16 lg:gap-y-14 lg:pt-10">
+          <HomeHero />
+          <div className="flex flex-col gap-4 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+            <EntryNotice message={form.entryNotice} />
+            <HomeEntry form={form} linkCode={linkCode} />
           </div>
-          <div className="py-7">
-            <JoinTableForm
-              code={form.code}
-              error={form.errors.code}
-              pending={form.pending !== null}
-              serverError={form.joinError}
-              onCodeChange={form.handleCodeChange}
-              onSubmit={form.handleJoin}
-            />
-          </div>
-        </div>
-      </main>
+          <CreateTableForm
+            settings={form.settings}
+            errors={form.errors}
+            onModeChange={form.handleModeChange}
+            onNumberChange={form.handleNumberChange}
+            onSubmit={form.handleCreate}
+          />
+        </main>
+        <RulesDialog open={rulesOpen} threshold={threshold} onClose={() => setRulesOpen(false)} />
+      </div>
     </div>
   );
 }

@@ -2,9 +2,24 @@ import { useId } from "react";
 
 import { cn } from "@/lib";
 
-import type { TextFieldProps } from "./types";
+import type { FieldTone, TextFieldProps } from "./types";
 
-export function TextField({ label, hint, error, className, id, ...props }: TextFieldProps) {
+const LABEL_CLASSES: Readonly<Record<FieldTone, string>> = {
+  paper: "text-ink-soft",
+  ink: "text-paper/70",
+};
+
+const INPUT_CLASSES: Readonly<Record<FieldTone, string>> = {
+  paper: "bg-paper-light/80 text-ink placeholder:text-ink-soft/60 border-ink/25 hover:border-ink/50 focus-visible:border-ink",
+  ink: "bg-paper/[0.06] text-paper placeholder:text-paper/45 border-paper/30 hover:border-paper/55 focus-visible:border-paper",
+};
+
+const HINT_CLASSES: Readonly<Record<FieldTone, string>> = {
+  paper: "text-ink-soft",
+  ink: "text-paper/60",
+};
+
+export function TextField({ label, hint, error, tone = "paper", className, id, ...props }: TextFieldProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const hintId = `${inputId}-hint`;
@@ -13,7 +28,7 @@ export function TextField({ label, hint, error, className, id, ...props }: TextF
 
   return (
     <div className={cn("flex flex-col gap-2", className)}>
-      <label htmlFor={inputId} className="label-caps text-[0.7rem] text-ink-soft">
+      <label htmlFor={inputId} className={cn("label-caps text-[0.62rem]", LABEL_CLASSES[tone])}>
         {label}
       </label>
       <input
@@ -21,17 +36,22 @@ export function TextField({ label, hint, error, className, id, ...props }: TextF
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
         className={cn(
-          "h-12 w-full rounded-full border-[1.5px] bg-card/70 px-5 font-display text-lg text-ink placeholder:text-ink-soft/60 placeholder:italic",
-          error ? "border-coral-deep" : "border-ink/40 focus-visible:border-ink",
+          "h-12 w-full rounded-full border-[1.5px] px-5 text-lg transition-colors duration-200 placeholder:italic focus-visible:outline-offset-2",
+          INPUT_CLASSES[tone],
+          error && "border-coral-ink",
         )}
         {...props}
       />
       {hint && (
-        <p id={hintId} className="font-display text-sm text-ink-soft italic">
+        <p id={hintId} className={cn("text-sm italic", HINT_CLASSES[tone])}>
           {hint}
         </p>
       )}
-      <p id={errorId} aria-live="polite" className="min-h-0 text-sm font-semibold text-coral-ink empty:hidden">
+      <p
+        id={errorId}
+        aria-live="polite"
+        className={cn("text-sm font-semibold empty:hidden", tone === "ink" ? "text-salmon" : "text-coral-ink")}
+      >
         {error}
       </p>
     </div>

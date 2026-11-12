@@ -5,23 +5,26 @@ import type { ComponentProps } from "react";
 export const BUTTON_VARIANT = {
   PRIMARY: "primary",
   OUTLINE: "outline",
-  OUTLINE_LIGHT: "outline-light",
+  DARK: "dark",
+  LIGHT: "light",
   GHOST: "ghost",
 } as const;
 
 export type ButtonVariant = (typeof BUTTON_VARIANT)[keyof typeof BUTTON_VARIANT];
 
 const VARIANT_CLASSES: Readonly<Record<ButtonVariant, string>> = {
-  primary: "border-coral bg-coral text-ink not-disabled:hover:bg-coral-deep not-disabled:hover:border-coral-deep",
-  outline: "border-ink text-ink not-disabled:hover:bg-ink not-disabled:hover:text-paper",
-  "outline-light": "border-paper/70 text-paper not-disabled:hover:bg-paper not-disabled:hover:text-ink",
-  ghost: "border-transparent text-ink underline-offset-4 not-disabled:hover:underline",
+  primary:
+    "bg-coral text-ink shadow-[inset_0_0_0_1.5px_var(--color-salmon),0_10px_22px_-12px_rgb(168_69_44/0.8)] not-disabled:hover:bg-coral-deep",
+  outline: "border-[1.5px] border-ink text-ink not-disabled:hover:bg-ink not-disabled:hover:text-paper",
+  dark: "bg-ink text-paper not-disabled:hover:bg-ink-soft",
+  light: "border-[1.5px] border-paper/60 text-paper not-disabled:hover:bg-paper not-disabled:hover:text-ink",
+  ghost: "text-ink underline-offset-4 not-disabled:hover:underline",
 };
 
 const BASE_CLASSES =
-  "label-caps inline-flex min-h-11 items-center justify-center gap-2 rounded-full border-[1.5px] px-4 pt-[0.8rem] pb-[0.7rem] max-sm:tracking-[0.1em] sm:px-6 text-xs transition-colors disabled:cursor-not-allowed disabled:opacity-40";
+  "label-caps inline-flex min-h-11 items-center justify-center gap-2.5 rounded-full px-6 pt-[0.8rem] pb-[0.7rem] text-xs whitespace-nowrap transition-[background-color,color,border-color,scale] duration-200 ease-glide not-disabled:active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 max-sm:tracking-[0.14em]";
 
-function buttonClasses(variant: ButtonVariant = BUTTON_VARIANT.PRIMARY, className?: string): string {
+export function buttonClasses(variant: ButtonVariant = BUTTON_VARIANT.PRIMARY, className?: string): string {
   return cn(BASE_CLASSES, VARIANT_CLASSES[variant], className);
 }
 

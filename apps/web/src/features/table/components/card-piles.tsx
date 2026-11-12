@@ -4,48 +4,111 @@ import { useTranslation } from "react-i18next";
 
 import { CARD_SIZE, PlayingCard } from "@/components";
 import { useCardLabel } from "@/hooks/use-card-label";
+import { cn } from "@/lib";
 
+import type { PileAction } from "../types";
 import type { CardDto } from "@apuntado/contracts";
+import type { ReactNode } from "react";
+
+const SLOT_CLASSES = "relative block aspect-[5/7] w-[4.6rem] sm:w-[5.75rem] lg:w-[7rem]";
+const GHOST_CLASSES = "absolute inset-0 rounded-[7%/5%] bg-card shadow-card";
+
+interface PileProps {
+  name: "stock" | "discard";
+  label: string;
+  caption: ReactNode;
+  action: PileAction | null;
+  children: ReactNode;
+}
+
+function Pile({ name, label, caption, action, children }: PileProps) {
+  const body = (
+    <>
+      <span data-pile={name} className={SLOT_CLASSES}>
+        {children}
+      </span>
+      <span aria-hidden="true" className="label-caps flex items-baseline gap-2 text-[0.6rem] text-paper/70">
+        {caption}
+      </span>
+    </>
+  );
+  if (!action) {
+    return (
+      <figure role="img" aria-label={label} className="flex flex-col items-center gap-3">
+        {body}
+      </figure>
+    );
+  }
+  return (
+    <button
+      type="button"
+      aria-label={action.label}
+      onClick={action.onPress}
+      className="flex flex-col items-center gap-3 rounded-2xl p-1 transition-[translate] duration-200 ease-spring hover:-translate-y-1 active:translate-y-0 [&_[data-pile]]:rounded-[7%/5%] [&_[data-pile]]:shadow-[0_0_0_3px_var(--color-coral),0_0_30px_-6px_rgb(224_122_95/0.9)]"
+    >
+      {body}
+    </button>
+  );
+}
+
+function EmptySlot() {
+  return <span className="absolute inset-0 rounded-[7%/5%] border border-dashed border-paper/30" />;
+}
 
 interface CardPilesProps {
   stockSize: number;
   discardTop: CardDto | null;
+  stockAction: PileAction | null;
+  discardAction: PileAction | null;
 }
 
-const PILE_LABEL_CLASSES = "label-caps text-[0.62rem] text-paper/70";
-
-export function CardPiles({ stockSize, discardTop }: CardPilesProps) {
+export function CardPiles({ stockSize, discardTop, stockAction, discardAction }: CardPilesProps) {
   const { t } = useTranslation();
   const cardLabel = useCardLabel();
   const discardLabel = discardTop ? t("table.discardLabel", { card: cardLabel(discardTop) }) : t("table.discardEmpty");
 
   return (
-    <div className="flex items-end justify-center gap-10 sm:gap-16">
-      <figure role="img" aria-label={t("table.stockLabel", { count: stockSize })} className="flex flex-col items-center gap-3">
-        <span aria-hidden="true" className="grid">
-          <PlayingCard card={null} size={CARD_SIZE.LG} className="col-start-1 row-start-1 translate-1.5 brightness-75" />
-          <PlayingCard card={null} size={CARD_SIZE.LG} className="col-start-1 row-start-1 translate-0.5 brightness-90" />
-          <PlayingCard card={null} size={CARD_SIZE.LG} className="col-start-1 row-start-1" />
-        </span>
-        <figcaption aria-hidden="true" className="flex items-baseline gap-2">
-          <span className={PILE_LABEL_CLASSES}>{t("table.stock")}</span>
-          <span className="font-display text-paper">{stockSize}</span>
-        </figcaption>
-      </figure>
-      <figure role="img" aria-label={discardLabel} className="flex flex-col items-center gap-3">
-        <span aria-hidden="true" className="relative block">
-          <span className="absolute inset-0 rotate-[-9deg] rounded-[9%/6.4%] bg-card/80 shadow-card" />
-          <span className="absolute inset-0 rotate-[6deg] rounded-[9%/6.4%] bg-card/90 shadow-card" />
-          {discardTop ? (
-            <PlayingCard card={discardTop} size={CARD_SIZE.LG} className="rotate-[-2deg]" />
-          ) : (
-            <span className="relative block aspect-[5/7] w-16 rounded-[9%/6.4%] border border-dashed border-paper/40 sm:w-24 lg:w-28" />
-          )}
-        </span>
-        <figcaption aria-hidden="true" className={PILE_LABEL_CLASSES}>
-          {t("table.discard")}
-        </figcaption>
-      </figure>
+    <div className="relative flex items-start justify-center gap-8 sm:gap-16">
+      <Pile
+        name="stock"
+        label={t("table.stockLabel", { count: stockSize })}
+        action={stockAction}
+        caption={
+          <>
+            {t("table.stock")}
+            <span className="font-serif text-sm tracking-normal text-paper normal-case tabular-nums">{stockSize}</span>
+          </>
+        }
+      >
+        {stockSize === 0 ? (
+          <EmptySlot />
+        ) : (
+          <>
+            <span className="absolute inset-0 translate-x-[3px] translate-y-[4px]">
+              <PlayingCard card={null} size={CARD_SIZE.FILL} className="brightness-75" />
+            </span>
+            <span className="absolute inset-0 translate-x-[1.5px] translate-y-[2px]">
+              <PlayingCard card={null} size={CARD_SIZE.FILL} className="brightness-90" />
+            </span>
+            <span data-pile-top="stock" className="absolute inset-0">
+              <PlayingCard card={null} size={CARD_SIZE.FILL} />
+            </span>
+          </>
+        )}
+      </Pile>
+      <Pile name="discard" label={discardLabel} action={discardAction} caption={t("table.discard")}>
+        {discardTop ? (
+          <>
+            <span className={cn(GHOST_CLASSES, "rotate-[-7deg] brightness-90")} />
+            <span className={cn(GHOST_CLASSES, "rotate-[4deg] brightness-95")} />
+            <span data-pile-top="discard" className="absolute inset-0 rotate-[-1.5deg]">
+              <PlayingCard card={discardTop} size={CARD_SIZE.FILL} />
+            </span>
+          </>
+        ) : (
+          <EmptySlot />
+        )}
+      </Pile>
     </div>
   );
 }

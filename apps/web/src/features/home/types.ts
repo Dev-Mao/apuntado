@@ -42,11 +42,11 @@ export interface SettingsDraft {
   readonly stake: string;
 }
 
+export const CREATE_FORM_ID = "create-table";
+
 export interface CreateTableFormProps {
   settings: SettingsDraft;
   errors: HomeErrors;
-  pending: boolean;
-  serverError: string | undefined;
   onModeChange: (mode: GameMode) => void;
   onNumberChange: (field: NumericSettingField, value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
@@ -57,6 +57,7 @@ export interface JoinTableFormProps {
   error: HomeErrorKey | undefined;
   pending: boolean;
   serverError: string | undefined;
+  emphasized: boolean;
   onCodeChange: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }

@@ -5,18 +5,27 @@ import { memo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button, BUTTON_VARIANT } from "@/components";
+import { cn } from "@/lib";
 
 import { useFocusRecovery } from "../hooks";
 
 import type { TurnActionsProps } from "../types";
 import type { PlayerAction } from "@apuntado/contracts";
 
+const ACTION_LABELS = {
+  DRAW_STOCK: "table.actions.draw",
+  DRAW_DISCARD: "table.actions.takeDiscard",
+  DISCARD: "table.actions.discard",
+  DECLARE_CLOSURE: "table.actions.declareClosure",
+} as const satisfies Record<PlayerAction, string>;
+
+const ACTION_ORDER: readonly PlayerAction[] = ["DRAW_STOCK", "DRAW_DISCARD", "DISCARD", "DECLARE_CLOSURE"];
+
 function TurnActionsBase({
+  layout,
   allowedActions,
   pending,
   canDiscard,
-  showLockedHint,
-  notice,
   onFocusLost,
   onDrawFromStock,
   onDrawFromDiscard,
@@ -25,34 +34,34 @@ function TurnActionsBase({
 }: TurnActionsProps) {
   const { t } = useTranslation();
   const { groupRef, handleFocus, handleBlur } = useFocusRecovery<HTMLDivElement>(allowedActions, onFocusLost);
-  const isAllowed = (action: PlayerAction) => !pending && allowedActions.includes(action);
+  const handlers: Readonly<Record<PlayerAction, () => void>> = {
+    DRAW_STOCK: onDrawFromStock,
+    DRAW_DISCARD: onDrawFromDiscard,
+    DISCARD: onDiscard,
+    DECLARE_CLOSURE: onDeclareClosure,
+  };
+  const visible = ACTION_ORDER.filter((action) => allowedActions.includes(action));
 
   return (
-    <div className="flex flex-col">
-      <div
-        ref={groupRef}
-        role="group"
-        aria-label={t("table.actions.label")}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        className="grid grid-cols-2 gap-2 lg:grid-cols-1"
-      >
-        <Button onClick={onDrawFromStock} disabled={!isAllowed("DRAW_STOCK")}>
-          {t("table.actions.draw")}
+    <div
+      ref={groupRef}
+      role="group"
+      aria-label={t("table.actions.label")}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      className={cn("flex gap-2 empty:hidden", layout === "stack" ? "flex-col" : "flex-row")}
+    >
+      {visible.map((action, index) => (
+        <Button
+          key={action}
+          variant={index === 0 ? BUTTON_VARIANT.PRIMARY : BUTTON_VARIANT.OUTLINE}
+          onClick={handlers[action]}
+          disabled={pending || (action === "DISCARD" && !canDiscard)}
+          className={cn("animate-turn-in", layout === "stack" ? "w-full" : "flex-1 px-3")}
+        >
+          {t(ACTION_LABELS[action])}
         </Button>
-        <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onDrawFromDiscard} disabled={!isAllowed("DRAW_DISCARD")}>
-          {t("table.actions.takeDiscard")}
-        </Button>
-        <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onDiscard} disabled={!isAllowed("DISCARD") || !canDiscard}>
-          {t("table.actions.discard")}
-        </Button>
-        <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onDeclareClosure} disabled={!isAllowed("DECLARE_CLOSURE")}>
-          {t("table.actions.declareClosure")}
-        </Button>
-      </div>
-      <p aria-live="polite" className="font-display text-sm text-ink-soft italic not-empty:mt-3">
-        {showLockedHint ? t("table.actions.lockedHint") : notice}
-      </p>
+      ))}
     </div>
   );
 }

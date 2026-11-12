@@ -1,108 +1,110 @@
 "use client";
 
-import { useCallback } from "react";
-
 import { useTranslation } from "react-i18next";
 
-import { AppHeader, Pill } from "@/components";
+import { Dialog } from "@/components";
 import { ClosureDialog } from "@/features/closure";
-import { useCommandNotice } from "@/hooks/use-command-notice";
-import { cardId } from "@/lib";
 
-import { useClosurePrompt, useHand, useTurnMessage } from "../hooks";
+import { useTableScreen } from "../hooks";
 import { PlayerHand } from "./player-hand";
+import { RulesDialog } from "./rules-dialog";
+import { ScoreStrip } from "./score-strip";
 import { Scoreboard } from "./scoreboard";
-import { TableFooter } from "./table-footer";
+import { TableBackdrop } from "./table-backdrop";
+import { TableHeader } from "./table-header";
+import { TableSidebar } from "./table-sidebar";
 import { TableStage } from "./table-stage";
 import { TurnActions } from "./turn-actions";
-import { TurnStatus } from "./turn-status";
+import { TurnPanel } from "./turn-panel";
 import { TurnTimer } from "./turn-timer";
 
 import type { TableScreenProps } from "../types";
 
-function focusHand() {
-  document.querySelector<HTMLElement>("[data-hand-index='0']")?.focus();
-}
-
-export function TableScreen({ snapshot, pending, onDrawFromStock, onDrawFromDiscard, onDiscard, onDeclareClosure }: TableScreenProps) {
+export function TableScreen(props: TableScreenProps) {
   const { t } = useTranslation();
-  const { view } = snapshot;
-  const hand = useHand(view.hand);
-  const turnMessage = useTurnMessage(snapshot);
-  const { notice, run, show } = useCommandNotice();
-  const closure = useClosurePrompt(view.allowedActions.includes("DECLARE_CLOSURE"), () =>
-    show(t("table.actions.closureExpired")),
-  );
-  const isMyTurn = view.currentPlayerId === view.playerId;
-  const lockedId = view.cannotDiscard ? cardId(view.cannotDiscard) : null;
-  const selectedIsLocked = lockedId !== null && hand.selectedIds.has(lockedId);
-  const { clearSelection } = hand;
-
-  const handleDiscard = useCallback(() => {
-    const card = hand.cards.find((held) => hand.selectedIds.has(cardId(held)));
-    if (!card) return;
-    clearSelection();
-    void run(() => onDiscard(card));
-  }, [hand.cards, hand.selectedIds, clearSelection, run, onDiscard]);
-  const handleDrawFromStock = useCallback(() => void run(onDrawFromStock), [run, onDrawFromStock]);
-  const handleDrawFromDiscard = useCallback(() => void run(onDrawFromDiscard), [run, onDrawFromDiscard]);
+  const { snapshot, onDeclareClosure } = props;
+  const { view, seats } = snapshot;
+  const screen = useTableScreen(props);
+  const { hand, panels, closure, piles, turn } = screen;
+  const scoreboard = {
+    entries: view.scoreboard,
+    seats,
+    threshold: view.eliminationThreshold,
+    selfId: view.playerId,
+    turnPlayerId: view.currentPlayerId,
+  };
+  const turnPanel = {
+    isMine: turn.isMine,
+    message: turn.message,
+    waitingFor: turn.waitingFor,
+    notice: turn.notice,
+    turnKey: view.currentPlayerId ?? "",
+    turnDeadline: view.turnDeadline,
+    serverTime: view.serverTime,
+  };
 
   return (
-    <div className="flex min-h-dvh flex-col overflow-x-clip lg:grid lg:h-dvh lg:grid-cols-[minmax(0,1fr)_23rem] lg:overflow-hidden">
-      <main className="flex flex-col lg:min-h-0">
-        <AppHeader homeLink={false}>
-          <Pill>{t("table.title", { code: snapshot.code })}</Pill>
-        </AppHeader>
-        <h1 className="sr-only">{t("table.title", { code: snapshot.code })}</h1>
-        <TableStage snapshot={snapshot} />
-        <PlayerHand
+    <div className="relative isolate grid min-h-dvh grid-rows-[auto_auto_minmax(0,1fr)_auto] overflow-clip lg:grid-cols-[minmax(0,1fr)_22rem] lg:grid-rows-[auto_minmax(0,1fr)_auto] [@media(min-height:34rem)]:h-dvh">
+      <TableBackdrop />
+      <TableHeader code={snapshot.code} round={view.roundNumber} onShowRules={panels.showRules} />
+      <ScoreStrip entries={view.scoreboard} seats={seats} selfId={view.playerId} turnPlayerId={view.currentPlayerId} onOpen={panels.showScores} />
+      <span
+        aria-hidden="true"
+        className="col-start-1 row-start-3 mx-3 rounded-[2rem] bg-ink shadow-sheet sm:mx-6 lg:row-span-2 lg:row-start-2 lg:mx-0 lg:ml-8 lg:rounded-tl-[16rem] lg:rounded-tr-none lg:rounded-br-none lg:rounded-bl-[7rem]"
+      />
+      <div className="col-start-1 row-start-3 mx-3 grid min-h-0 sm:mx-6 lg:row-start-2 lg:mx-0 lg:ml-8">
+        <TableStage snapshot={snapshot} selfName={screen.selfName} stockAction={piles.stockAction} discardAction={piles.discardAction} />
+      </div>
+      <div className="relative col-start-1 row-start-4 flex flex-col gap-3 overflow-x-clip px-3 pt-5 sm:px-6 lg:row-start-3 lg:ml-8 lg:px-12 lg:pt-8">
+        <span aria-hidden="true" className="absolute -inset-x-[70%] top-0 -bottom-[120%] rounded-[50%] bg-paper-light shadow-[0_-1px_0_var(--color-line)]" />
+        <div className="relative flex flex-col gap-3 lg:hidden">
+          <TurnPanel {...turnPanel} />
+          <TurnActions layout="row" {...screen.actions} />
+        </div>
+        <div className="relative">
+          <PlayerHand
           cards={hand.cards}
           selectedIds={hand.selectedIds}
-          lockedId={lockedId}
+          lockedId={screen.lockedId}
           onToggle={hand.toggle}
           onMove={hand.move}
           onSortByRank={hand.handleSortByRank}
           onSortBySuit={hand.handleSortBySuit}
-        />
-      </main>
-      <aside
-        aria-label={t("table.round", { count: view.roundNumber })}
-        className="flex flex-col gap-6 border-t border-line px-5 py-6 sm:px-8 lg:overflow-y-auto lg:border-t-0 lg:border-l lg:px-7"
-      >
-        <div>
-          <p className="label-caps text-[0.65rem] text-coral-ink">{t(`gameMode.${view.mode}`)}</p>
-          <p className="mt-1 font-display text-5xl leading-none">{t("table.round", { count: view.roundNumber })}</p>
-        </div>
-        <Scoreboard
-          entries={view.scoreboard}
-          seats={snapshot.seats}
-          threshold={view.eliminationThreshold}
-          turnPlayerId={view.currentPlayerId}
-        />
-        <div className="order-first flex flex-col gap-3 lg:order-none">
-          <TurnStatus message={turnMessage} turnDeadline={view.turnDeadline} serverTime={view.serverTime} isMyTurn={isMyTurn} />
-          <TurnActions
-            allowedActions={view.allowedActions}
-            pending={pending}
-            canDiscard={hand.selectedIds.size === 1 && !selectedIsLocked}
-            showLockedHint={selectedIsLocked}
-            notice={notice}
-            onFocusLost={focusHand}
-            onDrawFromStock={handleDrawFromStock}
-            onDrawFromDiscard={handleDrawFromDiscard}
-            onDiscard={handleDiscard}
-            onDeclareClosure={closure.handleOpen}
           />
         </div>
-        <TableFooter threshold={view.eliminationThreshold} />
-      </aside>
+      </div>
+      <TableSidebar
+        round={view.roundNumber}
+        mode={view.mode}
+        code={snapshot.code}
+        enabledClosures={view.enabledClosures}
+        scoreboard={scoreboard}
+        turn={<TurnPanel {...turnPanel} />}
+        actions={<TurnActions layout="stack" {...screen.actions} />}
+      />
+      <Dialog open={panels.scoresOpen} title={t("table.scoreboard.title")} closeLabel={t("common.close")} onClose={panels.close}>
+        {panels.scoresOpen && (
+          <div className="mt-4">
+            <Scoreboard {...scoreboard} bandClassName="-mx-5 px-5 sm:-mx-9 sm:px-9" />
+          </div>
+        )}
+      </Dialog>
+      <RulesDialog open={panels.rulesOpen} threshold={view.eliminationThreshold} onClose={panels.close} />
       <ClosureDialog
         key={closure.attempt}
         open={closure.open}
         cards={hand.cards}
         enabledClosures={view.enabledClosures}
         cannotDiscard={view.cannotDiscard}
-        timer={<TurnTimer turnDeadline={view.turnDeadline} serverTime={view.serverTime} className="text-3xl" unitClassName="text-ink-soft" />}
+        timer={
+          <TurnTimer
+            turnDeadline={view.turnDeadline}
+            serverTime={view.serverTime}
+            className="text-2xl"
+            unitClassName="text-ink-soft"
+            urgentClassName="text-coral-ink"
+          />
+        }
         onClose={closure.handleClose}
         onSubmit={onDeclareClosure}
       />

@@ -2,6 +2,7 @@ export const ROUTES = {
   HOME: "/",
   LOBBY: "/sala",
   TABLE: "/mesa",
+  PROFILE: "/perfil",
 } as const;
 
 export const ROOM_CODE_PARAM = "codigo";
@@ -14,4 +15,8 @@ export function homeHref(code: string): string {
 
 export function roomHref(page: RoomPage, code: string): string {
   return `${page}/?${ROOM_CODE_PARAM}=${encodeURIComponent(code)}`;
+}
+
+export function profileHref(): string {
+  return `${ROUTES.PROFILE}/`;
 }

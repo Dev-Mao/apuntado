@@ -1,4 +1,4 @@
-import { Josefin_Sans, Playfair_Display } from "next/font/google";
+import { Bodoni_Moda, Josefin_Sans } from "next/font/google";
 
 import { AppProviders } from "@/components";
 import { ConnectionBanner, RealtimeProvider, RoomNotice } from "@/features/realtime";
@@ -9,10 +9,11 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
-const display = Playfair_Display({
+const display = Bodoni_Moda({
   subsets: ["latin"],
   style: ["normal", "italic"],
-  variable: "--font-playfair",
+  axes: ["opsz"],
+  variable: "--font-bodoni",
   display: "swap",
 });
 
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f3ead9",
+  themeColor: "#efe5d6",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

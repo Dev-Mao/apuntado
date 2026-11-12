@@ -4,7 +4,6 @@ import { memo, useCallback, useMemo } from "react";
 
 import { useTranslation } from "react-i18next";
 
-import { Button, BUTTON_VARIANT } from "@/components";
 import { cardId } from "@/lib";
 
 import { fanStyles } from "../fan-layout";
@@ -12,16 +11,19 @@ import { useHandDrag } from "../hooks";
 import { HAND_HELP_ID, HandCard } from "./hand-card";
 
 import type { PlayerHandProps } from "../types";
+import type { CSSProperties } from "react";
 
-const HAND_SPREAD_DEG = 2.4;
-const HAND_ARC_PX = 0.7;
+const HAND_SPREAD_DEG = 1.8;
+const HAND_ARC_PX = 0.55;
 const EMPTY_STYLE = {};
-const SORT_BUTTON_CLASSES = "min-h-9 px-4 pt-[0.55rem] pb-[0.45rem] text-[0.62rem]";
+const SORT_CLASSES =
+  "label-caps min-h-9 rounded-full px-3 pt-[0.55rem] pb-[0.45rem] text-[0.6rem] whitespace-nowrap text-ink-soft transition-colors hover:bg-ink hover:text-paper";
 
 function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSortByRank, onSortBySuit }: PlayerHandProps) {
   const { t } = useTranslation();
   const drag = useHandDrag(onMove, cards.length);
   const styles = useMemo(() => fanStyles(cards.length, HAND_SPREAD_DEG, HAND_ARC_PX), [cards.length]);
+  const fanVars = useMemo(() => ({ "--n": cards.length }) as CSSProperties, [cards.length]);
   const { consumeSuppressedClick } = drag;
 
   const handleToggle = useCallback(
@@ -32,29 +34,37 @@ function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSort
   );
 
   return (
-    <section aria-labelledby="hand-title" className="flex flex-col gap-3 px-4 pt-2 pb-5 sm:px-8">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-baseline gap-3">
-          <h2 id="hand-title" className="label-caps text-xs">
+    <section aria-labelledby="hand-title" className="flex flex-col gap-1">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <h2 id="hand-title" className="label-caps text-[0.65rem] whitespace-nowrap">
             {t("table.hand.label")}
           </h2>
-          <span aria-live="polite" className="font-display text-sm text-ink-soft italic">
+          {selectedIds.size > 0 && (
+            <span aria-hidden="true" className="grid size-5 animate-spark place-items-center rounded-full bg-coral text-sm leading-none tabular-nums">
+              {selectedIds.size}
+            </span>
+          )}
+          <span aria-live="polite" className="sr-only">
             {selectedIds.size > 0 ? t("table.hand.selected", { count: selectedIds.size }) : ""}
           </span>
         </div>
-        <div className="flex gap-2">
-          <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onSortByRank} className={SORT_BUTTON_CLASSES}>
+        <div role="group" aria-label={t("table.hand.sortLabel")} className="flex items-center gap-1">
+          <span aria-hidden="true" className="label-caps mr-1 hidden text-[0.6rem] text-ink-soft sm:inline">
+            {t("table.hand.sortLabel")}
+          </span>
+          <button type="button" onClick={onSortByRank} className={SORT_CLASSES}>
             {t("table.hand.sortByRank")}
-          </Button>
-          <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onSortBySuit} className={SORT_BUTTON_CLASSES}>
+          </button>
+          <button type="button" onClick={onSortBySuit} className={SORT_CLASSES}>
             {t("table.hand.sortBySuit")}
-          </Button>
+          </button>
         </div>
       </div>
       <p id={HAND_HELP_ID} className="sr-only">
         {t("table.hand.instructions")}
       </p>
-      <ul className="flex justify-center pt-5 pb-5">
+      <ul style={fanVars} className="hand-fan flex justify-center pt-8 pb-9 sm:pt-10 lg:pb-6">
         {cards.map((card, index) => (
           <HandCard
             key={cardId(card)}
