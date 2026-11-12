@@ -1,1 +1,1 @@
-export { IDENTITY_FOR_GAME, IdentityModule, type IdentityOptions } from "./identity.module.js";
+export { IDENTITY_FOR_MODULES, IdentityModule, type IdentityOptions } from "./identity.module.js";
