@@ -90,8 +90,9 @@ function track(from: Placement, to: Placement, flips: readonly [number, number, 
 }
 
 export function fly({ from, target, back, delay = 0 }: Flight): void {
-  const to = placementOf(target);
   const height = target.offsetHeight;
+  if (target.offsetWidth === 0 || height === 0) return;
+  const to = placementOf(target);
   const timing: KeyframeAnimationOptions = { duration: FLIGHT_MS, delay, easing: GLIDE, fill: "backwards" };
   const face = cloneAt(target, to, height);
   const clones = [face];

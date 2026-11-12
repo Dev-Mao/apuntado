@@ -28,7 +28,7 @@ function pileAnchor(pile: Pile): HTMLElement | null {
 
 function seatCards(playerId: string): HTMLElement[] {
   const fan = find(`[data-seat-fan="${CSS.escape(playerId)}"]`);
-  return fan ? Array.from(fan.querySelectorAll<HTMLElement>("[data-card-visual]")) : [];
+  return fan && fan.offsetWidth > 0 ? Array.from(fan.querySelectorAll<HTMLElement>("[data-card-visual]")) : [];
 }
 
 export function measureHand(): HandPlacements {
