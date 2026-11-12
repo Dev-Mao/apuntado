@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 import { AppHeader, Button, buttonClasses, BUTTON_VARIANT } from "@/components";
+import { ChipBalance } from "@/features/account";
 import { cn, profileHref } from "@/lib";
 
 import { useResultsSummary } from "../hooks";
@@ -28,7 +29,9 @@ export function ResultsScreen({ snapshot, onLeave }: ResultsScreenProps) {
         )}
       />
       <div className="mx-auto flex h-full max-w-3xl flex-col">
-        <AppHeader homeLink={summary.isFinished} />
+        <AppHeader homeLink={summary.isFinished}>
+          <ChipBalance />
+        </AppHeader>
         <main className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain px-4 pb-5 short:gap-3 tiny:gap-2 tiny:pb-2 sm:px-8">
           <ResultsHero summary={summary} isSelfWinner={isSelfWinner} />
           <section aria-labelledby="sheet-title" className="flex min-h-[13rem] animate-sheet-rise flex-col short:min-h-[10rem] tiny:min-h-0 rounded-[1.75rem] bg-paper-light py-5 pr-5 pl-12 shadow-sheet [animation-delay:200ms] tiny:py-3 sm:py-7 sm:tiny:py-3 sm:pr-9 sm:pl-16">

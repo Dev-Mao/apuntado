@@ -16,7 +16,7 @@ function statusOf(line: ScoreLineView, view: PlayerView): ResultStatus {
   return view.status === "FINISHED" ? RESULT_STATUS.FINISHED : RESULT_STATUS.PLAYING;
 }
 
-function summarize({ seats, view }: TableSnapshot): ResultsSummary {
+function summarize({ seats, stake, view }: TableSnapshot): ResultsSummary {
   const { lastRound } = view;
   const roundPoints = new Map(lastRound?.scores.map((score) => [score.playerId, score.points]));
   const roundWinnerId = lastRound?.roundWinnerId ?? null;
@@ -25,6 +25,7 @@ function summarize({ seats, view }: TableSnapshot): ResultsSummary {
     threshold: view.eliminationThreshold,
     roundNumber: lastRound?.roundNumber ?? view.roundNumber,
     isFinished: view.status === "FINISHED",
+    pot: stake * seats.length,
     winnerName: view.winnerId ? nicknameOf(seats, view.winnerId) : null,
     roundWinnerName: roundWinnerId ? nicknameOf(seats, roundWinnerId) : null,
     closureType: lastRound?.closureType ?? null,

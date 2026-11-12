@@ -25,6 +25,7 @@ export interface ResultsSummary {
   readonly roundNumber: number;
   readonly isFinished: boolean;
   readonly winnerName: string | null;
+  readonly pot: number;
   readonly roundWinnerName: string | null;
   readonly closureType: ClosureType | null;
   readonly rows: readonly ResultRow[];
