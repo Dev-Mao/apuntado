@@ -97,6 +97,7 @@ export function TableScreen({ snapshot, pending, onDrawFromStock, onDrawFromDisc
         <TableFooter threshold={view.eliminationThreshold} />
       </aside>
       <ClosureDialog
+        key={closure.attempt}
         open={closure.open}
         cards={hand.cards}
         enabledClosures={view.enabledClosures}
