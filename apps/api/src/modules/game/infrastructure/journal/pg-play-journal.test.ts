@@ -22,7 +22,7 @@ class GatedSql implements SqlClient {
       throw new Error("connection lost");
     }
     this.written.push(params);
-    return [];
+    return [{ id: this.written.length } as Row];
   }
 
   async script(): Promise<void> {}
