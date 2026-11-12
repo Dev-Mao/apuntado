@@ -5,6 +5,8 @@ import type { AccountStore, PasswordHasher, SessionTokens } from "./ports.js";
 const WRONG_CREDENTIALS = failure("UNAUTHORIZED", "Correo o contraseña incorrectos");
 
 export class LogIn {
+  private decoy: Promise<string> | null = null;
+
   constructor(
     private readonly accounts: AccountStore,
     private readonly hasher: PasswordHasher,
@@ -17,7 +19,13 @@ export class LogIn {
     const password = fieldOf(body, "password");
     if (!email || typeof password !== "string") return WRONG_CREDENTIALS;
     const account = await this.accounts.findByEmail(email);
-    if (!account || !(await this.hasher.verify(account.passwordHash, password))) return WRONG_CREDENTIALS;
+    const matches = await this.hasher.verify(account?.passwordHash ?? (await this.decoyHash()), password);
+    if (!account || !matches) return WRONG_CREDENTIALS;
     return { ok: true, player: account.player, token: this.tokens.issue(account.player) };
+  }
+
+  private decoyHash(): Promise<string> {
+    this.decoy ??= this.hasher.hash("contraseña-señuelo-para-igualar-tiempos");
+    return this.decoy;
   }
 }

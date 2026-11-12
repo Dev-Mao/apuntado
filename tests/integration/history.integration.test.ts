@@ -98,7 +98,7 @@ const setUp = () => {
 describe("Migraciones", () => {
   it("aplican el esquema del E2 y el catálogo de cartas una sola vez", async () => {
     const fresh = new PgliteSqlClient();
-    expect(await runMigrations(fresh)).toEqual(["001-esquema-e2", "002-catalogo-de-cartas", "003-ronda-sin-ganador", "004-devolucion-de-apuestas"]);
+    expect(await runMigrations(fresh)).toEqual(["001-esquema-e2", "002-catalogo-de-cartas", "003-ronda-sin-ganador", "004-devolucion-de-apuestas", "005-liquidacion-unica"]);
     expect(await runMigrations(fresh)).toEqual([]);
     const [{ total }] = (await fresh.query<{ total: number }>("SELECT COUNT(*)::int AS total FROM carta")) as [{ total: number }];
     expect(total).toBe(52);

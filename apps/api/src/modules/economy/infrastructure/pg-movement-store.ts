@@ -45,6 +45,7 @@ export class PgMovementStore implements MovementStore {
   }
 
   async recent(playerId: string, limit: number): Promise<readonly WalletMovement[]> {
+    await this.database.queue.idle();
     const rows = await this.database.sql.query<RecentRow>(RECENT, [playerId, limit]);
     return rows.map((row) => ({ amount: row.amount, reason: row.reason, matchId: row.match_id, at: new Date(row.at).toISOString() }));
   }

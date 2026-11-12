@@ -9,6 +9,10 @@ class MemoryAccounts implements AccountStore {
   readonly available = true;
   readonly byEmail = new Map<string, StoredAccount>();
 
+  async emailInUse(email: string): Promise<boolean> {
+    return this.byEmail.has(email);
+  }
+
   async register(player: Player, email: string, passwordHash: string): Promise<AccountCreation> {
     if (this.byEmail.has(email)) return "EMAIL_TAKEN";
     this.byEmail.set(email, { player, passwordHash });
@@ -20,9 +24,16 @@ class MemoryAccounts implements AccountStore {
   }
 }
 
+const calls = { hash: 0, verify: 0 };
 const hasher: PasswordHasher = {
-  hash: async (password) => `hashed:${password}`,
-  verify: async (passwordHash, password) => passwordHash === `hashed:${password}`,
+  hash: async (password) => {
+    calls.hash += 1;
+    return `hashed:${password}`;
+  },
+  verify: async (passwordHash, password) => {
+    calls.verify += 1;
+    return passwordHash === `hashed:${password}`;
+  },
 };
 
 const setup = (accounts: AccountStore = new MemoryAccounts()) => {
@@ -42,7 +53,7 @@ describe("Cuentas · registro", () => {
     const result = await register.execute(EVA, null);
     expect(result).toMatchObject({ ok: true, player: { id: "new-id", nickname: "Eva", kind: "REGISTRADO" } });
     if (result.ok) expect(tokens.read(result.token)?.kind).toBe("REGISTRADO");
-    expect((accounts as MemoryAccounts).byEmail.get("eva@example.com")?.passwordHash).toBe("hashed:secreto123");
+    expect((accounts as unknown as MemoryAccounts).byEmail.get("eva@example.com")?.passwordHash).toBe("hashed:secreto123");
     expect(published).toEqual([{ name: "JugadorRegistrado", payload: { playerId: "new-id" } }]);
   });
 
@@ -69,8 +80,25 @@ describe("Cuentas · registro", () => {
     expect(await register.execute(EVA, registered)).toMatchObject({ ok: false, problem: "CONFLICT" });
   });
 
+  it("un correo ya usado se rechaza antes de gastar tiempo cifrando la contraseña", async () => {
+    const { register } = setup();
+    await register.execute(EVA, null);
+    const before = calls.hash;
+    await register.execute({ ...EVA, nickname: "Otra" }, null);
+    expect(calls.hash).toBe(before);
+  });
+
+  it("si la sesión ya pertenece a una cuenta, pide iniciar sesión con ella", async () => {
+    const taken: AccountStore = { available: true, emailInUse: async () => false, register: async () => "PLAYER_TAKEN", findByEmail: async () => null };
+    expect(await setup(taken).register.execute(EVA, GUEST)).toEqual({
+      ok: false,
+      problem: "CONFLICT",
+      reason: "Esta sesión ya pertenece a una cuenta; inicie sesión con ella",
+    });
+  });
+
   it("sin base de datos las cuentas no están disponibles", async () => {
-    const unavailable: AccountStore = { available: false, register: async () => "CREATED", findByEmail: async () => null };
+    const unavailable: AccountStore = { available: false, emailInUse: async () => false, register: async () => "CREATED", findByEmail: async () => null };
     const { register, logIn } = setup(unavailable);
     expect(await register.execute(EVA, null)).toMatchObject({ ok: false, problem: "UNAVAILABLE" });
     expect(await logIn.execute(EVA)).toMatchObject({ ok: false, problem: "UNAVAILABLE" });
@@ -94,5 +122,12 @@ describe("Cuentas · inicio de sesión", () => {
     expect(await logIn.execute({ email: "eva@example.com", password: "otra-clave" })).toEqual(wrong);
     expect(await logIn.execute({ email: "nadie@example.com", password: "secreto123" })).toEqual(wrong);
     expect(await logIn.execute({})).toEqual(wrong);
+  });
+
+  it("con un correo desconocido también verifica una contraseña, para no delatar qué correos existen", async () => {
+    const { logIn } = setup();
+    const before = calls.verify;
+    await logIn.execute({ email: "nadie@example.com", password: "secreto123" });
+    expect(calls.verify).toBe(before + 1);
   });
 });

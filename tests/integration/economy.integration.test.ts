@@ -78,6 +78,21 @@ describe("Cuentas en PostgreSQL", () => {
     expect(await sql.query("SELECT id, apodo, tipo FROM jugador")).toEqual([{ id: EVA, apodo: "Eva", tipo: "REGISTRADO" }]);
   });
 
+  it("registrarse mientras la fila del invitado sigue en cola crea la cuenta igual", async () => {
+    new PgPlayerRegistry(database).remember({ id: EVA, nickname: "Evita", kind: "INVITADO" });
+    expect(await accounts().register({ id: EVA, nickname: "Eva", kind: "REGISTRADO" }, "eva@example.com", "hash")).toBe("CREATED");
+    await database.queue.idle();
+    expect(await sql.query("SELECT apodo, tipo FROM jugador")).toEqual([{ apodo: "Eva", tipo: "REGISTRADO" }]);
+  });
+
+  it("una cookie vieja de invitado no cambia el apodo de la cuenta registrada", async () => {
+    await accounts().register({ id: EVA, nickname: "Eva", kind: "REGISTRADO" }, "eva@example.com", "hash");
+    new PgPlayerRegistry(database).remember({ id: EVA, nickname: "Vieja", kind: "INVITADO" });
+    await database.queue.idle();
+    expect(await sql.query("SELECT apodo, tipo FROM jugador")).toEqual([{ apodo: "Eva", tipo: "REGISTRADO" }]);
+    expect(await accounts().register({ id: EVA, nickname: "Eva", kind: "REGISTRADO" }, "otra@example.com", "hash")).toBe("PLAYER_TAKEN");
+  });
+
   it("un correo repetido se informa sin lanzar errores", async () => {
     await accounts().register({ id: EVA, nickname: "Eva", kind: "REGISTRADO" }, "eva@example.com", "hash");
     expect(await accounts().register({ id: TOM, nickname: "Tom", kind: "REGISTRADO" }, "eva@example.com", "hash")).toBe("EMAIL_TAKEN");
@@ -107,6 +122,34 @@ describe("Libro de fichas en PostgreSQL", () => {
     expect((await bank.walletOf(TOM)).movements.map((m) => m.reason)).toEqual(["BOTE_GANADO", "APUESTA_RETENIDA", "BONO_BIENVENIDA"]);
     const [{ total }] = (await sql.query<{ total: number }>("SELECT SUM(saldo)::int AS total FROM saldo_jugador")) as [{ total: number }];
     expect(total).toBe(2000);
+  });
+
+});
+
+describe("Libro de fichas · liquidación y consistencia", () => {
+  it("si dos servidores liquidan la misma partida, la base acepta solo una liquidación", async () => {
+    await registered();
+    const live = await openBank();
+    live.grantWelcomeBonus(EVA);
+    live.grantWelcomeBonus(TOM);
+    new MatchArchiver(new PgMatchRecords(database, new RandomIds())).matchStarted(started(100));
+    live.hold(MATCH, [EVA, TOM], 100);
+    live.matchStarted({ matchId: MATCH });
+    await database.queue.idle();
+
+    await openBank();
+    live.matchFinished({ matchId: MATCH, winnerId: TOM });
+    await database.queue.idle();
+
+    expect(errors).toHaveLength(1);
+    expect(await balances()).toEqual({ [EVA]: 1000, [TOM]: 1000 });
+  });
+
+  it("la billetera muestra los movimientos que ya explican su saldo", async () => {
+    await registered();
+    const bank = await openBank();
+    bank.grantWelcomeBonus(EVA);
+    expect(await bank.walletOf(EVA)).toMatchObject({ balance: 1000, movements: [{ amount: 1000, reason: "BONO_BIENVENIDA" }] });
   });
 
   it("al reabrir devuelve una sola vez las retenciones que quedaron sin liquidar", async () => {
