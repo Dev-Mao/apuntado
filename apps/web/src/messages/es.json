@@ -105,13 +105,14 @@
     "players": "Jugadores",
     "playersCount": "{{count}} de {{max}}",
     "host": "Anfitrión",
+    "bot": "Bot",
     "selfTag": "(Tú)",
     "connected": "Conectado",
     "disconnected": "Desconectado",
     "emptySeat": "Puesto libre",
     "start": "Iniciar partida",
+    "addBot": "Agregar bot",
     "waitingHost": "El anfitrión iniciará la partida",
-    "waitingPlayers": "Se necesitan más jugadores para iniciar",
     "leave": "Salir de la mesa"
   },
   "table": {

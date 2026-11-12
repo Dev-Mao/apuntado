@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button, BUTTON_VARIANT } from "@/components";
 
-import { useCopyCode } from "../hooks/use-copy-code";
+import { useCopyCode } from "../hooks";
 
 export function ShareCode({ code }: { code: string }) {
   const { t } = useTranslation();

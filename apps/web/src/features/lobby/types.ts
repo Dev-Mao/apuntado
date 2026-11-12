@@ -1,23 +1,12 @@
-import type { TableSettings } from "@/lib";
+import type { LobbyView } from "@apuntado/contracts";
 
-export interface LobbyPlayer {
-  readonly id: string;
-  readonly name: string;
-  readonly isHost: boolean;
-  readonly isConnected: boolean;
-}
-
-export interface LobbyView {
-  readonly code: string;
-  readonly selfId: string;
-  readonly maxPlayers: number;
-  readonly players: readonly LobbyPlayer[];
-  readonly settings: TableSettings;
-  readonly canStart: boolean;
-}
+export const MAX_SEATS = 4;
 
 export interface LobbyScreenProps {
   lobby: LobbyView;
+  selfId: string;
+  notice: string | null;
+  onAddBot: () => void;
   onStart: () => void;
   onLeave: () => void;
 }

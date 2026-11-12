@@ -2,17 +2,18 @@
 
 import { useTranslation } from "react-i18next";
 
-import { AppHeader, Button, BUTTON_VARIANT } from "@/components";
+import { AppHeader, Button, BUTTON_VARIANT, LiveNotice } from "@/components";
 
+import { MAX_SEATS } from "../types";
 import { PlayerList } from "./player-list";
 import { SettingsSummary } from "./settings-summary";
 import { ShareCode } from "./share-code";
 
 import type { LobbyScreenProps } from "../types";
 
-export function LobbyScreen({ lobby, onStart, onLeave }: LobbyScreenProps) {
+export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave }: LobbyScreenProps) {
   const { t } = useTranslation();
-  const isHost = lobby.players.some((player) => player.id === lobby.selfId && player.isHost);
+  const isHost = lobby.hostId === selfId;
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-[90rem] flex-col">
@@ -27,22 +28,25 @@ export function LobbyScreen({ lobby, onStart, onLeave }: LobbyScreenProps) {
           <ShareCode code={lobby.code} />
         </div>
         <div className="flex flex-col gap-10 lg:pt-4">
-          <PlayerList players={lobby.players} selfId={lobby.selfId} maxPlayers={lobby.maxPlayers} />
+          <PlayerList seats={lobby.seats} hostId={lobby.hostId} selfId={selfId} maxPlayers={MAX_SEATS} />
           <SettingsSummary settings={lobby.settings} />
-          <div className="flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center">
-            {isHost ? (
-              <Button onClick={onStart} disabled={!lobby.canStart}>
-                {t("lobby.start")}
+          <div className="flex flex-col gap-4 border-t border-line pt-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              {isHost ? (
+                <>
+                  <Button onClick={onStart}>{t("lobby.start")}</Button>
+                  <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onAddBot}>
+                    {t("lobby.addBot")}
+                  </Button>
+                </>
+              ) : (
+                <p className="font-display text-lg italic">{t("lobby.waitingHost")}</p>
+              )}
+              <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onLeave}>
+                {t("lobby.leave")}
               </Button>
-            ) : (
-              <p className="font-display text-lg italic">{t("lobby.waitingHost")}</p>
-            )}
-            <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onLeave}>
-              {t("lobby.leave")}
-            </Button>
-            {isHost && !lobby.canStart && (
-              <p className="font-display text-sm text-ink-soft italic">{t("lobby.waitingPlayers")}</p>
-            )}
+            </div>
+            <LiveNotice message={notice} />
           </div>
         </div>
       </main>

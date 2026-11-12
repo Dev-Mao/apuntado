@@ -1,3 +1,2 @@
-export { LobbyScreen, MockLobbyScreen } from "./components";
-export { MOCK_LOBBY } from "./mock-data";
-export type { LobbyPlayer, LobbyView } from "./types";
+export { LobbyContainer, LobbyScreen } from "./components";
+export type { LobbyScreenProps } from "./types";
