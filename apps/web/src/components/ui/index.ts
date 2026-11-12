@@ -1,9 +1,12 @@
 export * from "./button";
+export * from "./card-fan";
 export * from "./choice-pills";
 export * from "./dialog";
+export * from "./icons";
 export * from "./live-notice";
 export * from "./pill";
 export * from "./playing-card";
+export * from "./suit-glyph";
 export * from "./text-field";
 export * from "./threshold-bar";
 export type * from "./types";

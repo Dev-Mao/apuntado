@@ -1,77 +1,74 @@
+import Image from "next/image";
 import { memo } from "react";
 
-import { cn, FACE_RANKS, isRedSuit, SUIT_SYMBOL } from "@/lib";
+import { CARD_BACK_SRC, cardImageSrc, cn } from "@/lib";
+
+import { CardBack, CardFace } from "./card-face";
 
 import type { CardDto } from "@apuntado/contracts";
+import type { CSSProperties } from "react";
+
+export const CARD_ART = {
+  CSS: "css",
+  IMAGES: "images",
+} as const;
+
+type CardArt = (typeof CARD_ART)[keyof typeof CARD_ART];
+
+const ART = CARD_ART.CSS as CardArt;
 
 export const CARD_SIZE = {
   XS: "xs",
+  SEAT: "seat",
   SM: "sm",
   MD: "md",
   LG: "lg",
+  XL: "xl",
+  FLUID: "fluid",
+  FILL: "fill",
 } as const;
 
 export type CardSize = (typeof CARD_SIZE)[keyof typeof CARD_SIZE];
 
 const SIZE_CLASSES: Readonly<Record<CardSize, string>> = {
-  xs: "w-7 sm:w-10",
-  sm: "w-11 sm:w-14",
-  md: "w-[4.4rem] sm:w-24",
-  lg: "w-16 sm:w-24 lg:w-28",
+  xs: "w-[1.4rem] sm:w-[1.75rem]",
+  seat: "w-[1.6rem] sm:w-[2.1rem] lg:w-[3.4rem]",
+  sm: "w-[3rem] sm:w-[3.5rem]",
+  md: "w-[4.25rem] sm:w-[5rem]",
+  lg: "w-[4.6rem] sm:w-[5.75rem] lg:w-[6.5rem]",
+  xl: "w-[5.25rem] sm:w-[7rem] lg:w-[8rem]",
+  fluid: "w-(--card-w)",
+  fill: "w-full",
 };
 
 interface PlayingCardProps {
   card: CardDto | null;
   size?: CardSize;
   className?: string | undefined;
+  style?: CSSProperties | undefined;
 }
 
-const FRAME_CLASSES = "@container relative aspect-[5/7] shrink-0 overflow-hidden rounded-[9%/6.4%] shadow-card";
-
-function CardIndex({ card, className }: { card: CardDto; className?: string }) {
-  return (
-    <span className={cn("absolute flex flex-col items-center leading-none", className)}>
-      <span className="font-display text-[length:24cqw] font-bold tracking-tighter">{card.rank}</span>
-      <span className="text-[length:18cqw]">{SUIT_SYMBOL[card.suit]}</span>
-    </span>
-  );
+function CardArtwork({ card }: { card: CardDto | null }) {
+  if (ART === CARD_ART.IMAGES) {
+    return <Image src={card ? cardImageSrc(card) : CARD_BACK_SRC} alt="" fill sizes="8rem" className="object-cover" />;
+  }
+  return card ? <CardFace card={card} /> : <CardBack />;
 }
 
-function CardFace({ card }: { card: CardDto }) {
-  const isFace = FACE_RANKS.includes(card.rank);
+function PlayingCardBase({ card, size = CARD_SIZE.MD, className, style }: PlayingCardProps) {
   return (
-    <span className={cn("absolute inset-0 bg-card", isRedSuit(card.suit) ? "text-suit-red" : "text-ink")}>
-      <span className="absolute inset-[6%] rounded-[6%/4.3%] border border-current/20" />
-      <CardIndex card={card} className="top-[6%] left-[7%]" />
-      <CardIndex card={card} className="right-[7%] bottom-[6%] rotate-180" />
-      <span className="absolute inset-0 grid place-items-center">
-        {isFace ? (
-          <span className="font-display text-[length:62cqw] leading-none italic">{card.rank}</span>
-        ) : (
-          <span className="text-[length:46cqw] leading-none">{SUIT_SYMBOL[card.suit]}</span>
-        )}
-      </span>
-    </span>
-  );
-}
-
-function CardBack() {
-  return (
-    <span className="absolute inset-0 bg-coral">
-      <span className="absolute inset-[7%] rounded-[6%/4.3%] border border-paper/80 bg-[repeating-linear-gradient(45deg,transparent_0_5cqw,rgb(243_234_217/0.28)_5cqw_6cqw),repeating-linear-gradient(-45deg,transparent_0_5cqw,rgb(243_234_217/0.28)_5cqw_6cqw)]" />
-      <span className="absolute inset-0 grid place-items-center">
-        <span className="grid size-[38cqw] rotate-45 place-items-center border border-paper bg-coral">
-          <span className="size-[14cqw] rounded-full bg-paper" />
-        </span>
-      </span>
-    </span>
-  );
-}
-
-function PlayingCardBase({ card, size = CARD_SIZE.MD, className }: PlayingCardProps) {
-  return (
-    <span aria-hidden="true" className={cn(FRAME_CLASSES, SIZE_CLASSES[size], "block", className)}>
-      {card ? <CardFace card={card} /> : <CardBack />}
+    <span
+      aria-hidden="true"
+      data-card-visual=""
+      style={style}
+      className={cn(
+        "@container relative block aspect-[5/7] shrink-0 overflow-hidden rounded-[7%/5%] shadow-card",
+        SIZE_CLASSES[size],
+        className,
+      )}
+    >
+      <CardArtwork card={card} />
+      <span className="pointer-events-none absolute inset-0 rounded-[inherit] shadow-[inset_0_0_0_1px_rgb(27_31_30/0.08)]" />
     </span>
   );
 }

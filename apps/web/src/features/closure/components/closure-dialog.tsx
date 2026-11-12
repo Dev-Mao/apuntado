@@ -31,12 +31,12 @@ export function ClosureDialog({ open, cards, enabledClosures, cannotDiscard, tim
       closeLabel={t("common.close")}
       dismissible={!isSubmitting}
       onClose={handleClose}
-      className="sm:w-[min(100%-3rem,54rem)]"
+      className="sm:w-[min(100%-3rem,58rem)]"
     >
       {open && state.status !== SUBMIT_STATUS.ACCEPTED && (
         <>
-          <div className="mt-3 flex items-baseline gap-3">
-            <span className="label-caps text-[0.65rem] text-ink-soft">{t("closure.timeLeft")}</span>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-ink-soft italic">{t("closure.timeLeft")}</span>
             {timer}
           </div>
           <ClosureForm

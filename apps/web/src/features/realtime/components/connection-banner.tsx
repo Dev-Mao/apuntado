@@ -15,7 +15,7 @@ export function ConnectionBanner() {
   return (
     <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-3">
       {(isLost || isFailed) && (
-        <p className="label-caps flex items-center gap-2.5 rounded-full bg-ink px-4 pt-[0.6rem] pb-[0.5rem] text-[0.65rem] text-paper shadow-card">
+        <p className="label-caps flex animate-turn-in items-center gap-2.5 rounded-full bg-ink px-4 pt-[0.6rem] pb-[0.5rem] text-[0.65rem] text-paper shadow-lift">
           <span aria-hidden="true" className={cn("size-2 shrink-0 rounded-full bg-coral", isLost && "animate-pulse")} />
           {t(isFailed ? "realtime.rejected" : "realtime.reconnecting")}
         </p>

@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
+
 import { useTranslation } from "react-i18next";
 
-import { AppHeader, Button } from "@/components";
+import { AppHeader, Button, buttonClasses, BUTTON_VARIANT } from "@/components";
+import { cn, profileHref } from "@/lib";
 
 import { useResultsSummary } from "../hooks";
 import { ResultsHero } from "./results-hero";
@@ -13,47 +16,43 @@ import type { ResultsScreenProps } from "../types";
 export function ResultsScreen({ snapshot, onLeave }: ResultsScreenProps) {
   const { t } = useTranslation();
   const summary = useResultsSummary(snapshot);
-  const eliminated = summary.rows.filter((row) => row.eliminated);
+  const isSelfWinner = snapshot.view.winnerId !== null && snapshot.view.winnerId === snapshot.view.playerId;
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-[90rem] flex-col">
-      <AppHeader homeLink={summary.isFinished} />
-      <main className="grid flex-1 gap-10 px-5 pb-10 sm:px-8 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-        <ResultsHero summary={summary} />
-        <div className="flex flex-col gap-8 lg:pt-4">
-          <ResultsTable summary={summary} />
-          <p className="font-display text-ink-soft italic">
-            {t("results.threshold", { count: summary.threshold })}
-          </p>
-          <section aria-labelledby="eliminated-title" className="flex flex-col gap-3">
-            <h2 id="eliminated-title" className="label-caps border-b border-ink pb-2 text-xs">
-              {t("results.eliminatedTitle")}
+    <div className="relative isolate overflow-x-clip">
+      <span
+        aria-hidden="true"
+        className={cn(
+          "absolute -z-10 rounded-full bg-coral",
+          summary.isFinished ? "-top-56 left-1/2 size-[36rem] -translate-x-1/2" : "-top-32 -right-32 size-80 sm:size-[26rem]",
+        )}
+      />
+      <div className="mx-auto flex min-h-dvh max-w-3xl flex-col">
+        <AppHeader homeLink={summary.isFinished} />
+        <main className="flex flex-1 flex-col gap-8 px-4 pt-2 pb-12 sm:px-8">
+          <ResultsHero summary={summary} isSelfWinner={isSelfWinner} />
+          <section aria-labelledby="sheet-title" className="animate-sheet-rise rounded-[1.75rem] bg-paper-light py-6 pr-5 pl-12 shadow-sheet [animation-delay:200ms] sm:py-8 sm:pr-9 sm:pl-16">
+            <h2 id="sheet-title" className="label-caps text-[0.68rem]">
+              {summary.isFinished ? t("results.finalSheet") : t("results.roundSheet", { count: summary.roundNumber })}
             </h2>
-            {eliminated.length === 0 ? (
-              <p className="font-display italic">{t("results.noEliminated")}</p>
-            ) : (
-              <ul className="flex flex-wrap gap-2">
-                {eliminated.map((row) => (
-                  <li key={row.playerId} className="label-caps rounded-full border border-ink/50 px-3 pt-[0.45rem] pb-[0.35rem] text-[0.65rem]">
-                    {row.name}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <p className="mt-1 mb-4 text-ink-soft italic">{t("results.threshold", { count: summary.threshold })}</p>
+            <ResultsTable summary={summary} />
           </section>
-          <div className="flex flex-col gap-3 border-t border-line pt-6">
-            {summary.isFinished ? (
-              <Button onClick={onLeave} className="sm:self-start">
-                {t("results.backHome")}
-              </Button>
-            ) : (
-              <p role="status" className="font-display text-lg italic">
-                {t("results.nextRoundSoon")}
-              </p>
-            )}
-          </div>
-        </div>
-      </main>
+          {summary.isFinished ? (
+            <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
+              <Button onClick={onLeave}>{t("results.backHome")}</Button>
+              <Link href={profileHref()} className={buttonClasses(BUTTON_VARIANT.OUTLINE)}>
+                {t("results.profile")}
+              </Link>
+            </div>
+          ) : (
+            <p role="status" className="flex items-center justify-center gap-2 text-xl italic">
+              <span aria-hidden="true" className="size-2 animate-pulse rounded-full bg-coral" />
+              {t("results.nextRoundSoon")}
+            </p>
+          )}
+        </main>
+      </div>
     </div>
   );
 }

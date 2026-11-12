@@ -1,68 +1,63 @@
 "use client";
 
-import { memo, useMemo } from "react";
+import { memo } from "react";
 
 import { useTranslation } from "react-i18next";
 
-import { Button, ChoicePills, LiveNotice, TextField } from "@/components";
-import { GAME_MODES } from "@/lib";
+import { TextField } from "@/components";
 
-import { HOME_FIELD } from "../types";
+import { CREATE_FORM_ID, HOME_FIELD } from "../types";
+import { ModeCards } from "./mode-cards";
 
 import type { CreateTableFormProps } from "../types";
 
-function CreateTableFormBase({ settings, errors, pending, serverError, onModeChange, onNumberChange, onSubmit }: CreateTableFormProps) {
+function CreateTableFormBase({ settings, errors, onModeChange, onNumberChange, onSubmit }: CreateTableFormProps) {
   const { t } = useTranslation();
-  const modeOptions = useMemo(() => GAME_MODES.map((mode) => ({ value: mode, label: t(`gameMode.${mode}`) })), [t]);
   const errorText = (field: keyof typeof errors) => (errors[field] ? t(`home.errors.${errors[field]}`) : undefined);
 
   return (
-    <form noValidate onSubmit={onSubmit} aria-labelledby="create-title" className="flex flex-col gap-5">
-      <h2 id="create-title" className="font-display text-2xl sm:text-3xl">
+    <form id={CREATE_FORM_ID} noValidate onSubmit={onSubmit} aria-labelledby="create-title" className="flex flex-col gap-8">
+      <h2 id="create-title" className="sr-only">
         {t("home.create.title")}
       </h2>
-      <ChoicePills
-        legend={t("settings.mode")}
-        name="mode"
-        options={modeOptions}
-        value={settings.mode}
-        onChange={onModeChange}
-      />
-      <div className="grid gap-4 sm:grid-cols-3">
-        <TextField
-          label={t("settings.threshold")}
-          type="number"
-          inputMode="numeric"
-          min={1}
-          value={settings.eliminationThreshold}
-          error={errorText(HOME_FIELD.THRESHOLD)}
-          onChange={(event) => onNumberChange(HOME_FIELD.THRESHOLD, event.target.value)}
-        />
-        <TextField
-          label={t("settings.turn")}
-          hint={t("settings.turnHint")}
-          type="number"
-          inputMode="numeric"
-          min={10}
-          value={settings.turnSeconds}
-          error={errorText(HOME_FIELD.TURN)}
-          onChange={(event) => onNumberChange(HOME_FIELD.TURN, event.target.value)}
-        />
-        <TextField
-          label={t("settings.stake")}
-          hint={t("settings.stakeHint")}
-          type="number"
-          inputMode="numeric"
-          min={0}
-          value={settings.stake}
-          error={errorText(HOME_FIELD.STAKE)}
-          onChange={(event) => onNumberChange(HOME_FIELD.STAKE, event.target.value)}
-        />
-      </div>
-      <Button type="submit" disabled={pending} aria-busy={pending} className="self-start">
-        {t("home.create.submit")}
-      </Button>
-      <LiveNotice message={serverError} />
+      <ModeCards value={settings.mode} onChange={onModeChange} />
+      <fieldset className="flex flex-col">
+        <legend className="label-caps mb-4 flex items-center gap-4 text-[0.68rem]">
+          {t("settings.title")}
+          <span aria-hidden="true" className="h-px w-12 bg-ink/40" />
+        </legend>
+        <div className="grid gap-4 sm:grid-cols-3 sm:gap-3 sm:[&_label]:flex sm:[&_label]:min-h-[2.6em] sm:[&_label]:items-end">
+          <TextField
+            label={t("settings.threshold")}
+            type="number"
+            inputMode="numeric"
+            min={1}
+            value={settings.eliminationThreshold}
+            error={errorText(HOME_FIELD.THRESHOLD)}
+            onChange={(event) => onNumberChange(HOME_FIELD.THRESHOLD, event.target.value)}
+          />
+          <TextField
+            label={t("settings.turn")}
+            hint={t("settings.turnHint")}
+            type="number"
+            inputMode="numeric"
+            min={10}
+            value={settings.turnSeconds}
+            error={errorText(HOME_FIELD.TURN)}
+            onChange={(event) => onNumberChange(HOME_FIELD.TURN, event.target.value)}
+          />
+          <TextField
+            label={t("settings.stake")}
+            hint={t("settings.stakeHint")}
+            type="number"
+            inputMode="numeric"
+            min={0}
+            value={settings.stake}
+            error={errorText(HOME_FIELD.STAKE)}
+            onChange={(event) => onNumberChange(HOME_FIELD.STAKE, event.target.value)}
+          />
+        </div>
+      </fieldset>
     </form>
   );
 }

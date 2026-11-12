@@ -2,11 +2,10 @@
 
 import { useTranslation } from "react-i18next";
 
-import { AppHeader, Button, BUTTON_VARIANT, LiveNotice } from "@/components";
+import { AppHeader, ArrowIcon, Button, BUTTON_VARIANT, LiveNotice } from "@/components";
 
-import { PlayerList } from "./player-list";
+import { LobbyTable } from "./lobby-table";
 import { SettingsSummary } from "./settings-summary";
-import { ShareCode } from "./share-code";
 
 import type { LobbyScreenProps } from "../types";
 
@@ -15,40 +14,41 @@ export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave 
   const isHost = lobby.hostId === selfId;
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-[90rem] flex-col">
-      <AppHeader homeLink={false} />
-      <main className="grid flex-1 gap-10 px-5 pb-10 sm:px-8 lg:grid-cols-2 lg:gap-16">
-        <div className="flex flex-col gap-8">
-          <div>
-            <p className="label-caps text-[0.7rem] text-coral-ink">{t("lobby.eyebrow")}</p>
-            <h1 className="mt-3 font-display text-5xl leading-none sm:text-7xl">{t("lobby.title", { code: lobby.code })}</h1>
-            <p className="mt-4 font-display text-xl text-ink-soft italic">{t("lobby.tagline")}</p>
+    <div className="relative isolate overflow-x-clip">
+      <span aria-hidden="true" className="absolute -top-32 -right-36 -z-10 size-80 rounded-full bg-coral sm:-top-48 sm:-right-40 sm:size-[30rem]" />
+      <div className="mx-auto flex min-h-dvh max-w-5xl flex-col">
+        <AppHeader homeLink={false}>
+          <Button variant={BUTTON_VARIANT.GHOST} onClick={onLeave} className="px-2">
+            {t("lobby.leave")}
+          </Button>
+        </AppHeader>
+        <main className="flex flex-1 flex-col gap-8 px-4 pb-12 sm:px-8">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-[clamp(3rem,10vw,5.5rem)] leading-[0.9] tracking-[-0.02em]">{t("lobby.heading")}</h1>
+            <p className="text-xl italic">
+              {t("lobby.tagline")} <span className="text-coral-ink">{t("lobby.playersCount", { count: lobby.seats.length, max: lobby.maxSeats })}</span>
+            </p>
           </div>
-          <ShareCode code={lobby.code} />
-        </div>
-        <div className="flex flex-col gap-10 lg:pt-4">
-          <PlayerList seats={lobby.seats} hostId={lobby.hostId} selfId={selfId} maxPlayers={lobby.maxSeats} />
+          <LobbyTable lobby={lobby} selfId={selfId} />
+          <div className="flex flex-col items-center gap-3">
+            {isHost ? (
+              <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+                <Button onClick={onStart} className="sm:min-w-56">
+                  {t("lobby.start")}
+                  <ArrowIcon />
+                </Button>
+                <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onAddBot}>
+                  {t("lobby.addBot")}
+                </Button>
+              </div>
+            ) : (
+              <p className="text-xl italic">{t("lobby.waitingHost")}</p>
+            )}
+            <LiveNotice message={notice} className="text-center" />
+          </div>
           <SettingsSummary settings={lobby.settings} />
-          <div className="flex flex-col gap-4 border-t border-line pt-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              {isHost ? (
-                <>
-                  <Button onClick={onStart}>{t("lobby.start")}</Button>
-                  <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onAddBot}>
-                    {t("lobby.addBot")}
-                  </Button>
-                </>
-              ) : (
-                <p className="font-display text-lg italic">{t("lobby.waitingHost")}</p>
-              )}
-              <Button variant={BUTTON_VARIANT.OUTLINE} onClick={onLeave}>
-                {t("lobby.leave")}
-              </Button>
-            </div>
-            <LiveNotice message={notice} />
-          </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

@@ -45,12 +45,16 @@ export interface PlayerHandProps {
   onSortBySuit: () => void;
 }
 
+export interface PileAction {
+  readonly label: string;
+  readonly onPress: () => void;
+}
+
 export interface TurnActionsProps {
+  layout: "stack" | "row";
   allowedActions: readonly PlayerAction[];
   pending: boolean;
   canDiscard: boolean;
-  showLockedHint: boolean;
-  notice: string | null;
   onFocusLost: () => void;
   onDrawFromStock: () => void;
   onDrawFromDiscard: () => void;

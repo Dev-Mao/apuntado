@@ -8,15 +8,16 @@ import { Button, BUTTON_VARIANT, LiveNotice, TextField } from "@/components";
 
 import type { JoinTableFormProps } from "../types";
 
-function JoinTableFormBase({ code, error, pending, serverError, onCodeChange, onSubmit }: JoinTableFormProps) {
+function JoinTableFormBase({ code, error, pending, serverError, emphasized, onCodeChange, onSubmit }: JoinTableFormProps) {
   const { t } = useTranslation();
   return (
-    <form noValidate onSubmit={onSubmit} aria-labelledby="join-title" className="flex flex-col gap-5">
-      <h2 id="join-title" className="font-display text-2xl sm:text-3xl">
+    <form noValidate onSubmit={onSubmit} aria-labelledby="join-title" className="flex flex-col gap-3">
+      <h2 id="join-title" className="sr-only">
         {t("home.join.title")}
       </h2>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+      <div className="flex items-start gap-2">
         <TextField
+          tone="ink"
           label={t("home.join.label")}
           placeholder={t("home.join.placeholder")}
           autoComplete="off"
@@ -24,13 +25,19 @@ function JoinTableFormBase({ code, error, pending, serverError, onCodeChange, on
           value={code}
           error={error ? t(`home.errors.${error}`) : undefined}
           onChange={(event) => onCodeChange(event.target.value)}
-          className="flex-1 [&_input]:tracking-[0.3em] [&_input]:uppercase"
+          className="min-w-0 flex-1 [&_input]:tracking-[0.3em] [&_input]:uppercase"
         />
-        <Button type="submit" variant={BUTTON_VARIANT.OUTLINE} disabled={pending} aria-busy={pending} className="sm:mt-[1.6rem]">
+        <Button
+          type="submit"
+          variant={emphasized ? BUTTON_VARIANT.PRIMARY : BUTTON_VARIANT.LIGHT}
+          disabled={pending}
+          aria-busy={pending}
+          className="mt-[1.6rem] h-12 px-5"
+        >
           {t("home.join.submit")}
         </Button>
       </div>
-      <LiveNotice message={serverError} />
+      <LiveNotice message={serverError} className="text-salmon" />
     </form>
   );
 }

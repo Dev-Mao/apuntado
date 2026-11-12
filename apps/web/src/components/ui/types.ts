@@ -10,8 +10,11 @@ export interface DialogProps {
   children: ReactNode;
 }
 
+export type FieldTone = "paper" | "ink";
+
 export interface TextFieldProps extends ComponentProps<"input"> {
   label: string;
+  tone?: FieldTone | undefined;
   hint?: string | undefined;
   error?: string | undefined;
 }

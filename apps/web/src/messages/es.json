@@ -5,7 +5,6 @@
   },
   "brand": {
     "name": "Apuntado",
-    "course": "Juego de cartas en línea",
     "home": "Apuntado, ir al inicio"
   },
   "common": {
@@ -58,7 +57,7 @@
     }
   },
   "settings": {
-    "title": "Configuración de la mesa",
+    "title": "Ajustes de la mesa",
     "mode": "Modalidad",
     "threshold": "Umbral de eliminación",
     "turn": "Duración del turno",
@@ -67,10 +66,10 @@
     "stakeHint": "0 significa jugar sin apuesta"
   },
   "home": {
-    "eyebrow": "Para dos a cuatro jugadores",
     "title": "Apuntado",
-    "tagline": "Roba, combina y cierra antes que nadie",
-    "intro": "Crea una mesa, comparte el código con tus amigos y jueguen en tiempo real.",
+    "tagline": "Roba, combina y cierra antes que nadie.",
+    "intro": "Comparte el código con tus amigos o juega contra un bot.",
+    "rules": "Cómo se juega",
     "nickname": {
       "title": "Entra como invitado",
       "label": "Tu apodo",
@@ -95,21 +94,40 @@
       "turnInvalid": "El turno debe durar al menos 10 segundos",
       "stakeInvalid": "La apuesta debe ser un número entero, 0 o más",
       "codeRequired": "Escribe el código que te compartieron"
+    },
+    "nav": "Navegación principal",
+    "entry": {
+      "eyebrow": "Juega ahora",
+      "title": "Crea tu mesa",
+      "invitedTitle": "Te esperan en la mesa {{code}}",
+      "or": "o únete con un código"
+    },
+    "modes": {
+      "CLASICA": {
+        "title": "Clásica",
+        "detail": "Cuarta y dos ternas"
+      },
+      "APUNTADO": {
+        "title": "Apuntado",
+        "detail": "Tres ternas, menos de 5"
+      },
+      "AMBAS": {
+        "title": "Ambas",
+        "detail": "Vale cualquier cierre"
+      }
     }
   },
   "lobby": {
-    "eyebrow": "Sala de espera",
-    "title": "Mesa {{code}}",
-    "tagline": "Comparte el código y espera a que lleguen todos",
+    "heading": "Sala de espera",
+    "tagline": "Comparte el código y espera a que lleguen todos.",
     "codeLabel": "Código para compartir",
     "copy": "Copiar código",
     "copied": "Código copiado",
     "players": "Jugadores",
-    "playersCount": "{{count}} de {{max}}",
+    "playersCount": "{{count}} de {{max}} jugadores",
     "host": "Anfitrión",
     "bot": "Bot",
-    "selfTag": "(Tú)",
-    "connected": "Conectado",
+    "selfTag": "Tú",
     "disconnected": "Desconectado",
     "emptySeat": "Puesto libre",
     "start": "Iniciar partida",
@@ -132,28 +150,28 @@
     "opponentTurn": "Está jugando.",
     "opponentBot": "Es un bot.",
     "opponentDisconnected": "Desconectado.",
-    "botTag": "Bot",
-    "selfLabel": "Tú · {{name}}",
     "hand": {
       "label": "Tu mano",
       "instructions": "Pulsa una carta para seleccionarla. Arrástrala o usa Alt y las flechas para moverla.",
-      "sortByRank": "Ordenar por valor",
-      "sortBySuit": "Ordenar por palo",
+      "sortByRank": "Por valor",
+      "sortBySuit": "Por palo",
       "selected_one": "{{count}} seleccionada",
       "selected_other": "{{count}} seleccionadas",
       "lockedCard": "{{card}}, tomada del pozo, no la puedes descartar en este turno",
-      "lockedTag": "Pozo"
+      "lockedTag": "Pozo",
+      "sortLabel": "Ordenar"
     },
     "turn": {
       "title": "Turno",
-      "draw": "Tu turno · roba una carta",
-      "discard": "Tu turno · descarta una carta",
+      "draw": "Roba del mazo o toma la carta del pozo.",
+      "discard": "Elige una carta y descártala, o declara tu cierre.",
       "waiting": "Turno de {{name}}",
       "secondsUnit": "s",
       "secondsLeft_one": "Queda {{count}} segundo del turno",
       "secondsLeft_other": "Quedan {{count}} segundos del turno",
       "roundOver": "La ronda terminó",
-      "finished": "La partida terminó"
+      "finished": "La partida terminó",
+      "yours": "Tu turno"
     },
     "actions": {
       "label": "Acciones del turno",
@@ -162,19 +180,21 @@
       "discard": "Descartar",
       "declareClosure": "Declarar cierre",
       "lockedHint": "La carta que tomaste del pozo no se puede descartar en este turno",
-      "closureExpired": "Tu turno terminó antes de enviar el cierre"
+      "closureExpired": "Tu turno terminó antes de enviar el cierre",
+      "discardOnPile": "Descartar la carta seleccionada en el pozo"
     },
     "scoreboard": {
       "title": "Marcador",
       "threshold": "Eliminación a {{count}}",
       "eliminated": "Eliminado",
       "entryLabel": "{{name}}, {{points}} de {{threshold}} puntos",
-      "entryLabelEliminated": "{{name}}, {{points}} de {{threshold}} puntos, eliminado"
+      "entryLabelEliminated": "{{name}}, {{points}} de {{threshold}} puntos, eliminado",
+      "self": "{{name}}, tú",
+      "rival": "Rival",
+      "open": "Ver el marcador completo"
     },
     "footer": {
-      "label": "Enlaces de la mesa",
-      "rules": "Reglas",
-      "scoreboard": "Marcador"
+      "rules": "Reglas"
     },
     "rules": {
       "title": "Reglas en breve",
@@ -185,16 +205,22 @@
       "item5": "Cierre por apuntado: exactamente tres ternas, y las cartas sobrantes deben sumar menos de 5 puntos. El as vale 1, del 2 al 10 valen su número, y J, Q y K valen 10.",
       "item6": "Al cerrar una ronda, los demás suman los puntos de sus cartas sin combinar. Quien llega a {{threshold}} puntos queda eliminado.",
       "note": "El servidor es el árbitro: revisa cada jugada y cada cierre."
+    },
+    "codeTag": "Mesa",
+    "selfLabel": "{{name}} (tú)",
+    "closures": "Cierres",
+    "closureNames": {
+      "CLASICO": "Clásico (4-3-3)",
+      "APUNTADO": "Apuntado"
     }
   },
   "closure": {
     "title": "Declarar cierre",
     "timeLeft": "Tiempo de tu turno",
-    "intro": "Reparte tus cartas en combinaciones, marca las sobrantes y elige la carta que descartas. El servidor revisa el cierre.",
+    "intro": "Selecciona cartas abajo y toca el grupo donde van. Arma tus combinaciones, marca las sobrantes y elige la carta que descartas. El servidor revisa el cierre.",
     "type": "Tipo de cierre",
     "unassigned": "Cartas sin asignar",
     "allAssigned": "Ya asignaste todas tus cartas",
-    "moveTo": "Mover las seleccionadas a",
     "group": "Combinación {{count}}",
     "leftovers": "Sobrantes",
     "discard": "Descarte",
@@ -206,23 +232,22 @@
     "submitting": "Enviando",
     "rejectedTitle": "El servidor rechazó el cierre",
     "failedTitle": "No pudimos enviar el cierre",
-    "failedBody": "Revisa tu conexión e inténtalo de nuevo."
+    "failedBody": "Revisa tu conexión e inténtalo de nuevo.",
+    "moveToSlot": "Mover las cartas seleccionadas a {{slot}}",
+    "placeHere": "Poner aquí"
   },
   "results": {
-    "eyebrow": "{{stage}} · {{mode}}",
-    "roundEyebrow": "Fin de ronda",
-    "roundTitle": "Ronda {{count}}",
-    "gameEyebrow": "Fin de partida",
+    "roundTitle": "Ronda {{count}} terminada",
     "gameTitle": "Gana {{name}}",
-    "tagline": "Así quedó la mesa",
-    "closedBy": "Cerró {{name}} · {{closure}}",
-    "noClosure": "La ronda terminó sin cierre",
+    "closedBy": "{{name}} cerró con {{closure}}.",
+    "noClosure": "La ronda terminó sin cierre.",
     "caption": "Puntos de la ronda {{count}} y acumulados",
     "columns": {
       "player": "Jugador",
       "round": "Ronda",
       "total": "Acumulado",
-      "status": "Estado"
+      "status": "Estado",
+      "place": "Puesto"
     },
     "status": {
       "playing": "Sigue en juego",
@@ -230,11 +255,60 @@
       "winner": "Ganador",
       "closed": "Cerró la ronda"
     },
-    "threshold": "Umbral de eliminación: {{count}} puntos",
-    "eliminatedTitle": "Eliminados",
-    "noEliminated": "Nadie quedó eliminado en esta ronda",
+    "threshold": "Se elimina quien llega a {{count}} puntos",
     "nextRoundSoon": "La siguiente ronda empieza sola en unos segundos",
     "backHome": "Volver al inicio",
-    "roundPoints": "+{{count}}"
+    "roundPoints": "+{{count}}",
+    "selfWon": "Ganaste la partida",
+    "closure": {
+      "CLASICO": "cierre clásico (4-3-3)",
+      "APUNTADO": "cierre por apuntado"
+    },
+    "finalSheet": "Resultado final",
+    "roundSheet": "Puntos de la ronda {{count}}",
+    "profile": "Ver mi perfil"
+  },
+  "profile": {
+    "title": "Tu perfil",
+    "guest": "Juegas como invitado",
+    "member": "Jugador registrado",
+    "sheetTitle": "Tus cifras",
+    "stats": {
+      "played": "Partidas jugadas",
+      "won": "Partidas ganadas",
+      "roundsWon": "Rondas ganadas",
+      "apuntado": "Cierres por apuntado"
+    },
+    "recentTitle": "Últimas partidas",
+    "match": {
+      "won": "Ganaste",
+      "lost": "Perdiste",
+      "rivals": "contra {{names}}",
+      "noRivals": "sin rivales registrados",
+      "rounds_one": "{{count}} ronda",
+      "rounds_other": "{{count}} rondas",
+      "pointsUnit_one": "punto",
+      "pointsUnit_other": "puntos"
+    },
+    "empty": {
+      "title": "Todavía no has terminado ninguna partida",
+      "body": "Cuando termines una, aquí verás la fecha, la modalidad, tus puntos y contra quién jugaste. Puedes estrenar el historial contra un bot.",
+      "action": "Crear una mesa"
+    },
+    "loading": "Cargando tu perfil",
+    "none": {
+      "title": "Aún no tienes una sesión",
+      "body": "Entra con un apodo desde el inicio y tus partidas empezarán a quedar guardadas aquí.",
+      "action": "Ir al inicio"
+    },
+    "unavailable": {
+      "title": "El historial no está disponible",
+      "body": "No pudimos leer tus partidas en este momento. Puedes seguir jugando; vuelve a intentarlo en un rato."
+    },
+    "failed": {
+      "title": "No pudimos cargar tu perfil"
+    },
+    "retry": "Intentar de nuevo",
+    "open": "Abrir mi perfil"
   }
 }
