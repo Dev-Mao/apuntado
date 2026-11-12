@@ -33,6 +33,29 @@ Cada fase deja algo verificable y no se avanza sin que la anterior funcione.
 | 5. Identidad y economía | Registro e inicio de sesión, saldo, retención de la apuesta con `StakeGuard`, bote al ganador, libro de movimientos | El libro cuadra con el saldo y un invitado no puede apostar |
 | 6. Gobernanza ampliada | Reglas para `web` y `contracts`, reporte de Ce, Ca, inestabilidad, abstracción y distancia a la secuencia principal, aproximación a Deméter, cobertura, un flujo E2E | Todo corre en el pipeline |
 
+## Cómo quedó la persistencia (fase 4)
+
+- La partida en curso sigue en memoria (ADR-04). La base de datos registra lo jugado, fuera del
+  camino crítico del turno.
+- Juego escribe solo la bitácora (`turno_jugada`) a través de su puerto `PlayJournal`.
+- Historial escucha los eventos `PartidaIniciada`, `RondaIniciada`, `RondaCerrada` y
+  `PartidaFinalizada`. Con ellos escribe `partida`, `participacion`, `ronda`, las manos repartidas y
+  `puntaje_acumulado`. Juego no sabe que Historial existe.
+- Identidad guarda cada invitado en `jugador` cuando le emite un token.
+- Todas las escrituras pasan por una sola cola en serie, así una jugada nunca llega antes que la
+  ronda a la que pertenece. Cada liquidación de ronda se escribe en una sola transacción, y la
+  restricción `UNIQUE (participacion_id, ronda_id)` impide aplicarla dos veces.
+- Cada partida tiene su propio identificador (UUID), distinto del código de la mesa, porque los
+  códigos se reutilizan.
+- Las migraciones se aplican al arrancar. La 001 es el `schema.sql` del E2 sin cambios, la 002 carga
+  las 52 cartas y la 003 permite cerrar una ronda sin ganador (fin por segundo reciclaje), caso que
+  la restricción original `cierre_coherente` no contemplaba.
+
+Desviación respecto al E2 (§2.4): la liquidación se persiste justo después de aplicarse en memoria,
+no dentro del turno. Se conserva la atomicidad de la escritura, pero si el servidor cae entre ambos
+momentos, esa ronda no queda registrada. Se acepta porque la partida en curso tampoco sobrevive a
+una caída.
+
 ## Interfaz
 
 Se construye en paralelo desde la fase 1, en una rama propia, empezando por el sistema de diseño
