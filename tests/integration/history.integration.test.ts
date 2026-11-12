@@ -195,14 +195,36 @@ describe("Archivo de una partida · casos borde", () => {
     expect(await sql.query("SELECT version FROM partida")).toEqual([{ version: 1 }]);
   });
 
-  it("si el jugador no quedó registrado, la partida se archiva igual con su apodo", async () => {
+});
+
+describe("Archivo de una partida · registros incompletos", () => {
+  it("un invitado sin fila en jugador queda registrado al archivar la partida y la ve en su perfil", async () => {
     const archiver = new MatchArchiver(new PgMatchRecords(database, new RandomIds()));
-    archiver.matchStarted(started());
-    await database.queue.idle();
+    await playFullMatch(archiver, new PgPlayJournal(database));
     expect(errors).toEqual([]);
-    expect(await sql.query("SELECT jugador_id, apodo_invitado FROM participacion WHERE posicion = 1")).toEqual([
-      { jugador_id: null, apodo_invitado: "Ana" },
+    expect(await sql.query("SELECT apodo, tipo FROM jugador ORDER BY apodo")).toEqual([
+      { apodo: "Ana", tipo: "INVITADO" },
+      { apodo: "Luis", tipo: "INVITADO" },
     ]);
+    expect(await new PgProfileReader(sql).statsOf(LUIS)).toMatchObject({ played: 1, won: 1 });
+  });
+
+  it("una jugada que no encuentra su ronda se informa como error en lugar de perderse en silencio", async () => {
+    const { archiver, journal } = setUp();
+    archiver.matchStarted(started());
+    journal.record({ gameId: "ABCD", matchId: MATCH, roundNumber: 1, playerId: ANA, seat: 1, action: "ROBAR_MAZO", cardId: "KS", occurredAt: T0 });
+    await database.queue.idle();
+    expect(errors).toHaveLength(1);
+    expect(String(errors[0])).toContain("No rows affected");
+  });
+
+  it("las rondas ganadas de una partida sin terminar no cuentan en el perfil", async () => {
+    const { archiver } = setUp();
+    archiver.matchStarted(started());
+    archiver.roundStarted(roundStarted(1, [ANA, LUIS, BOT]));
+    archiver.roundClosed(roundClosed(1, ANA, "APUNTADO", [[ANA, 0, 0, false], [LUIS, 20, 20, false], [BOT, 30, 30, false]]));
+    await database.queue.idle();
+    expect(await new PgProfileReader(sql).statsOf(ANA)).toMatchObject({ played: 0, roundsWon: 0, apuntadoClosures: 0 });
   });
 
   it("contra la máquina, con un solo humano, la partida se registra como VS_MAQUINA", async () => {
