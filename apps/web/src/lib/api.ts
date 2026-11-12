@@ -1,4 +1,4 @@
-import type { SessionView } from "@apuntado/contracts";
+import type { SessionState, SessionView } from "@apuntado/contracts";
 
 export const API_ORIGIN = process.env.NEXT_PUBLIC_API_ORIGIN ?? "";
 
@@ -15,9 +15,8 @@ async function reasonOf(response: Response): Promise<string> {
 
 export async function fetchSession(): Promise<SessionView | null> {
   const response = await fetch(apiUrl("/api/session"), { credentials: "include" });
-  if (response.status === 401) return null;
   if (!response.ok) throw new Error(`Session lookup failed with status ${response.status}`);
-  return (await response.json()) as SessionView;
+  return ((await response.json()) as SessionState).session;
 }
 
 export async function startGuestSession(nickname: string): Promise<GuestSessionResult> {
