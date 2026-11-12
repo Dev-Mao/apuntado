@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { cn } from "@/lib";
 
 import type { ComponentProps } from "react";
@@ -33,12 +31,4 @@ interface ButtonProps extends ComponentProps<"button"> {
 
 export function Button({ variant, className, type = "button", ...props }: ButtonProps) {
   return <button type={type} className={buttonClasses(variant, className)} {...props} />;
-}
-
-interface ButtonLinkProps extends ComponentProps<typeof Link> {
-  variant?: ButtonVariant;
-}
-
-export function ButtonLink({ variant, className, ...props }: ButtonLinkProps) {
-  return <Link className={buttonClasses(variant, className)} {...props} />;
 }

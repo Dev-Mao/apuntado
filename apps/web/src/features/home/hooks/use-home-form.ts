@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 
 import { useTranslation } from "react-i18next";
 
-import { useRealtime, useRoomRedirect } from "@/features/realtime";
+import { useRealtime } from "@/features/realtime";
 import { DEFAULT_TABLE_SETTINGS } from "@/lib";
 
 import { HOME_FORM } from "../types";
@@ -40,7 +40,6 @@ export function useHomeForm() {
   const [pending, setPending] = useState<HomeForm | null>(null);
   const [serverError, setServerError] = useState<ServerError | null>(null);
   const nickname = nicknameDraft ?? (session.status === "ready" ? session.session.nickname : "");
-  useRoomRedirect(null);
 
   const enter = useCallback(
     async (form: HomeForm, nextErrors: HomeErrors, command: () => Promise<RoomResult>) => {

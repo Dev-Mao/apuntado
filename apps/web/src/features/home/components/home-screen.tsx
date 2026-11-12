@@ -3,6 +3,7 @@
 import { useTranslation } from "react-i18next";
 
 import { AppHeader, TextField } from "@/components";
+import { useRoomRedirect } from "@/features/realtime";
 
 import { CreateTableForm } from "./create-table-form";
 import { HomeHero } from "./home-hero";
@@ -12,6 +13,7 @@ import { useHomeForm } from "../hooks/use-home-form";
 export function HomeScreen() {
   const { t } = useTranslation();
   const form = useHomeForm();
+  useRoomRedirect(null);
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-[90rem] flex-col">
