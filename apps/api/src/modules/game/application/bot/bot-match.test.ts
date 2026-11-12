@@ -9,7 +9,7 @@ import { DiscardCard } from "../use-cases/discard-card.js";
 import { DrawCard } from "../use-cases/draw-card.js";
 import { StartGame } from "../use-cases/start-game.js";
 import { StartNextRound } from "../use-cases/start-next-round.js";
-import { EventSpy, JournalSpy } from "../use-cases/use-cases.test-support.js";
+import { EventSpy, JournalSpy, seatsOf } from "../use-cases/use-cases.test-support.js";
 import { BotPlayer } from "./bot-player.js";
 import { SimpleBotStrategy } from "./simple-bot-strategy.js";
 
@@ -26,11 +26,12 @@ const playBotMatch = (mode: GameMode, seed: number) => {
     declare: new DeclareClosure(games, new RuleResolver(), journal, events, clock),
   };
   const bot = new BotPlayer(games, new SimpleBotStrategy(), useCases, clock);
-  const nextRound = new StartNextRound(games);
-  new StartGame(games, new SeededRandom(seed), clock).execute({
+  const nextRound = new StartNextRound(games, events);
+  new StartGame({ games, random: new SeededRandom(seed), clock, ids: { next: () => "m1" }, events }).execute({
     gameId: "g1",
-    playerIds: ["bot-a", "bot-b"],
+    seats: seatsOf(["bot-a", "bot-b"]),
     config: { mode, eliminationThreshold: 101, turnSeconds: 60 },
+    stake: 0,
   });
   const session = games.find("g1")!;
   for (let turn = 0; turn < MAX_TURNS && session.currentStatus !== "FINISHED"; turn++) {

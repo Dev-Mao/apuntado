@@ -15,7 +15,7 @@ const CLASSIC = {
 };
 
 const session = (mode: GameMode = "AMBAS", clock = new ManualClock()) =>
-  GameSession.start("g1", ["ana", "luis"], { mode, eliminationThreshold: 101, turnSeconds: 60 }, {
+  GameSession.start({ gameId: "g1", matchId: "m1" }, ["ana", "luis"], { mode, eliminationThreshold: 101, turnSeconds: 60 }, {
     random: new SeededRandom(9),
     clock,
     newDeck: () => [...CLOSING_DECK],
@@ -57,6 +57,45 @@ describe("Sesión de juego · turno y reloj", () => {
   });
 });
 
+describe("Sesión de juego · eventos", () => {
+  it("anuncia la primera ronda con la mano que recibió cada jugador", () => {
+    const clock = new ManualClock();
+    const s = session("AMBAS", clock);
+    const events = s.pullEvents();
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ name: "RondaIniciada", gameId: "g1", matchId: "m1", roundNumber: 1, at: clock.now() });
+    const hands = events[0]?.name === "RondaIniciada" ? events[0].hands : [];
+    expect(hands).toEqual([
+      { playerId: "ana", cards: ["7H", "7S", "7D", "7C", "KH", "KS", "KD", "4C", "4D", "4H"] },
+      { playerId: "luis", cards: ["2C", "3C", "5C", "6C", "8C", "9C", "10C", "JC", "QC", "2D"] },
+    ]);
+  });
+
+  it("numera los asientos según el orden de los jugadores", () => {
+    const s = session();
+    expect([s.seatOf("ana"), s.seatOf("luis")]).toEqual([1, 2]);
+  });
+
+  it("al cerrar la ronda informa la partida, el instante y el marcador acumulado", () => {
+    const clock = new ManualClock();
+    const s = session("AMBAS", clock);
+    s.pullEvents();
+    anaClosesAfterLuisTurn(s);
+    const [closed] = s.pullEvents();
+    expect(closed).toMatchObject({ name: "RondaCerrada", gameId: "g1", matchId: "m1", at: clock.now(), scoreboard: s.scoreboard });
+  });
+
+  it("la siguiente ronda se anuncia con su número y las manos repartidas", () => {
+    const s = session("AMBAS");
+    anaClosesAfterLuisTurn(s);
+    s.pullEvents();
+    s.startNextRound();
+    const [started] = s.pullEvents();
+    expect(started).toMatchObject({ name: "RondaIniciada", matchId: "m1", roundNumber: 2 });
+    expect(started?.name === "RondaIniciada" && started.hands.map((h) => h.cards.length)).toEqual([10, 10]);
+  });
+});
+
 describe("Sesión de juego · fin de ronda", () => {
   it("en una partida de varias rondas, al cerrar se liquida la ronda y queda a la espera de la siguiente", () => {
     const s = session("AMBAS");
@@ -69,6 +108,7 @@ describe("Sesión de juego · fin de ronda", () => {
 
   it("publica el evento RondaCerrada una sola vez", () => {
     const s = session("AMBAS");
+    s.pullEvents();
     anaClosesAfterLuisTurn(s);
     expect(s.pullEvents().map((e) => e.name)).toEqual(["RondaCerrada"]);
     expect(s.pullEvents()).toEqual([]);
@@ -95,6 +135,7 @@ describe("Sesión de juego · fin de ronda", () => {
 
   it("en Clásica, el primer cierre termina la partida y publica PartidaFinalizada", () => {
     const s = session("CLASICA");
+    s.pullEvents();
     expect(anaClosesAfterLuisTurn(s).valid).toBe(true);
     expect(s.currentStatus).toBe("FINISHED");
     expect(s.winnerId).toBe("ana");

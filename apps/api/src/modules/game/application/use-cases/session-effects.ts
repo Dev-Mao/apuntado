@@ -17,8 +17,10 @@ export const journalEntry = (
   clock: Clock,
 ): PlayJournalEntry => ({
   gameId: session.id,
+  matchId: session.matchId,
   roundNumber: session.currentRoundNumber,
   playerId,
+  seat: session.seatOf(playerId),
   action,
   cardId: card ? cardId(card) : null,
   occurredAt: clock.now(),

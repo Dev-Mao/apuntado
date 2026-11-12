@@ -1,5 +1,6 @@
 import { type DynamicModule, Inject, Injectable, type InjectionToken, Logger, Module, type ModuleMetadata, type OnModuleDestroy } from "@nestjs/common";
 import { SystemClock } from "../../shared/clock.js";
+import { RandomIds } from "../../shared/ids.js";
 import { InProcessEventBus } from "../../shared/in-process-event-bus.js";
 import { OriginPolicy } from "../../shared/origin-policy.js";
 import { SystemRandom } from "../../shared/random.js";
@@ -41,6 +42,7 @@ export class GameModule {
     const components = composeGame({
       clock,
       random: new SystemRandom(),
+      ids: new RandomIds(),
       scheduler,
       notifier,
       presence: registry,

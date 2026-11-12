@@ -36,6 +36,36 @@ export interface ScoreLine {
   readonly eliminated: boolean;
 }
 
-export type GameEvent =
-  | { readonly name: "RondaCerrada"; readonly gameId: string; readonly summary: RoundSummary }
-  | { readonly name: "PartidaFinalizada"; readonly gameId: string; readonly winnerId: string; readonly scoreboard: readonly ScoreLine[] };
+export interface SessionIds {
+  readonly gameId: string;
+  readonly matchId: string;
+}
+
+export interface DealtHand {
+  readonly playerId: string;
+  readonly cards: readonly string[];
+}
+
+interface EventBase extends SessionIds {
+  readonly at: Date;
+}
+
+export interface RoundStarted extends EventBase {
+  readonly name: "RondaIniciada";
+  readonly roundNumber: number;
+  readonly hands: readonly DealtHand[];
+}
+
+export interface RoundClosed extends EventBase {
+  readonly name: "RondaCerrada";
+  readonly summary: RoundSummary;
+  readonly scoreboard: readonly ScoreLine[];
+}
+
+export interface MatchFinished extends EventBase {
+  readonly name: "PartidaFinalizada";
+  readonly winnerId: string;
+  readonly scoreboard: readonly ScoreLine[];
+}
+
+export type GameEvent = RoundStarted | RoundClosed | MatchFinished;
