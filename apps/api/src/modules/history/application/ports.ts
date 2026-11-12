@@ -2,6 +2,10 @@ import type { ProfileStats } from "@apuntado/contracts";
 
 export type MatchKind = "VS_MAQUINA" | "SALA_PRIVADA";
 
+export interface IdGenerator {
+  next(): string;
+}
+
 export interface Participant {
   readonly playerId: string;
   readonly nickname: string;

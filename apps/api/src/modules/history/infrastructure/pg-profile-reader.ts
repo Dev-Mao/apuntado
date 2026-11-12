@@ -18,7 +18,8 @@ SELECT
   COUNT(*) FILTER (WHERE r.tipo_cierre = 'APUNTADO')::int AS apuntado_closures
 FROM ronda r
 JOIN participacion p ON p.id = r.ganador_participacion_id
-WHERE p.jugador_id = $1`;
+JOIN partida pa ON pa.id = r.partida_id
+WHERE p.jugador_id = $1 AND pa.estado = 'FINALIZADA'`;
 
 const RECENT_MATCHES = `
 SELECT
