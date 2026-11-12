@@ -2,6 +2,9 @@ import { cardId } from "@/lib";
 
 import type { PlayerView } from "@apuntado/contracts";
 
+const DEAL_HAND_SIZE = 10;
+const DECK_SIZE = 52;
+
 export interface MotionFrame {
   readonly round: number;
   readonly hand: readonly string[];
@@ -51,7 +54,14 @@ function rivalEvents(prev: MotionFrame, next: MotionFrame): MotionEvent[] {
   return events;
 }
 
+function isFreshDeal(frame: MotionFrame): boolean {
+  const players = frame.counts.size + 1;
+  const opponentsUntouched = Array.from(frame.counts.values()).every((count) => count === DEAL_HAND_SIZE);
+  return frame.hand.length === DEAL_HAND_SIZE && opponentsUntouched && frame.stockSize === DECK_SIZE - players * DEAL_HAND_SIZE - 1;
+}
+
 export function eventsBetween(prev: MotionFrame | null, next: MotionFrame): MotionEvent[] {
-  if (!prev || prev.round !== next.round) return [{ kind: "deal" }];
+  if (!prev) return isFreshDeal(next) ? [{ kind: "deal" }] : [];
+  if (prev.round !== next.round) return [{ kind: "deal" }];
   return [...selfEvents(prev, next), ...rivalEvents(prev, next)];
 }
