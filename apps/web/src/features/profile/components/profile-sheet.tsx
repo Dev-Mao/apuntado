@@ -1,28 +1,11 @@
 "use client";
 
-import Link from "next/link";
-
 import { useTranslation } from "react-i18next";
 
-import { buttonClasses, BUTTON_VARIANT } from "@/components";
-import { ROUTES } from "@/lib";
-
-import { MatchItem } from "./match-item";
+import { MatchList } from "./match-list";
+import { MemberPanels } from "./member-panels";
 
 import type { ProfileView } from "@apuntado/contracts";
-
-function EmptyHistory() {
-  const { t } = useTranslation();
-  return (
-    <div className="flex min-h-0 flex-col items-start gap-3 overflow-y-auto py-4">
-      <p className="text-2xl italic">{t("profile.empty.title")}</p>
-      <p className="max-w-md text-ink-soft">{t("profile.empty.body")}</p>
-      <Link href={ROUTES.HOME} className={buttonClasses(BUTTON_VARIANT.DARK, "mt-1")}>
-        {t("profile.empty.action")}
-      </Link>
-    </div>
-  );
-}
 
 export function ProfileSheet({ profile }: { profile: ProfileView }) {
   const { t } = useTranslation();
@@ -46,15 +29,13 @@ export function ProfileSheet({ profile }: { profile: ProfileView }) {
           </div>
         ))}
       </dl>
-      <h3 className="label-caps mt-4 border-b-[1.5px] border-ink pb-2 text-[0.68rem] sm:mt-6">{t("profile.recentTitle")}</h3>
-      {profile.recent.length === 0 ? (
-        <EmptyHistory />
+      {profile.guest ? (
+        <>
+          <h3 className="label-caps mt-4 border-b-[1.5px] border-ink pb-2 text-[0.68rem] sm:mt-6">{t("profile.recentTitle")}</h3>
+          <MatchList matches={profile.recent} />
+        </>
       ) : (
-        <ol className="min-h-0 divide-y divide-line overflow-y-auto overscroll-contain [mask-image:linear-gradient(to_bottom,black_calc(100%-1.25rem),transparent)]">
-          {profile.recent.map((match) => (
-            <MatchItem key={match.matchId} match={match} />
-          ))}
-        </ol>
+        <MemberPanels matches={profile.recent} />
       )}
     </section>
   );
