@@ -51,10 +51,12 @@ export function useRealtimeStore(): RealtimeContextValue {
   const startSession = useCallback(
     async (nickname: string) => {
       const result = await startGuestSession(nickname);
-      if (result.ok) applySession(result.session);
+      if (!result.ok) return result;
+      if (session.status === "ready" && session.session.nickname !== result.session.nickname) close();
+      applySession(result.session);
       return result;
     },
-    [applySession],
+    [session, close, applySession],
   );
 
   return useMemo(
