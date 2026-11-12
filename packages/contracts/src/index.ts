@@ -76,6 +76,7 @@ export interface SeatView {
 
 export interface TableSnapshot {
   readonly code: string;
+  readonly stake: number;
   readonly seats: readonly SeatView[];
   readonly view: PlayerView;
 }

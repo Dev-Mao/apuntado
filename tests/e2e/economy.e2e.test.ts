@@ -101,6 +101,7 @@ describe("Economía · el libro cuadra con el saldo", () => {
     const finished = Promise.all([playUntilFinished(evaSocket), playUntilFinished(tomSocket)]);
     expect(await evaSocket.emitWithAck("room:start")).toEqual({ ok: true });
     const [final] = await finished;
+    expect(final.stake).toBe(100);
     await database.queue.idle();
 
     const evaWon = final.view.winnerId === final.view.playerId;
