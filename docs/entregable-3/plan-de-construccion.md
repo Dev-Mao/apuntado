@@ -41,7 +41,11 @@ Cada fase deja algo verificable y no se avanza sin que la anterior funcione.
 - Historial escucha los eventos `PartidaIniciada`, `RondaIniciada`, `RondaCerrada` y
   `PartidaFinalizada`. Con ellos escribe `partida`, `participacion`, `ronda`, las manos repartidas y
   `puntaje_acumulado`. Juego no sabe que Historial existe.
-- Identidad guarda cada invitado en `jugador` cuando le emite un token.
+- Identidad guarda cada invitado en `jugador` cuando le emite un token. Además, Historial asegura
+  esa fila al abrir la partida, para que también la vean en su perfil los invitados con una sesión
+  anterior a esta fase.
+- Una escritura que no encuentra su fila (una jugada sin su ronda, una liquidación de una ronda ya
+  cerrada) se informa como error en lugar de perderse en silencio.
 - Todas las escrituras pasan por una sola cola en serie, así una jugada nunca llega antes que la
   ronda a la que pertenece. Cada liquidación de ronda se escribe en una sola transacción, y la
   restricción `UNIQUE (participacion_id, ronda_id)` impide aplicarla dos veces.
@@ -51,10 +55,27 @@ Cada fase deja algo verificable y no se avanza sin que la anterior funcione.
   las 52 cartas y la 003 permite cerrar una ronda sin ganador (fin por segundo reciclaje), caso que
   la restricción original `cierre_coherente` no contemplaba.
 
-Desviación respecto al E2 (§2.4): la liquidación se persiste justo después de aplicarse en memoria,
-no dentro del turno. Se conserva la atomicidad de la escritura, pero si el servidor cae entre ambos
-momentos, esa ronda no queda registrada. Se acepta porque la partida en curso tampoco sobrevive a
-una caída.
+Desviaciones respecto al E2 (§2.4), aceptadas porque la partida en curso vive en memoria y tampoco
+sobrevive a una caída:
+
+- La liquidación se persiste justo después de aplicarse en memoria, no dentro del turno. Se
+  conserva la atomicidad de la escritura, pero si el servidor cae entre ambos momentos, esa ronda
+  no queda registrada.
+- `partida.version` se incrementa en cada liquidación, pero no se usa como bloqueo optimista: con un
+  solo proceso y una sola cola en serie no hay dos escritores que compitan por la misma partida.
+- El cierre de la partida es una transacción aparte de la última liquidación. Si esa escritura
+  falla, la partida queda `EN_CURSO` y no aparece en el perfil.
+- Una escritura fallida se registra en el log y no se reintenta.
+- Una partida interrumpida por un reinicio o un redespliegue queda `EN_CURSO` para siempre.
+- El perfil se lee directamente de la base, así que una partida que acaba de terminar puede tardar
+  un instante en aparecer.
+
+Otras decisiones de operación:
+
+- Si `DATABASE_URL` está definida pero la base no responde al arrancar, el servidor no arranca. En
+  Render eso hace fallar el despliegue y deja en pie la versión anterior.
+- La migración 001 lee `models/er/schema.sql`, el entregable del E2, que queda congelado: cualquier
+  cambio al esquema entra como una migración nueva.
 
 ## Interfaz
 

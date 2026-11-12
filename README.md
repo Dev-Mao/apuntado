@@ -68,7 +68,9 @@ npm start                 # arranca el servidor en http://localhost:3000 con la 
 ```
 
 Para desarrollar con recarga automática, en dos terminales. El servidor de desarrollo lee
-`.env.local` de la raíz si existe; ese archivo no se sube al repositorio.
+`.env.local` de la raíz si existe; ese archivo no se sube al repositorio. Si `DATABASE_URL` apunta
+a la base de producción, las partidas de prueba quedan en producción: para desarrollar conviene una
+rama de Neon aparte o el PostgreSQL local de `compose.yaml`.
 
 ```bash
 npm run dev -w @apuntado/api   # servidor en http://localhost:3000
@@ -159,6 +161,6 @@ archivada en PostgreSQL y aparece en el perfil del jugador (`GET /api/profile`).
   se pierde la conexión.
 
 ```
-263 pruebas  ·  226 de servidor + 6 de arquitectura + 18 de esquema e historial + 13 de punta a punta
+267 pruebas  ·  228 de servidor + 6 de arquitectura + 20 de esquema e historial + 13 de punta a punta
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```
