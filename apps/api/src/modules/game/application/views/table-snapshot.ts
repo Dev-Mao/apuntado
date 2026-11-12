@@ -30,6 +30,7 @@ export const buildTableSnapshot = (
   presence: Presence,
 ): TableSnapshot => ({
   code: room.code,
+  stake: room.settings.stake,
   seats: seatViews(room, presence),
   view: projectPlayerView(session, playerId, now),
 });
