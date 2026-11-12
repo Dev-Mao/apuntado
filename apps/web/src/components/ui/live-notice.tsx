@@ -7,7 +7,7 @@ interface LiveNoticeProps {
 
 export function LiveNotice({ message, className }: LiveNoticeProps) {
   return (
-    <p aria-live="polite" className={cn("font-display text-lg leading-snug text-coral-ink empty:hidden", className)}>
+    <p aria-live="polite" className={cn("font-display text-lg leading-snug text-coral-ink empty:sr-only", className)}>
       {message}
     </p>
   );

@@ -20,7 +20,7 @@
     "unavailable": "No pudimos comunicarnos con el servidor. Inténtalo de nuevo."
   },
   "realtime": {
-    "reconnecting": "Sin conexión con el servidor, reconectando",
+    "reconnecting": "Reconectando con el servidor",
     "loading": "Preparando la mesa"
   },
   "gameMode": {
