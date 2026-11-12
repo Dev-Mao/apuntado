@@ -8,16 +8,16 @@ import { ROUTES } from "@/lib";
 
 import { useRealtime } from "../context";
 
-export function useLeaveRoom() {
+export function useLeaveRoom(evenIfRejected = false) {
   const router = useRouter();
   const { commands, clearRoom } = useRealtime();
   const { notice, run } = useCommandNotice();
 
   const leave = useCallback(async () => {
-    if (!(await run(commands.leaveRoom))) return;
+    if (!(await run(commands.leaveRoom)) && !evenIfRejected) return;
     clearRoom();
     router.push(ROUTES.HOME);
-  }, [run, commands, clearRoom, router]);
+  }, [run, commands, clearRoom, router, evenIfRejected]);
 
   return { notice, leave };
 }

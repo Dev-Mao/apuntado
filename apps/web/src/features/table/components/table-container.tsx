@@ -13,7 +13,7 @@ export function TableContainer() {
   const code = useRoomCode();
   const { room } = useRealtime();
   const actions = useTableCommands();
-  const { notice, leave } = useLeaveRoom();
+  const { notice, leave } = useLeaveRoom(true);
   const handleLeave = useCallback(() => void leave(), [leave]);
   useRoomEntry(code);
   useRoomRedirect(ROUTES.TABLE, code);
