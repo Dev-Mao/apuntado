@@ -28,15 +28,8 @@ export function SeatPill({ name, count, isSelf = false, isActive = false, isConn
         className,
       )}
     >
-      <span className="flex min-w-0 items-center gap-2 py-1 pr-2 pl-2.5 sm:pr-3 sm:pl-3">
-        <span
-          className={cn(
-            "size-1.5 shrink-0 rounded-full max-sm:hidden",
-            isConnected ? "bg-ink" : "border border-ink",
-            isActive && !isSelf && "animate-pulse bg-coral-ink",
-          )}
-        />
-        <span className="truncate text-[0.82rem] leading-tight sm:text-[0.95rem]">{name}</span>
+      <span className="flex min-w-0 items-center py-1 pr-2.5 pl-3 sm:pr-3.5 sm:pl-4">
+        <span className="truncate text-[0.85rem] leading-tight font-semibold sm:text-base">{name}</span>
       </span>
       <span className="grid min-w-7 place-items-center bg-ink px-1.5 text-sm leading-none text-paper tabular-nums sm:min-w-9 sm:px-2 sm:text-[0.95rem]">{count}</span>
     </span>

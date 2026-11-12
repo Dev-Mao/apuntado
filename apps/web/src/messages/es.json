@@ -196,7 +196,9 @@
       "open": "Ver el marcador completo"
     },
     "footer": {
-      "rules": "Reglas"
+      "rules": "Reglas",
+      "label": "Enlaces de la mesa",
+      "scoreboard": "Marcador"
     },
     "rules": {
       "title": "Reglas en breve",

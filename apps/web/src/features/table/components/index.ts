@@ -9,6 +9,7 @@ export * from "./seat-pill";
 export * from "./table-backdrop";
 export * from "./table-container";
 export * from "./table-header";
+export * from "./table-links";
 export * from "./table-screen";
 export * from "./table-sidebar";
 export * from "./table-stage";

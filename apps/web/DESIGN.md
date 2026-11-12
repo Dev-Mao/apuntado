@@ -2,17 +2,17 @@
 
 ## Idea
 
-Una mesa de juego vintage y editorial: papel crema con grano, una mesa negra de bordes orgánicos en el centro, círculos coral que se salen de los bordes y tipografía de revista. Tres colores y sus matices, mucho aire y alineación estricta. La referencia es la imagen que compartió el equipo; aquí la traducimos a Apuntado sin copiar textos ni ilustraciones.
+Una mesa de juego vintage y editorial, pero limpia: fondo crema plano, una mesa negra de borde curvo, círculos coral que se salen por los bordes y tipografía de revista. Tres colores planos, sin texturas ni adornos, mucho aire y alineación estricta. La referencia es la imagen favorita del equipo; la usamos como lenguaje, no como plano, y no copiamos textos ni ilustraciones.
 
 ## Paleta
 
 | Nombre       | Hex       | Uso                                                        |
 | ------------ | --------- | ---------------------------------------------------------- |
-| Papel        | `#EFE5D6` | Fondo de toda la app, con grano sutil                      |
-| Papel claro  | `#F7F0E4` | Paneles, barra lateral, arco de la mano, diálogos          |
+| Papel        | `#F5EEE6` | Fondo plano de toda la app                                 |
+| Papel claro  | `#FBF6F1` | Paneles, barra lateral, arco de la mano, diálogos          |
 | Tinta        | `#1F1B19` | La mesa, el texto, los pips negros                         |
-| Coral        | `#E07A5F` | Acción principal, turno, selección, dorso de las cartas    |
-| Salmón       | `#EE9A80` | Círculos de fondo y matices del coral                      |
+| Coral        | `#EC7A60` | Acción principal, turno, selección, dorso liso de las cartas |
+| Salmón       | `#F29C84` | Círculos de fondo y matices del coral                      |
 | Coral tinta  | `#A8452C` | Texto coral sobre papel (contraste AA) y palos rojos       |
 
 Las líneas finas son tinta al 15 %.
@@ -59,4 +59,4 @@ Las 10 u 11 cartas se solapan en un abanico que siempre cabe en el ancho: el pas
 
 ## Cartas
 
-Papel crema envejecido, pips de tinta (rojos en coral tinta), índices en Bodoni y figuras enmarcadas con trazos finos. Para usar las imágenes del equipo basta cambiar `CARD_ART` en `src/components/ui/playing-card.tsx` a `CARD_ART.IMAGES`; se leerán de `/cards/{rango}{palo}.png` y `/cards/back.png`.
+Caras crema con pips de tinta (rojos en coral tinta), índices serif y figuras enmarcadas con trazos finos. El dorso es coral liso con un filo crema. Para usar las imágenes del equipo basta cambiar `CARD_ART` en `src/components/ui/playing-card.tsx` a `CARD_ART.IMAGES`; se leerán de `/cards/{rango}{palo}.png` y `/cards/back.png`.

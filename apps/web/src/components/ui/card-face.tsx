@@ -83,11 +83,7 @@ export function CardFace({ card }: { card: CardDto }) {
 export function CardBack() {
   return (
     <span className="absolute inset-0 bg-card">
-      <span className="card-back absolute inset-[6%] grid place-items-center rounded-[5%/3.6%] shadow-[inset_0_0_0_1px_rgb(246_238_223/0.7)]">
-        <span className="grid size-[44cqw] place-items-center rounded-full border border-card/70 bg-coral text-card">
-          <SuitGlyph suit="C" className="size-[24cqw]" />
-        </span>
-      </span>
+      <span className="card-back absolute inset-[5%] rounded-[5%/3.6%]" />
     </span>
   );
 }

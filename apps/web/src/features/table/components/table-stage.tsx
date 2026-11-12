@@ -2,7 +2,6 @@
 
 import { useTranslation } from "react-i18next";
 
-import { SparkleIcon } from "@/components";
 import { seatOf } from "@/lib";
 
 import { CardPiles } from "./card-piles";
@@ -52,7 +51,6 @@ export function TableStage({ snapshot, selfName, stockAction, discardAction }: T
           aria-hidden="true"
           className="pointer-events-none absolute top-1/2 left-1/2 aspect-square h-[115%] max-h-[34rem] -translate-1/2 rounded-full border border-paper/15"
         />
-        <SparkleIcon className="pointer-events-none absolute top-[18%] left-[18%] hidden size-5 text-paper/70 sm:block" />
         <CardPiles stockSize={view.stockSize} discardTop={view.discardTop} stockAction={stockAction} discardAction={discardAction} />
       </div>
       <div className="flex justify-center lg:absolute lg:inset-x-0 lg:bottom-3">

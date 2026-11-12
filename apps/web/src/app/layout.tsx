@@ -30,13 +30,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#efe5d6",
+  themeColor: "#f5eee6",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es" className={`${display.variable} ${sans.variable}`}>
-      <body className="paper-grain">
+      <body>
         <AppProviders>
           <RealtimeProvider>
             <ConnectionBanner />

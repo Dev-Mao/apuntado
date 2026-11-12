@@ -4,13 +4,16 @@ import { useTranslation } from "react-i18next";
 
 import { RulesIcon, SuitGlyph } from "@/components";
 
+import { TableLinks } from "./table-links";
+
 interface TableHeaderProps {
   code: string;
   round: number;
   onShowRules: () => void;
+  onShowScores: () => void;
 }
 
-export function TableHeader({ code, round, onShowRules }: TableHeaderProps) {
+export function TableHeader({ code, round, onShowRules, onShowScores }: TableHeaderProps) {
   const { t } = useTranslation();
 
   return (
@@ -21,7 +24,8 @@ export function TableHeader({ code, round, onShowRules }: TableHeaderProps) {
         <span className="label-caps text-[0.75rem] tracking-[0.3em]">{t("brand.name")}</span>
         <span aria-hidden="true" className="hidden h-px w-14 bg-ink/40 sm:block" />
       </div>
-      <div className="flex items-center gap-4">
+      <TableLinks onShowRules={onShowRules} onShowScores={onShowScores} />
+      <div className="flex items-center gap-4 lg:hidden">
         <span className="label-caps text-[0.62rem] lg:hidden">{t("table.round", { count: round })}</span>
         <button
           type="button"
