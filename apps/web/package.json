@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint ."
@@ -15,7 +15,8 @@
     "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "react-i18next": "^18.0.1"
+    "react-i18next": "^18.0.1",
+    "socket.io-client": "^4.8.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.5",
