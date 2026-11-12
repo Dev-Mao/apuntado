@@ -32,7 +32,7 @@ export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave 
           <LobbyTable lobby={lobby} selfId={selfId} />
           <div className="flex flex-col items-center gap-3">
             {isHost ? (
-              <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+              <div className="flex w-full flex-col gap-2 tiny:flex-row tiny:justify-center sm:w-auto sm:flex-row">
                 <Button onClick={onStart} className="sm:min-w-56">
                   {t("lobby.start")}
                   <ArrowIcon />

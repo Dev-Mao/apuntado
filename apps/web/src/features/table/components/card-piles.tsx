@@ -68,7 +68,7 @@ export function CardPiles({ stockSize, discardTop, stockAction, discardAction }:
   const discardLabel = discardTop ? t("table.discardLabel", { card: cardLabel(discardTop) }) : t("table.discardEmpty");
 
   return (
-    <div className="relative flex items-start justify-center gap-8 sm:gap-16">
+    <div className="relative flex items-start justify-center gap-8 sm:gap-16 lg:gap-10 xl:gap-16">
       <Pile
         name="stock"
         label={t("table.stockLabel", { count: stockSize })}
