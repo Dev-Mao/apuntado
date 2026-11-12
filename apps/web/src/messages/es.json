@@ -16,7 +16,12 @@
     "seconds": "{{count}} s",
     "noStake": "Sin apuesta",
     "chips_one": "{{count}} ficha",
-    "chips_other": "{{count}} fichas"
+    "chips_other": "{{count}} fichas",
+    "unavailable": "No pudimos comunicarnos con el servidor. Inténtalo de nuevo."
+  },
+  "realtime": {
+    "reconnecting": "Sin conexión con el servidor, reconectando",
+    "loading": "Preparando la mesa"
   },
   "gameMode": {
     "CLASICA": "Clásica (4-3-3)",

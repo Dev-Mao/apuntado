@@ -1,6 +1,7 @@
 import { Josefin_Sans, Playfair_Display } from "next/font/google";
 
 import { AppProviders } from "@/components";
+import { ConnectionBanner, RealtimeProvider } from "@/features/realtime";
 import es from "@/messages/es.json";
 
 import "./globals.css";
@@ -35,7 +36,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es" className={`${display.variable} ${sans.variable}`}>
       <body className="paper-grain">
-        <AppProviders>{children}</AppProviders>
+        <AppProviders>
+          <RealtimeProvider>
+            <ConnectionBanner />
+            {children}
+          </RealtimeProvider>
+        </AppProviders>
       </body>
     </html>
   );
