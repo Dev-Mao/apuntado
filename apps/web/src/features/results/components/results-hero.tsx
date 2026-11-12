@@ -38,12 +38,12 @@ export function ResultsHero(props: ResultsHeroProps) {
 
   return (
     <div className="flex shrink-0 flex-col items-center gap-3 text-center">
-      {summary.isFinished && <CardFan cards={WINNING_HAND} spreadDeg={7} delayMs={150} className="mb-8 max-sm:-my-6 max-sm:scale-[0.7] [@media(max-height:46rem)]:hidden" />}
+      {summary.isFinished && <CardFan cards={WINNING_HAND} spreadDeg={7} delayMs={150} className="mb-6 max-sm:-my-6 max-sm:scale-[0.7] [@media(max-height:50rem)]:hidden" />}
       <h1
         className={
           summary.isFinished
-            ? "animate-turn-in font-display font-semibold tiny:text-[2.2rem] text-[clamp(3rem,11vw,6.5rem)] leading-[0.9] tracking-[-0.02em] [animation-delay:650ms]"
-            : "font-display font-semibold tiny:text-[2.2rem] text-[clamp(2.8rem,9vw,5rem)] leading-[0.9] tracking-[-0.02em]"
+            ? "animate-turn-in font-display text-[clamp(2.6rem,7vw,4.6rem)] leading-[0.95] font-semibold tracking-[-0.02em] text-balance [animation-delay:650ms] tiny:text-[2rem]"
+            : "font-display text-[clamp(2.4rem,6vw,4rem)] leading-[0.95] font-semibold tracking-[-0.02em] text-balance tiny:text-[2rem]"
         }
       >
         {headline}

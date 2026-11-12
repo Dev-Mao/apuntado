@@ -38,8 +38,8 @@ export function ClosureForm({ cards, enabledClosures, cannotDiscard, state, onCl
   };
 
   return (
-    <div className="mt-4 flex flex-col gap-5">
-      <p className="max-w-xl text-lg leading-snug text-ink-soft italic">{t("closure.intro")}</p>
+    <div className="mt-4 flex flex-col gap-5 short:mt-3 short:gap-3">
+      <p className="max-w-xl text-lg leading-snug text-ink-soft italic short:hidden">{t("closure.intro")}</p>
       {typeOptions.length > 1 && (
         <ChoicePills legend={t("closure.type")} name="closure-type" options={typeOptions} value={draft.type} onChange={draft.setType} />
       )}

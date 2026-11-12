@@ -21,7 +21,7 @@ function SlotPanelBase({ slot, title, cards, canAssign, onAssign, onReturn }: Sl
     <section
       aria-label={title}
       className={cn(
-        "flex min-h-32 flex-col rounded-2xl border transition-[border-color,background-color] duration-200",
+        "flex min-h-32 flex-col short:min-h-24 rounded-2xl border transition-[border-color,background-color] duration-200",
         isDiscard ? "border-coral/60 bg-coral/[0.08]" : "border-dashed border-ink/25 bg-paper/60",
         canAssign && "border-solid border-coral bg-coral/15",
       )}
