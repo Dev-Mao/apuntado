@@ -86,7 +86,7 @@ Variables de entorno del servidor:
 | `SESSION_SECRET` | Clave con que se firman las sesiones | clave de desarrollo |
 | `WEB_DIR` | Carpeta de la interfaz compilada | `apps/web/out` |
 | `ALLOWED_ORIGINS` | Orígenes adicionales aceptados, separados por comas; en desarrollo se suman a `http://localhost:3001` | ninguno |
-| `DATABASE_URL` | Conexión a PostgreSQL. Al arrancar se aplican las migraciones pendientes | sin definir: el juego funciona, pero no guarda historial ni bitácora |
+| `DATABASE_URL` | Conexión a PostgreSQL. Al arrancar se aplican las migraciones pendientes | sin definir: el juego funciona solo con invitados, sin historial, bitácora ni fichas |
 
 Para tener PostgreSQL local sin una cuenta en la nube: `docker compose up -d` y
 `DATABASE_URL=postgres://apuntado:apuntado@localhost:5432/apuntado`.
@@ -141,9 +141,10 @@ violadas. Se reescribieron con `matchingPattern` explícito. El análisis está 
 
 ## Estado actual
 
-Fases 3 y 4 del [plan de construcción](docs/entregable-3/plan-de-construccion.md) completas: el
-juego se puede jugar de punta a punta desde varios navegadores, y cada partida terminada queda
-archivada en PostgreSQL y aparece en el perfil del jugador (`GET /api/profile`).
+Fases 3, 4 y 5 del [plan de construcción](docs/entregable-3/plan-de-construccion.md) completas: el
+juego se puede jugar de punta a punta desde varios navegadores; cada partida terminada queda
+archivada en PostgreSQL y aparece en el perfil del jugador; y las cuentas registradas tienen fichas
+para apostar.
 
 - Dominio completo: ronda, partida en las modalidades Clásica, Apuntado y Ambas, acumulación y
   eliminación por umbral, vencimiento del turno.
@@ -151,7 +152,11 @@ archivada en PostgreSQL y aparece en el perfil del jugador (`GET /api/profile`).
   Las mesas terminadas o abandonadas se borran tras diez minutos.
 - En producción, la sesión y el socket solo aceptan peticiones del propio origen y de los listados
   en `ALLOWED_ORIGINS`; en desarrollo aceptan además la interfaz en `http://localhost:3001`.
-- Sesión de invitado con token firmado en una cookie `httpOnly`.
+- Sesión de invitado o de cuenta registrada con token firmado en una cookie `httpOnly`; contraseñas
+  con Argon2id.
+- Fichas: bono de bienvenida, apuesta retenida al iniciar, bote al ganador y devolución de
+  retenciones sin liquidar al arrancar. El saldo se deriva del libro de movimientos
+  (`GET /api/wallet`).
 - Servidor NestJS con Socket.IO: cada jugador recibe solo su vista; el reloj de turno y el bot juegan
   solos cuando corresponde.
 - Persistencia en PostgreSQL (Neon en producción) con migraciones al arrancar, bitácora de jugadas
@@ -161,6 +166,6 @@ archivada en PostgreSQL y aparece en el perfil del jugador (`GET /api/profile`).
   se pierde la conexión.
 
 ```
-269 pruebas  ·  230 de servidor + 6 de arquitectura + 20 de esquema e historial + 13 de punta a punta
+304 pruebas  ·  256 de servidor + 6 de arquitectura + 25 de esquema, historial y fichas + 17 de punta a punta
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```

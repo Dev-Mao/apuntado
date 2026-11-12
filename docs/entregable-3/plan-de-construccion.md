@@ -86,6 +86,41 @@ Otras decisiones de operación:
 - La migración 001 lee `models/er/schema.sql`, el entregable del E2, que queda congelado: cualquier
   cambio al esquema entra como una migración nueva.
 
+## Cómo quedaron las cuentas y las fichas (fase 5)
+
+- Identidad registra cuentas con correo, contraseña y apodo. La contraseña se guarda cifrada con
+  Argon2id. La misma cookie de sesión sirve para invitados y registrados. Un invitado que se
+  registra conserva su identificador y, con él, su historial (RF-ID-05). El inicio de sesión
+  responde lo mismo ante un correo desconocido y ante una contraseña equivocada.
+- Economía implementa el puerto `StakeGuard` que declara Juego (la `GarantiaDeApuesta` del ADR-05).
+  Al crear una mesa con apuesta y al unirse a ella, Juego consulta si el jugador cubre la apuesta.
+  Al iniciar, retiene la apuesta de cada jugador para esa partida, de forma síncrona y antes de
+  crear la sesión; si alguien no la cubre, la partida no empieza.
+- El bote completo (apuesta por número de jugadores) va al ganador con el evento
+  `PartidaFinalizada`. Una cuenta nueva recibe un bono de bienvenida de 1000 fichas con el evento
+  `JugadorRegistrado`.
+- El saldo no se guarda en ningún lado: se deriva de `movimiento_ficha`. Al arrancar, Economía lo
+  reconstruye desde el libro y devuelve las retenciones de partidas que una caída dejó sin liquidar
+  (RF-EC-05). La migración 004 agrega el motivo `APUESTA_DEVUELTA`.
+- Reglas: un invitado no apuesta; sin saldo suficiente no se crea ni se une a una mesa con apuesta
+  (RF-EC-06); la máquina no juega en mesas con apuesta (el bot no tiene economía, como dice el E1);
+  la apuesta va de 0 a 100 000 fichas.
+
+Decisiones y límites de esta fase:
+
+- Los saldos viven en memoria para que la consulta de `StakeGuard` sea síncrona, como pide el
+  ADR-05. Con un solo proceso no hay dos escritores; cada movimiento se aplica en memoria y se
+  encola hacia la base. Si una escritura falla, la memoria y el libro difieren hasta el siguiente
+  arranque, que reconstruye desde el libro.
+- La retención se escribe en el libro cuando llega `PartidaIniciada`, porque el movimiento
+  referencia la partida y esa fila la escribe Historial con el mismo evento. Por eso Historial se
+  suscribe antes que Economía; una prueba de punta a punta falla si se invierte el orden.
+- No se construyó el bono periódico para jugadores sin saldo (RF-EC-07) ni la recarga externa
+  (RF-EC-09, que el E1 deja como interfaz).
+- El E1 pedía historial solo para registrados (RF-HI-04). El MVP también lo guarda para invitados
+  mientras dure su sesión, y así se conserva cuando el invitado se registra.
+- El inicio de sesión no limita intentos por tiempo.
+
 ## Interfaz
 
 Se construye en paralelo desde la fase 1, en una rama propia, empezando por el sistema de diseño
