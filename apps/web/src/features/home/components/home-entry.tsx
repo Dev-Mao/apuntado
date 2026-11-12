@@ -2,7 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 
-import { ArrowIcon, Button, BUTTON_VARIANT, LiveNotice, SparkleIcon, TextField } from "@/components";
+import { ArrowIcon, Button, BUTTON_VARIANT, LiveNotice, TextField } from "@/components";
 
 import { CREATE_FORM_ID } from "../types";
 import { JoinTableForm } from "./join-table-form";
@@ -21,7 +21,6 @@ export function HomeEntry({ form, linkCode }: HomeEntryProps) {
 
   return (
     <section aria-labelledby="entry-title" className="relative overflow-hidden rounded-[2rem] bg-ink px-6 pt-8 pb-7 text-paper shadow-sheet sm:px-10 sm:pt-10 sm:pb-9">
-      <SparkleIcon className="absolute top-8 right-8 size-5 text-paper/70" />
       <p className="label-caps flex items-center gap-4 text-[0.65rem] text-paper/75">
         {t("home.entry.eyebrow")}
         <span aria-hidden="true" className="h-px w-12 bg-paper/40" />

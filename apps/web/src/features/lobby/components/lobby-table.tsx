@@ -2,8 +2,6 @@
 
 import { useTranslation } from "react-i18next";
 
-import { SparkleIcon } from "@/components";
-
 import { placeSeats } from "../seating";
 import { LobbySeat } from "./lobby-seat";
 import { ShareCode } from "./share-code";
@@ -29,7 +27,6 @@ export function LobbyTable({ lobby, selfId }: { lobby: LobbyView; selfId: string
       </h2>
       <span aria-hidden="true" className="absolute inset-x-[21%] inset-y-[13%] rounded-[50%] bg-ink shadow-sheet sm:inset-x-[13%] sm:inset-y-[14%]">
         <span className="absolute inset-[7%] rounded-[50%] border border-paper/15" />
-        <SparkleIcon className="absolute top-[22%] right-[20%] size-4 text-paper/70" />
       </span>
       <div className="absolute inset-0 grid place-items-center">
         <ShareCode code={lobby.code} />

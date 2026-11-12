@@ -7,15 +7,15 @@
 }
 
 @theme {
-  --color-paper: #efe5d6;
-  --color-paper-light: #f7f0e4;
-  --color-paper-deep: #e4d5bf;
-  --color-card: #f6eedf;
+  --color-paper: #f5eee6;
+  --color-paper-light: #fbf6f1;
+  --color-paper-deep: #ecdfd3;
+  --color-card: #fcf8f2;
   --color-ink: #1f1b19;
   --color-ink-soft: #5e544c;
-  --color-coral: #e07a5f;
-  --color-coral-deep: #c9644a;
-  --color-salmon: #ee9a80;
+  --color-coral: #ec7a60;
+  --color-coral-deep: #d8654b;
+  --color-salmon: #f29c84;
   --color-coral-ink: #a8452c;
   --color-suit-red: #b3402a;
   --color-line: #1f1b1926;
@@ -90,23 +90,6 @@
   letter-spacing: 0.2em;
 }
 
-@utility paper-grain {
-  position: relative;
-  isolation: isolate;
-  background-color: var(--color-paper);
-
-  &::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 30;
-    pointer-events: none;
-    opacity: 0.28;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.18 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-}
-
 @utility hand-fan {
   container-type: inline-size;
   --card-w: 4.4rem;
@@ -131,9 +114,6 @@
 
 @utility card-back {
   background-color: var(--color-coral);
-  background-image:
-    repeating-linear-gradient(45deg, rgb(246 238 223 / 0.18) 0 1px, transparent 1px 8%),
-    repeating-linear-gradient(-45deg, rgb(246 238 223 / 0.18) 0 1px, transparent 1px 8%);
 }
 
 @layer base {

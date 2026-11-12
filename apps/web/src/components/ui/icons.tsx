@@ -72,11 +72,11 @@ export function ArrowIcon({ className }: IconProps) {
   );
 }
 
-export function SparkleIcon({ className }: IconProps) {
+export function BarsIcon({ className }: IconProps) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor" className={className ?? "size-6"}>
-      <path d="M12 1c.6 5.6 4.4 9.4 11 11-6.6 1.6-10.4 5.4-11 11-.6-5.6-4.4-9.4-11-11 6.6-1.6 10.4-5.4 11-11z" />
-    </svg>
+    <Icon className={className}>
+      <path d="M6 19v-5M12 19V9M18 19V5" />
+    </Icon>
   );
 }
 
