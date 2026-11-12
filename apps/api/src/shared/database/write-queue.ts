@@ -7,7 +7,12 @@ export class WriteQueue {
     this.tail = this.tail.then(task).catch(this.onError);
   }
 
-  idle(): Promise<void> {
-    return this.tail;
+  async idle(): Promise<void> {
+    let observed: Promise<void>;
+    do {
+      observed = this.tail;
+      await observed;
+      await Promise.resolve();
+    } while (observed !== this.tail);
   }
 }

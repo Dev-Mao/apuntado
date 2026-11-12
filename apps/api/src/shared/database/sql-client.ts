@@ -9,3 +9,8 @@ export interface SqlClient extends SqlExecutor {
   transaction(work: (tx: SqlExecutor) => Promise<void>): Promise<void>;
   close(): Promise<void>;
 }
+
+export const requireRows = <Row>(rows: readonly Row[], what: string): readonly Row[] => {
+  if (rows.length === 0) throw new Error(`No rows affected: ${what}`);
+  return rows;
+};
