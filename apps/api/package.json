@@ -7,7 +7,8 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run src",
     "build": "tsc -p tsconfig.build.json",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "dev": "tsx watch src/main.ts"
   },
   "dependencies": {
     "@nestjs/common": "^12.4.2",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "socket.io-client": "^4.8.4"
+    "socket.io-client": "^4.8.4",
+    "tsx": "^4.23.15"
   }
 }

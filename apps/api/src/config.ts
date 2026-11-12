@@ -15,7 +15,13 @@ export interface AppConfig {
 const DEFAULT_PORT = 3000;
 const DEVELOPMENT_SECRET = "apuntado-development-secret";
 const DEFAULT_TIMING: TableTiming = { botDelayMs: 1200, roundPauseMs: 8000, cleanupMs: 10 * 60 * 1000 };
+const DEVELOPMENT_ORIGINS = ["http://localhost:3001"];
 const BUNDLED_WEB_DIR = fileURLToPath(new URL("../../web/out", import.meta.url));
+
+const allowedOrigins = (raw: string | undefined, production: boolean): string[] => {
+  if (raw === undefined) return production ? [] : DEVELOPMENT_ORIGINS;
+  return raw.split(",").map((o) => o.trim()).filter(Boolean);
+};
 
 export const loadConfig = (env: Record<string, string | undefined>): AppConfig => {
   const production = env["NODE_ENV"] === "production";
@@ -28,6 +34,6 @@ export const loadConfig = (env: Record<string, string | undefined>): AppConfig =
     secureCookies: production,
     webDir: existsSync(webDir) ? webDir : null,
     timing: DEFAULT_TIMING,
-    allowedOrigins: (env["ALLOWED_ORIGINS"] ?? "").split(",").map((o) => o.trim()).filter(Boolean),
+    allowedOrigins: allowedOrigins(env["ALLOWED_ORIGINS"], production),
   };
 };

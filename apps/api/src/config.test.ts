@@ -13,6 +13,15 @@ describe("Configuración del servidor", () => {
     expect(config.secureCookies).toBe(false);
   });
 
+  it("en desarrollo acepta por defecto la interfaz en el puerto 3001; en producción, solo el propio origen", () => {
+    expect(loadConfig({}).allowedOrigins).toEqual(["http://localhost:3001"]);
+    expect(loadConfig({ NODE_ENV: "production", SESSION_SECRET: "s" }).allowedOrigins).toEqual([]);
+    expect(loadConfig({ ALLOWED_ORIGINS: "https://a.example, https://b.example" }).allowedOrigins).toEqual([
+      "https://a.example",
+      "https://b.example",
+    ]);
+  });
+
   it("toma el puerto del entorno e ignora una carpeta web inexistente", () => {
     const config = loadConfig({ PORT: "8080", WEB_DIR: "no-existe" });
     expect(config.port).toBe(8080);

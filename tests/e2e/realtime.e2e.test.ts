@@ -5,28 +5,30 @@ import type { ClientToServerEvents, LobbyView, ServerToClientEvents, TableSnapsh
 import { type Socket, io } from "socket.io-client";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { AppModule } from "../../apps/api/src/app.module.js";
+import { configureApp } from "../../apps/api/src/bootstrap.js";
+import type { AppConfig } from "../../apps/api/src/config.js";
 
 type Client = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 const SETTINGS = { mode: "CLASICA", eliminationThreshold: 101, turnSeconds: 60, stake: 0 } as const;
 const WAIT_MS = 5000;
+const DEV_ORIGIN = "http://localhost:3001";
 
 let app: INestApplication;
 let baseUrl: string;
 const clients: Client[] = [];
 
 beforeAll(async () => {
-  app = await NestFactory.create(
-    AppModule.register({
-      port: 0,
-      sessionSecret: "e2e-secret",
-      secureCookies: false,
-      webDir: null,
-      timing: { botDelayMs: 20, roundPauseMs: 50, cleanupMs: 60_000 },
-      allowedOrigins: [],
-    }),
-    { logger: false },
-  );
+  const config: AppConfig = {
+    port: 0,
+    sessionSecret: "e2e-secret",
+    secureCookies: false,
+    webDir: null,
+    timing: { botDelayMs: 20, roundPauseMs: 50, cleanupMs: 60_000 },
+    allowedOrigins: [DEV_ORIGIN],
+  };
+  app = await NestFactory.create(AppModule.register(config), { logger: false });
+  configureApp(app, config);
   await app.listen(0);
   baseUrl = await app.getUrl();
 });
@@ -105,6 +107,21 @@ describe("Sesión de invitado por HTTP", () => {
     });
     expect(response.status).toBe(403);
     expect(response.headers.getSetCookie()).toEqual([]);
+  });
+
+  it("la interfaz en modo desarrollo puede pedir la sesión con cookies desde su propio puerto", async () => {
+    const preflight = await fetch(`${baseUrl}/api/session/guest`, {
+      method: "OPTIONS",
+      headers: { origin: DEV_ORIGIN, "access-control-request-method": "POST", "access-control-request-headers": "content-type" },
+    });
+    expect(preflight.headers.get("access-control-allow-origin")).toBe(DEV_ORIGIN);
+    expect(preflight.headers.get("access-control-allow-credentials")).toBe("true");
+    const response = await fetch(`${baseUrl}/api/session/guest`, {
+      method: "POST",
+      headers: { "content-type": "application/json", origin: DEV_ORIGIN },
+      body: JSON.stringify({ nickname: "Dev" }),
+    });
+    expect(response.status).toBe(200);
   });
 
   it("rechaza un apodo demasiado corto y una consulta sin sesión", async () => {
