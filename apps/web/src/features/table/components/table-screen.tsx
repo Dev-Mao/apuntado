@@ -50,7 +50,7 @@ export function TableScreen({ snapshot, pending, onDrawFromStock, onDrawFromDisc
   return (
     <div className="flex min-h-dvh flex-col overflow-x-clip lg:grid lg:h-dvh lg:grid-cols-[minmax(0,1fr)_23rem] lg:overflow-hidden">
       <main className="flex flex-col lg:min-h-0">
-        <AppHeader>
+        <AppHeader homeLink={false}>
           <Pill>{t("table.title", { code: snapshot.code })}</Pill>
         </AppHeader>
         <h1 className="sr-only">{t("table.title", { code: snapshot.code })}</h1>

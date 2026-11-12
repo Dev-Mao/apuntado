@@ -17,7 +17,7 @@ export function ResultsScreen({ snapshot, notice, onLeave }: ResultsScreenProps)
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-[90rem] flex-col">
-      <AppHeader />
+      <AppHeader homeLink={summary.isFinished} />
       <main className="grid flex-1 gap-10 px-5 pb-10 sm:px-8 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
         <ResultsHero summary={summary} />
         <div className="flex flex-col gap-8 lg:pt-4">

@@ -16,7 +16,7 @@ export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave 
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-[90rem] flex-col">
-      <AppHeader />
+      <AppHeader homeLink={false} />
       <main className="grid flex-1 gap-10 px-5 pb-10 sm:px-8 lg:grid-cols-2 lg:gap-16">
         <div className="flex flex-col gap-8">
           <div>

@@ -22,6 +22,10 @@ function belongsToOldRoom(room: RoomState, code: string, finished: boolean): boo
   return finished && active !== null && active !== code;
 }
 
+export function hasActiveRoom(room: RoomState): boolean {
+  return activeCode(room) !== null;
+}
+
 export function withLobby(room: RoomState, lobby: LobbyView): RoomState {
   if (belongsToOldRoom(room, lobby.code, lobby.status === "FINISHED")) return room;
   return { lobby, snapshot: room.snapshot?.code === lobby.code ? room.snapshot : null };
