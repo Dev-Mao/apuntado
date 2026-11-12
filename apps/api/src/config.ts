@@ -9,11 +9,12 @@ export interface AppConfig {
   readonly secureCookies: boolean;
   readonly webDir: string | null;
   readonly timing: TableTiming;
+  readonly allowedOrigins: readonly string[];
 }
 
 const DEFAULT_PORT = 3000;
 const DEVELOPMENT_SECRET = "apuntado-development-secret";
-const DEFAULT_TIMING: TableTiming = { botDelayMs: 1200, roundPauseMs: 8000 };
+const DEFAULT_TIMING: TableTiming = { botDelayMs: 1200, roundPauseMs: 8000, cleanupMs: 10 * 60 * 1000 };
 const BUNDLED_WEB_DIR = fileURLToPath(new URL("../../web/out", import.meta.url));
 
 export const loadConfig = (env: Record<string, string | undefined>): AppConfig => {
@@ -27,5 +28,6 @@ export const loadConfig = (env: Record<string, string | undefined>): AppConfig =
     secureCookies: production,
     webDir: existsSync(webDir) ? webDir : null,
     timing: DEFAULT_TIMING,
+    allowedOrigins: (env["ALLOWED_ORIGINS"] ?? "").split(",").map((o) => o.trim()).filter(Boolean),
   };
 };

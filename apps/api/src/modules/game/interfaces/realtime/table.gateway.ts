@@ -10,10 +10,11 @@ import {
 } from "@nestjs/websockets";
 import type { ActionResult, RoomResult } from "@apuntado/contracts";
 import type { Server } from "socket.io";
+import type { OriginPolicy } from "../../../../shared/origin-policy.js";
 import type { PlayerIdentity, TableNotifier } from "../../application/ports/index.js";
 import type { GameComponents } from "../../game.composition.js";
 import type { SocketRegistry, TableSocket } from "./socket-registry.js";
-import { GAME_COMPONENTS, PLAYER_IDENTITY, SOCKET_REGISTRY, TABLE_NOTIFIER } from "./tokens.js";
+import { GAME_COMPONENTS, ORIGIN_POLICY, PLAYER_IDENTITY, SOCKET_REGISTRY, TABLE_NOTIFIER } from "./tokens.js";
 
 @WebSocketGateway()
 export class TableGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -22,10 +23,13 @@ export class TableGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     @Inject(PLAYER_IDENTITY) private readonly identity: PlayerIdentity,
     @Inject(SOCKET_REGISTRY) private readonly registry: SocketRegistry,
     @Inject(TABLE_NOTIFIER) private readonly notifier: TableNotifier,
+    @Inject(ORIGIN_POLICY) private readonly origins: OriginPolicy,
   ) {}
 
   afterInit(server: Server): void {
     server.use((socket, next) => {
+      const { origin, host } = socket.handshake.headers;
+      if (!this.origins.allows(origin, host)) return next(new Error("Origen no permitido"));
       const player = this.identity.resolve(socket.handshake.headers.cookie);
       if (!player) return next(new Error("No hay una sesión activa"));
       (socket as TableSocket).data.player = player;
@@ -36,17 +40,20 @@ export class TableGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
   handleConnection(socket: TableSocket): void {
     const { id } = socket.data.player;
     const cameOnline = this.registry.add(id, socket);
-    const code = this.game.queries.activeRoomOf(id);
+    const code = this.game.queries.currentRoomOf(id);
     if (!code) return;
-    if (cameOnline) this.announce(code);
-    else this.sendStateTo(socket, code);
+    if (!cameOnline) return this.sendStateTo(socket, code);
+    this.game.lobby.presenceChanged(code);
+    this.announce(code);
   }
 
   handleDisconnect(socket: TableSocket): void {
     const player = socket.data.player;
     if (!player || !this.registry.remove(player.id, socket)) return;
-    const code = this.game.queries.activeRoomOf(player.id);
-    if (code) this.announce(code);
+    const code = this.game.queries.currentRoomOf(player.id);
+    if (!code) return;
+    this.game.lobby.presenceChanged(code);
+    this.announce(code);
   }
 
   @SubscribeMessage("room:create")
@@ -87,11 +94,6 @@ export class TableGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
   @SubscribeMessage("game:declare")
   declare(@ConnectedSocket() socket: TableSocket, @MessageBody() declaration: unknown): ActionResult {
     return this.game.table.declare(socket.data.player.id, declaration);
-  }
-
-  @SubscribeMessage("game:nextRound")
-  nextRound(@ConnectedSocket() socket: TableSocket): ActionResult {
-    return this.game.table.nextRound(socket.data.player.id);
   }
 
   private announce(code: string): void {

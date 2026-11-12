@@ -13,8 +13,9 @@ const webModules = (webDir: string | null): DynamicModule[] =>
 @Module({})
 export class AppModule {
   static register(config: AppConfig): DynamicModule {
-    const identity = IdentityModule.register({ secret: config.sessionSecret, secureCookies: config.secureCookies });
-    const game = GameModule.register({ imports: [identity], playerIdentity: IDENTITY_FOR_GAME, timing: config.timing });
+    const { sessionSecret: secret, secureCookies, allowedOrigins, timing } = config;
+    const identity = IdentityModule.register({ secret, secureCookies, allowedOrigins });
+    const game = GameModule.register({ imports: [identity], playerIdentity: IDENTITY_FOR_GAME, timing, allowedOrigins });
     return { module: AppModule, controllers: [HealthController], imports: [identity, game, ...webModules(config.webDir)] };
   }
 }
