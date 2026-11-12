@@ -1,14 +1,17 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
-import { DEFAULT_TABLE_SETTINGS, ROUTES } from "@/lib";
+import { useTranslation } from "react-i18next";
 
+import { useRealtime, useRoomRedirect } from "@/features/realtime";
+import { DEFAULT_TABLE_SETTINGS } from "@/lib";
+
+import { HOME_FORM } from "../types";
 import { validateCode, validateNickname, validateSettings } from "../validation";
 
-import type { HomeErrors, NumericSettingField, SettingsDraft } from "../types";
-import type { GameMode } from "@apuntado/contracts";
+import type { HomeErrors, HomeForm, NumericSettingField, ServerError, SettingsDraft } from "../types";
+import type { GameMode, RoomResult, RoomSettings } from "@apuntado/contracts";
 import type { FormEvent } from "react";
 
 const INITIAL_SETTINGS: SettingsDraft = {
@@ -18,35 +21,62 @@ const INITIAL_SETTINGS: SettingsDraft = {
   stake: String(DEFAULT_TABLE_SETTINGS.stake),
 };
 
+function toRoomSettings(draft: SettingsDraft): RoomSettings {
+  return {
+    mode: draft.mode,
+    eliminationThreshold: Number(draft.eliminationThreshold),
+    turnSeconds: Number(draft.turnSeconds),
+    stake: Number(draft.stake),
+  };
+}
+
 export function useHomeForm() {
-  const router = useRouter();
-  const [nickname, setNickname] = useState("");
+  const { t } = useTranslation();
+  const { session, commands, startSession } = useRealtime();
+  const [nicknameDraft, setNicknameDraft] = useState<string | null>(null);
   const [settings, setSettings] = useState<SettingsDraft>(INITIAL_SETTINGS);
   const [code, setCode] = useState("");
   const [errors, setErrors] = useState<HomeErrors>({});
+  const [pending, setPending] = useState<HomeForm | null>(null);
+  const [serverError, setServerError] = useState<ServerError | null>(null);
+  const nickname = nicknameDraft ?? (session.status === "ready" ? session.session.nickname : "");
+  useRoomRedirect(null);
 
-  const submitIfValid = useCallback(
-    (nextErrors: HomeErrors) => {
+  const enter = useCallback(
+    async (form: HomeForm, nextErrors: HomeErrors, command: () => Promise<RoomResult>) => {
       setErrors(nextErrors);
-      if (Object.keys(nextErrors).length === 0) router.push(ROUTES.LOBBY);
+      setServerError(null);
+      if (Object.keys(nextErrors).length > 0) return;
+      setPending(form);
+      try {
+        const started = await startSession(nickname.trim());
+        const result = started.ok ? await command() : started;
+        if (result.ok) return;
+        setServerError({ form, message: result.reason });
+      } catch {
+        setServerError({ form, message: t("common.unavailable") });
+      }
+      setPending(null);
     },
-    [router],
+    [nickname, startSession, t],
   );
 
   const handleCreate = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      submitIfValid({ ...validateNickname(nickname), ...validateSettings(settings) });
+      const nextErrors = { ...validateNickname(nickname), ...validateSettings(settings) };
+      void enter(HOME_FORM.CREATE, nextErrors, () => commands.createRoom(toRoomSettings(settings)));
     },
-    [nickname, settings, submitIfValid],
+    [nickname, settings, enter, commands],
   );
 
   const handleJoin = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      submitIfValid({ ...validateNickname(nickname), ...validateCode(code) });
+      const nextErrors = { ...validateNickname(nickname), ...validateCode(code) };
+      void enter(HOME_FORM.JOIN, nextErrors, () => commands.joinRoom(code.trim()));
     },
-    [nickname, code, submitIfValid],
+    [nickname, code, enter, commands],
   );
 
   const handleModeChange = useCallback((mode: GameMode) => setSettings((prev) => ({ ...prev, mode })), []);
@@ -58,12 +88,17 @@ export function useHomeForm() {
 
   const handleCodeChange = useCallback((value: string) => setCode(value.toUpperCase()), []);
 
+  const errorFor = (form: HomeForm) => (serverError?.form === form ? serverError.message : undefined);
+
   return {
     nickname,
     settings,
     code,
     errors,
-    handleNicknameChange: setNickname,
+    pending,
+    createError: errorFor(HOME_FORM.CREATE),
+    joinError: errorFor(HOME_FORM.JOIN),
+    handleNicknameChange: setNicknameDraft,
     handleModeChange,
     handleNumberChange,
     handleCodeChange,

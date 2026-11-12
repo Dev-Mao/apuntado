@@ -4,11 +4,11 @@ import { memo } from "react";
 
 import { useTranslation } from "react-i18next";
 
-import { Button, BUTTON_VARIANT, TextField } from "@/components";
+import { Button, BUTTON_VARIANT, LiveNotice, TextField } from "@/components";
 
 import type { JoinTableFormProps } from "../types";
 
-function JoinTableFormBase({ code, error, onCodeChange, onSubmit }: JoinTableFormProps) {
+function JoinTableFormBase({ code, error, pending, serverError, onCodeChange, onSubmit }: JoinTableFormProps) {
   const { t } = useTranslation();
   return (
     <form noValidate onSubmit={onSubmit} aria-labelledby="join-title" className="flex flex-col gap-5">
@@ -26,10 +26,11 @@ function JoinTableFormBase({ code, error, onCodeChange, onSubmit }: JoinTableFor
           onChange={(event) => onCodeChange(event.target.value)}
           className="flex-1 [&_input]:tracking-[0.3em] [&_input]:uppercase"
         />
-        <Button type="submit" variant={BUTTON_VARIANT.OUTLINE} className="sm:mt-[1.6rem]">
+        <Button type="submit" variant={BUTTON_VARIANT.OUTLINE} disabled={pending} aria-busy={pending} className="sm:mt-[1.6rem]">
           {t("home.join.submit")}
         </Button>
       </div>
+      <LiveNotice message={serverError} />
     </form>
   );
 }

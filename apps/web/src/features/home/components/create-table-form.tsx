@@ -4,14 +4,14 @@ import { memo, useMemo } from "react";
 
 import { useTranslation } from "react-i18next";
 
-import { Button, ChoicePills, TextField } from "@/components";
+import { Button, ChoicePills, LiveNotice, TextField } from "@/components";
 import { GAME_MODES } from "@/lib";
 
 import { HOME_FIELD } from "../types";
 
 import type { CreateTableFormProps } from "../types";
 
-function CreateTableFormBase({ settings, errors, onModeChange, onNumberChange, onSubmit }: CreateTableFormProps) {
+function CreateTableFormBase({ settings, errors, pending, serverError, onModeChange, onNumberChange, onSubmit }: CreateTableFormProps) {
   const { t } = useTranslation();
   const modeOptions = useMemo(() => GAME_MODES.map((mode) => ({ value: mode, label: t(`gameMode.${mode}`) })), [t]);
   const errorText = (field: keyof typeof errors) => (errors[field] ? t(`home.errors.${errors[field]}`) : undefined);
@@ -59,9 +59,10 @@ function CreateTableFormBase({ settings, errors, onModeChange, onNumberChange, o
           onChange={(event) => onNumberChange(HOME_FIELD.STAKE, event.target.value)}
         />
       </div>
-      <Button type="submit" className="self-start">
+      <Button type="submit" disabled={pending} aria-busy={pending} className="self-start">
         {t("home.create.submit")}
       </Button>
+      <LiveNotice message={serverError} />
     </form>
   );
 }

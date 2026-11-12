@@ -38,6 +38,8 @@ export function HomeScreen() {
             <CreateTableForm
               settings={form.settings}
               errors={form.errors}
+              pending={form.pending !== null}
+              serverError={form.createError}
               onModeChange={form.handleModeChange}
               onNumberChange={form.handleNumberChange}
               onSubmit={form.handleCreate}
@@ -47,6 +49,8 @@ export function HomeScreen() {
             <JoinTableForm
               code={form.code}
               error={form.errors.code}
+              pending={form.pending !== null}
+              serverError={form.joinError}
               onCodeChange={form.handleCodeChange}
               onSubmit={form.handleJoin}
             />

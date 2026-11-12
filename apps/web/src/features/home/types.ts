@@ -11,6 +11,18 @@ export const HOME_FIELD = {
 
 export type HomeField = (typeof HOME_FIELD)[keyof typeof HOME_FIELD];
 
+export const HOME_FORM = {
+  CREATE: "create",
+  JOIN: "join",
+} as const;
+
+export type HomeForm = (typeof HOME_FORM)[keyof typeof HOME_FORM];
+
+export interface ServerError {
+  readonly form: HomeForm;
+  readonly message: string;
+}
+
 export type HomeErrorKey =
   | "nicknameRequired"
   | "nicknameLength"
@@ -33,6 +45,8 @@ export interface SettingsDraft {
 export interface CreateTableFormProps {
   settings: SettingsDraft;
   errors: HomeErrors;
+  pending: boolean;
+  serverError: string | undefined;
   onModeChange: (mode: GameMode) => void;
   onNumberChange: (field: NumericSettingField, value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
@@ -41,6 +55,8 @@ export interface CreateTableFormProps {
 export interface JoinTableFormProps {
   code: string;
   error: HomeErrorKey | undefined;
+  pending: boolean;
+  serverError: string | undefined;
   onCodeChange: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
