@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: apuntado
+      POSTGRES_PASSWORD: apuntado
+      POSTGRES_DB: apuntado
+    ports:
+      - "5432:5432"
+    volumes:
+      - apuntado-data:/var/lib/postgresql/data
+
+volumes:
+  apuntado-data:
