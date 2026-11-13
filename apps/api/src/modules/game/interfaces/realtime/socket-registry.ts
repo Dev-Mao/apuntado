@@ -8,6 +8,8 @@ export interface SocketData {
 
 export type TableSocket = Socket<ClientToServerEvents, ServerToClientEvents, Record<string, never>, SocketData>;
 
+export const playerOf = (socket: TableSocket): AuthenticatedPlayer => socket.data.player;
+
 export class SocketRegistry implements Presence {
   private readonly sockets = new Map<string, Set<TableSocket>>();
 

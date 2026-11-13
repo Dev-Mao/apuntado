@@ -71,7 +71,8 @@ export class TableCoordinator {
   }
 
   private onTurnDue(code: string): void {
-    if (this.deps.timeOut.execute(code).ok) return this.refresh(code);
+    const { ok: timedOut } = this.deps.timeOut.execute(code);
+    if (timedOut) return this.refresh(code);
     const session = this.deps.games.find(code);
     if (session?.currentStatus !== "PLAYING") return;
     const retryAt = Math.max(session.turnDeadline.getTime(), this.deps.clock.now().getTime()) + TURN_RETRY_MS;
