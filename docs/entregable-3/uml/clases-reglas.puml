@@ -1,0 +1,102 @@
+@startuml clases-reglas
+skinparam shadowing false
+skinparam defaultFontSize 12
+skinparam dpi 100
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam nodesep 30
+skinparam ranksep 50
+skinparam class {
+  BackgroundColor #F7F9FC
+  BorderColor #33526E
+  ArrowColor #33526E
+}
+hide empty members
+
+package "game/domain/session y match" #FFFFFF {
+  class GameSession {
+    - settle() : void
+  }
+  class Round {
+    + declareClosure(playerId : string, declaration : ClosureDeclaration, rule : GameRule) : ValidationResult
+  }
+}
+package "game/domain/rules (Strategy)" #EEF6F0 {
+  interface GameRule {
+    + type : ClosureType {readOnly}
+    + validate(declaration : ClosureDeclaration) : ValidationResult
+  }
+  class ClassicRule {
+    + type : "CLASICO"
+    + validate(declaration : ClosureDeclaration) : ValidationResult
+  }
+  class ApuntadoRule {
+    + type : "APUNTADO"
+    + validate(declaration : ClosureDeclaration) : ValidationResult
+  }
+  class RuleResolver {
+    - rules : Map<ClosureType, GameRule>
+    + RuleResolver(rules : GameRule[])
+    + register(rule : GameRule) : void
+    + resolve(type : ClosureType, enabled : ClosureType[]) : GameRule | null
+  }
+  class ClosureDeclaration <<value>> {
+    + type : ClosureType
+    + melds : Card[][]
+    + leftovers : Card[]
+    + discard : Card | null
+  }
+  class ValidationResult <<value>> {
+    + valid : boolean
+    + reason : string | null
+    + leftoverPoints : number
+  }
+}
+package "game/domain/services" #FFFFFF {
+  class HandEvaluator <<utility>> {
+    + isSet(cards : Card[]) : boolean
+    + isQuarta(cards : Card[]) : boolean
+    + noCardReused(melds : Card[][]) : boolean
+    - isGroupOf(cards : Card[], size : number) : boolean
+    - isRunOf(cards : Card[], size : number) : boolean
+  }
+  class ScoreCalculator <<utility>> {
+    + pointsOf(cards : Card[]) : number
+  }
+  class MeldCandidates <<utility>> {
+    + setCandidates(hand : Card[]) : Card[][]
+    + quartaCandidates(hand : Card[]) : Card[][]
+  }
+  class HandArranger <<utility>> {
+    + bestArrangement(hand : Card[]) : Arrangement
+  }
+  class RoundSettler <<utility>> {
+    + settleRound(round : Round) : RoundScore[]
+  }
+  class ClosureFinder <<utility>> {
+    + findClosure(hand : Card[], enabled : ClosureType[], forbiddenDiscard : Card | null) : ClosureDeclaration | null
+  }
+}
+GameSession *-- "1" Round
+GameSession ..> RoundSettler : settleRound()
+Round ..> GameRule : validate()
+RuleResolver o-- "1..*" GameRule
+GameRule <|.. ClassicRule
+GameRule <|.. ApuntadoRule
+GameRule ..> ClosureDeclaration
+GameRule ..> ValidationResult
+ClassicRule ..> HandEvaluator
+ApuntadoRule ..> HandEvaluator
+ApuntadoRule ..> ScoreCalculator
+RoundSettler ..> HandArranger
+RoundSettler ..> ScoreCalculator
+HandArranger ..> MeldCandidates
+HandArranger ..> ScoreCalculator
+ClosureFinder ..> MeldCandidates
+ClosureFinder ..> ScoreCalculator
+ClosureFinder ..> ClosureDeclaration
+ClosureFinder ..> ApuntadoRule : LEFTOVER_LIMIT
+Round -[hidden]down- RuleResolver
+ClosureDeclaration -[hidden]down- HandEvaluator
+ApuntadoRule -[hidden]down- ClosureFinder
+@enduml

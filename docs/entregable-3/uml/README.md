@@ -9,7 +9,12 @@ repositorio.
 |---|---|---|
 | Despliegue | [despliegue.puml](despliegue.puml) | [despliegue.svg](despliegue.svg) |
 | Secuencia del cierre y la liquidación | [secuencia-cierre.puml](secuencia-cierre.puml) | [secuencia-cierre.svg](secuencia-cierre.svg) |
-| Clases de implementación | [clases.puml](clases.puml) | [clases.svg](clases.svg) |
+| Clases de implementación (completo) | [clases.puml](clases.puml) | [clases.svg](clases.svg) |
+| Clases (a): orquestación, puertos y estado | [clases-orquestacion.puml](clases-orquestacion.puml) | [clases-orquestacion.svg](clases-orquestacion.svg) |
+| Clases (b): Strategy de reglas y evaluación | [clases-reglas.puml](clases-reglas.puml) | [clases-reglas.svg](clases-reglas.svg) |
+
+El documento del entregable usa las dos vistas (a) y (b) del diagrama de clases, porque el diagrama
+completo no se puede leer al ancho de una página.
 
 ## Despliegue (`despliegue.puml`)
 
