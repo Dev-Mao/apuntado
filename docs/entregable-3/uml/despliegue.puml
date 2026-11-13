@@ -1,0 +1,66 @@
+@startuml despliegue
+top to bottom direction
+skinparam shadowing false
+skinparam defaultFontSize 14
+skinparam dpi 100
+skinparam nodesep 40
+skinparam ranksep 60
+skinparam node {
+  BackgroundColor #F7F9FC
+  BorderColor #33526E
+}
+skinparam artifact {
+  BackgroundColor #FFFFFF
+  BorderColor #33526E
+}
+skinparam database {
+  BackgroundColor #FFFFFF
+  BorderColor #33526E
+}
+skinparam arrow {
+  Color #33526E
+  FontSize 12
+}
+
+node "Dispositivo del jugador\n(computador o celular)" <<device>> as DEVICE {
+  node "Navegador web" <<executionEnvironment>> as BROWSER {
+    artifact "Interfaz web\nHTML, CSS y bundles JS\n(Next.js 16, React 19)" as UI
+    artifact "Cliente Socket.IO 4" as SIO_CLIENT
+  }
+}
+
+node "Render: Web Service apuntado\n(plan free, 1 instancia)" <<device>> as RENDER {
+  node "Contenedor Linux\nNode.js 22" <<executionEnvironment>> as NODE {
+    artifact "apps/api/dist/main.js\nNestJS 12, monolito modular\n(juego, identidad, economía, historial)" as API
+    artifact "apps/web/out\nsitio estático exportado" as STATIC
+    artifact "Gateway Socket.IO 4" as GATEWAY
+  }
+}
+
+node "Neon: PostgreSQL administrado\n(proyecto apuntado, rama production)" <<device>> as NEON {
+  database "PostgreSQL\nschema.sql del E2\n+ migraciones 002 a 005" as DB
+}
+
+node "GitHub" <<device>> as GITHUB {
+  artifact "Repositorio Dev-Mao/apuntado" as REPO
+  node "GitHub Actions\nubuntu-latest" <<executionEnvironment>> as ACTIONS {
+    artifact "gobernanza.yml\nfitness functions, métricas\ny Playwright" as CI
+  }
+}
+
+UI -down-> STATIC : HTTPS 443\nGET páginas y recursos
+UI -down-> API : HTTPS 443, REST JSON\n/api/session, /api/profile, /api/wallet\ncookie httpOnly firmada
+SIO_CLIENT -down-> GATEWAY : WSS 443, Socket.IO\nroom:*, game:* y table:snapshot
+API .right. GATEWAY : IPC en memoria\n(mismo proceso)
+API -down-> DB : TCP 5432, protocolo PostgreSQL con TLS\ndriver pg, pool de 5 conexiones
+REPO -right-> ACTIONS : push y pull request
+REPO -up-> RENDER : despliegue automático al integrar en main\nnpm ci && npm run build, npm start
+
+note right of NODE
+  Render termina TLS en su borde y reenvía
+  al puerto $PORT del contenedor.
+  Nest sirve la API, el socket y el sitio
+  desde el mismo origen: la cookie de sesión
+  es de primera parte.
+end note
+@enduml

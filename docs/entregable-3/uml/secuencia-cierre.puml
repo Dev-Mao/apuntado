@@ -1,0 +1,81 @@
+@startuml secuencia-cierre
+skinparam shadowing false
+skinparam defaultFontSize 12
+skinparam dpi 100
+skinparam sequenceMessageAlign left
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 170
+skinparam sequence {
+  ParticipantBackgroundColor #F7F9FC
+  ParticipantBorderColor #33526E
+  LifeLineBorderColor #33526E
+  ArrowColor #33526E
+  GroupBorderColor #33526E
+  GroupBackgroundColor #EEF2F7
+}
+autonumber
+
+actor Jugador
+participant "ClosureDialog\n(interfaz web)" as UI
+participant "TableGateway\nTableCommands" as GW
+participant "DeclareClosure\n«orquestador»\nRuleResolver" as UC
+participant "GameSession\nRound" as GS
+participant "GameRule\n«plug-in de regla»" as RULE
+participant "HandEvaluator" as HE
+participant "RoundSettler\nHandArranger\nScoreCalculator" as RS
+participant "Match" as M
+participant "EventBus\nMatchArchiver\nChipBank" as BUS
+database "PostgreSQL" as DB
+
+Jugador -> UI : arma combinaciones y pulsa "Enviar cierre"
+UI -> GW : game:declare(declaración) [WSS]
+GW -> UC : execute({gameId, playerId, declaration})
+UC -> UC : rule = resolve(type, enabledClosures)
+UC -> GS : declareClosure(playerId, declaration, rule)
+GS -> GS : turno, fase DISCARD y cartas = mano
+
+alt Escenario 1: modalidad Clásica (ClassicRule)
+  GS -> RULE : validate(declaration)
+  RULE -> HE : noCardReused, isQuarta, isSet
+  HE --> RULE : 1 cuarta + 2 ternas
+  RULE --> GS : valid()
+  GS -> GS : descarta la carta; ronda CLOSED
+  GS -> RS : settleRound(round)
+  RS --> GS : RoundScore[] (ganador 0)
+  GS -> M : recordRound(scores, winnerId)
+  M -> M : finish(winnerId)
+  GS -> GS : pending += RondaCerrada,\nPartidaFinalizada
+else Escenario 2: modalidad Apuntado (ApuntadoRule)
+  GS -> RULE : validate(declaration)
+  RULE -> HE : noCardReused, isSet ×3
+  RULE -> RULE : pointsOf(sobrantes)
+  break sobrantes ≥ 5 puntos
+    RULE --> GS : invalid(motivo, puntos)
+    GS --> UC : invalid
+    UC --> GW : invalid
+    GW --> UI : {ok: false, reason}
+    UI --> Jugador : "El servidor rechazó el cierre"
+  end
+  RULE --> GS : valid(leftoverPoints)
+  GS -> GS : ronda CLOSED
+  GS -> RS : settleRound(round)
+  RS --> GS : RoundScore[]: penalización\nde cada perdedor
+  GS -> M : recordRound(scores, winnerId)
+  M -> M : suma penalizaciones; elimina\nal que llega al umbral (101)
+  alt queda un solo jugador
+    M -> M : finish(sobreviviente)
+    GS -> GS : pending += RondaCerrada,\nPartidaFinalizada
+  else siguen dos o más
+    M -> M : rota el repartidor
+    GS -> GS : pending += RondaCerrada;\nROUND_OVER
+  end
+end
+
+GS --> UC : valid
+UC ->> DB : bitácora DECLARAR_CIERRE
+UC -> BUS : publish(eventos)
+BUS ->> DB : puntajes, cierre de partida\ny bote (cola de escritura)
+UC --> GW : valid
+GW --> UI : {ok: true} y table:snapshot
+UI --> Jugador : resultados o marcador final
+@enduml

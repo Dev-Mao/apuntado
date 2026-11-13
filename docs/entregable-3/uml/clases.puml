@@ -1,0 +1,184 @@
+@startuml clases
+skinparam shadowing false
+skinparam defaultFontSize 12
+skinparam dpi 100
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam nodesep 30
+skinparam ranksep 50
+skinparam class {
+  BackgroundColor #F7F9FC
+  BorderColor #33526E
+  ArrowColor #33526E
+}
+hide empty members
+
+package "game/application" #F7F4FA {
+  class DeclareClosure {
+    - games : GameRepository
+    - rules : RuleResolver
+    - journal : PlayJournal
+    - events : EventBus
+    - clock : Clock
+    + execute(command : DeclareClosureCommand) : ValidationResult
+  }
+  interface GameRepository <<port>> {
+    + find(gameId : string) : GameSession | null
+    + save(session : GameSession) : void
+    + delete(gameId : string) : void
+  }
+  interface PlayJournal <<port>> {
+    + record(entry : PlayJournalEntry) : void
+  }
+  interface EventBus <<port>> {
+    + publish(eventName : string, payload : Record<string, unknown>) : void
+  }
+}
+
+package "game/domain/session y match" #FFFFFF {
+  class GameSession {
+    - status : SessionStatus
+    - roundNumber : number
+    - pending : GameEvent[]
+    - match : Match
+    - round : Round
+    + id : string {readOnly}
+    + matchId : string {readOnly}
+    + config : SessionConfig {readOnly}
+    + {static} start(ids : SessionIds, playerIds : string[], config : SessionConfig, deps : SessionDependencies) : GameSession
+    + declareClosure(playerId : string, declaration : ClosureDeclaration, rule : GameRule) : ValidationResult
+    + startNextRound() : Outcome
+    + pullEvents() : GameEvent[]
+    - settle() : void
+    - finish() : void
+  }
+  class Match {
+    - status : MatchStatus
+    - winner : string | null
+    - dealer : number
+    - seats : Seat[]
+    + config : MatchConfig {readOnly}
+    + {static} create(playerIds : string[], config : MatchConfig) : Match
+    + recordRound(scores : RoundScore[], roundWinnerId : string | null) : void
+    - eliminateAndMaybeFinish(scores : RoundScore[]) : void
+    - best(candidates : Seat[]) : Seat
+    - finish(winnerId : string) : void
+  }
+  class Round {
+    - phase : RoundPhase
+    - status : RoundStatus
+    - closure : RoundClosure | null
+    - hands : Map<string, Card[]>
+    - stock : Card[]
+    - discardPile : Card[]
+    - turnIndex : number
+    + handOf(playerId : string) : Card[]
+    + drawFromStock(playerId : string) : Outcome
+    + discard(playerId : string, card : Card) : Outcome
+    + declareClosure(playerId : string, declaration : ClosureDeclaration, rule : GameRule) : ValidationResult
+    - recycleDiscardPile() : boolean
+    - passTurn() : void
+  }
+}
+
+package "game/domain/rules (Strategy)" #EEF6F0 {
+  interface GameRule {
+    + type : ClosureType {readOnly}
+    + validate(declaration : ClosureDeclaration) : ValidationResult
+  }
+  class ClassicRule {
+    + type : "CLASICO"
+    + validate(declaration : ClosureDeclaration) : ValidationResult
+  }
+  class ApuntadoRule {
+    + type : "APUNTADO"
+    + validate(declaration : ClosureDeclaration) : ValidationResult
+  }
+  class RuleResolver {
+    - rules : Map<ClosureType, GameRule>
+    + RuleResolver(rules : GameRule[])
+    + register(rule : GameRule) : void
+    + resolve(type : ClosureType, enabled : ClosureType[]) : GameRule | null
+  }
+  class ClosureDeclaration <<value>> {
+    + type : ClosureType
+    + melds : Card[][]
+    + leftovers : Card[]
+    + discard : Card | null
+  }
+  class ValidationResult <<value>> {
+    + valid : boolean
+    + reason : string | null
+    + leftoverPoints : number
+  }
+}
+
+package "game/domain/services" #FFFFFF {
+  class HandEvaluator <<utility>> {
+    + isSet(cards : Card[]) : boolean
+    + isQuarta(cards : Card[]) : boolean
+    + noCardReused(melds : Card[][]) : boolean
+    - isGroupOf(cards : Card[], size : number) : boolean
+    - isRunOf(cards : Card[], size : number) : boolean
+  }
+  class ScoreCalculator <<utility>> {
+    + pointsOf(cards : Card[]) : number
+  }
+  class MeldCandidates <<utility>> {
+    + setCandidates(hand : Card[]) : Card[][]
+    + quartaCandidates(hand : Card[]) : Card[][]
+  }
+  class HandArranger <<utility>> {
+    + bestArrangement(hand : Card[]) : Arrangement
+  }
+  class RoundSettler <<utility>> {
+    + settleRound(round : Round) : RoundScore[]
+  }
+  class ClosureFinder <<utility>> {
+    + findClosure(hand : Card[], enabled : ClosureType[], forbiddenDiscard : Card | null) : ClosureDeclaration | null
+  }
+}
+
+package "game/infrastructure y shared" #F7F4FA {
+  class InMemoryGameRepository
+  class PgPlayJournal {
+    - database : Database
+    + record(entry : PlayJournalEntry) : void
+  }
+  class InProcessEventBus {
+    + subscribe(eventName : string, handler : EventHandler) : void
+    + publish(eventName : string, payload : Record<string, unknown>) : void
+  }
+}
+
+DeclareClosure --> GameRepository
+DeclareClosure --> PlayJournal
+DeclareClosure --> EventBus
+GameRepository <|.. InMemoryGameRepository
+PlayJournal <|.. PgPlayJournal
+EventBus <|.. InProcessEventBus
+DeclareClosure ..> GameSession : declareClosure()
+DeclareClosure --> RuleResolver
+
+GameSession *-- "1" Match
+GameSession *-- "1" Round
+GameSession ..> RoundSettler : settleRound()
+Round ..> GameRule : validate()
+RuleResolver o-- "1..*" GameRule
+GameRule <|.. ClassicRule
+GameRule <|.. ApuntadoRule
+GameRule ..> ClosureDeclaration
+GameRule ..> ValidationResult
+ClassicRule ..> HandEvaluator
+ApuntadoRule ..> HandEvaluator
+ApuntadoRule ..> ScoreCalculator
+RoundSettler ..> HandArranger
+RoundSettler ..> ScoreCalculator
+HandArranger ..> MeldCandidates
+HandArranger ..> ScoreCalculator
+ClosureFinder ..> MeldCandidates
+ClosureFinder ..> ScoreCalculator
+ClosureFinder ..> ClosureDeclaration
+ClosureFinder ..> ApuntadoRule : LEFTOVER_LIMIT
+InProcessEventBus -[hidden]down- GameSession
+@enduml
