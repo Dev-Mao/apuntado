@@ -334,7 +334,6 @@
       "chips": "Fichas"
     },
     "movements": {
-      "title": "Últimos movimientos",
       "empty": "Todavía no tienes movimientos de fichas.",
       "failed": "No pudimos cargar tus fichas en este momento.",
       "loading": "Cargando tus fichas",
