@@ -13,7 +13,7 @@ jobs:
   verificar:
     name: Pruebas y reglas de arquitectura
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Obtener el código
@@ -37,7 +37,10 @@ jobs:
       - name: Reglas de dependencia (dependency-cruiser, FF-01 a FF-05 y FF-07)
         run: npm run arch:deps
 
-      - name: Fitness functions (TSArch, FF-01 a FF-06)
+      - name: Reglas de dependencia de la interfaz web (FF-04 y FF-12)
+        run: npm run arch:web
+
+      - name: Fitness functions (TSArch y métricas, FF-01 a FF-06 y FF-09 a FF-13)
         run: npm run test:arch
 
       - name: Pruebas del dominio
@@ -49,8 +52,56 @@ jobs:
       - name: Servidor en tiempo real de punta a punta
         run: npm run test:e2e
 
+      - name: Cobertura de pruebas del servidor
+        run: npm run test:coverage
+
+      - name: Reporte de métricas (complejidad, Ca, Ce, I, A, D, Deméter y LCOM4)
+        run: npm run arch:metrics
+
+      - name: Guardar el reporte de métricas y la cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metricas-de-arquitectura
+          path: reports/
+          if-no-files-found: ignore
+
       - name: Compilación de producción del servidor
         run: npm run api:build
 
       - name: Interfaz web (tipos, estilo y build)
         run: npm run web:check
+
+  navegador:
+    name: Partida en el navegador (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Obtener el código
+        uses: actions/checkout@v5
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar la interfaz y el servidor
+        run: npm run build
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Partida contra la máquina en escritorio y celular
+        run: npm run test:browser
+
+      - name: Guardar el reporte de Playwright
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-playwright
+          path: playwright-report/
