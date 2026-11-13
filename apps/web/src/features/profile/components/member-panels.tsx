@@ -46,7 +46,7 @@ export function MemberPanels({ matches }: { matches: readonly ProfileMatch[] }) 
             onClick={() => setTab(name)}
             className={cn("label-caps min-h-11 pb-2 text-[0.68rem] transition-opacity", tab === name ? "-mb-[1.5px] border-b-[3px] border-coral-ink" : "opacity-55 hover:opacity-100")}
           >
-            {name === "matches" ? t("profile.recentTitle") : t("profile.movements.title")}
+            {t(`profile.tabs.${name}`)}
           </button>
         ))}
       </div>
