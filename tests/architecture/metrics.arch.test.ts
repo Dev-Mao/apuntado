@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import ts from "typescript";
 import { beforeAll, describe, expect, it } from "vitest";
 import { NEAR_SEQUENCE, ZONE_DISTANCE } from "../../tools/metrics/abstractness.js";
@@ -49,11 +49,18 @@ describe("FF-11 · Cohesión del dominio", () => {
 
 describe("FF-13 · Los contratos son solo tipos", () => {
   it("packages/contracts no declara nada que exista en tiempo de ejecución", () => {
-    const path = new URL("../../packages/contracts/src/index.ts", import.meta.url);
-    const file = ts.createSourceFile("index.ts", readFileSync(path, "utf8"), ts.ScriptTarget.ES2022);
-    const runtime = file.statements.filter(
-      (s) => !ts.isInterfaceDeclaration(s) && !ts.isTypeAliasDeclaration(s) && !(ts.isExportDeclaration(s) && s.isTypeOnly),
-    );
-    expect(runtime.map((s) => s.getText(file).slice(0, 60))).toEqual([]);
+    const folder = new URL("../../packages/contracts/src/", import.meta.url);
+    const isTypeOnly = (s: ts.Statement) =>
+      ts.isInterfaceDeclaration(s) ||
+      ts.isTypeAliasDeclaration(s) ||
+      (ts.isExportDeclaration(s) && s.isTypeOnly) ||
+      (ts.isImportDeclaration(s) && (s.importClause?.isTypeOnly ?? false));
+    const runtime = readdirSync(folder)
+      .filter((name) => name.endsWith(".ts"))
+      .flatMap((name) => {
+        const file = ts.createSourceFile(name, readFileSync(new URL(name, folder), "utf8"), ts.ScriptTarget.ES2022);
+        return file.statements.filter((s) => !isTypeOnly(s)).map((s) => `${name}: ${s.getText(file).slice(0, 60)}`);
+      });
+    expect(runtime).toEqual([]);
   });
 });

@@ -25,10 +25,15 @@ const continuesChain = (node: ts.Node): boolean => {
   return isAccess(current.parent) && current.parent.expression === current;
 };
 
-const isProjectType = (checker: ts.TypeChecker, node: ts.Expression): boolean => {
-  const type = checker.getNonNullableType(checker.getTypeAtLocation(node));
+const isDeclaredInProject = (type: ts.Type): boolean => {
   const symbol = type.aliasSymbol ?? type.getSymbol();
   return symbol?.declarations?.some((declaration) => isProjectFile(declaration.getSourceFile().fileName)) ?? false;
+};
+
+const isProjectType = (checker: ts.TypeChecker, node: ts.Expression): boolean => {
+  const type = checker.getNonNullableType(checker.getTypeAtLocation(node));
+  if (isDeclaredInProject(type)) return true;
+  return type.isUnion() && type.types.every(isDeclaredInProject);
 };
 
 const hopsOf = (checker: ts.TypeChecker, node: ts.Expression): number => {

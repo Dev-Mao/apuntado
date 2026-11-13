@@ -148,19 +148,25 @@ Decisiones y límites de esta fase:
   ese total más las clases y funciones concretas.
 - **Deméter.** Se marca una expresión que atraviesa más de dos objetos cuyos tipos son del proyecto
   (`a.b.c.d`). `this` no cuenta como salto y las cadenas sobre arreglos, cadenas, promesas o
-  librerías tampoco, porque esas interfaces fluidas devuelven objetos del mismo tipo. Es una
-  aproximación: no distingue un objeto de datos de un colaborador. La primera medición encontró 8
-  expresiones (siete `socket.data.player.id` en el gateway y una en el coordinador de mesas) y se
-  corrigieron.
+  librerías tampoco, porque esas interfaces fluidas devuelven objetos del mismo tipo. Una unión
+  cuenta como salto cuando todos sus miembros son tipos del proyecto. Es una aproximación: no
+  distingue un objeto de datos de un colaborador, no analiza expresiones de tipo `any` y no ve la
+  misma navegación partida con una variable intermedia. La primera medición encontró 8 expresiones:
+  siete `socket.data.player.id` en el gateway, que ahora leen el jugador con una sola función
+  `playerOf`, y una en el coordinador de mesas, que guarda el resultado en una variable. El
+  acoplamiento real no cambió; el cambio deja en un solo lugar el conocimiento de dónde guarda el
+  socket al jugador.
 - **Cohesión.** LCOM4 cuenta los grupos de métodos que no comparten campos ni se llaman. En una
   clase sin estado cada método queda solo, así que la regla solo exige LCOM4 = 1 a las clases del
-  dominio con estado. Fuera del dominio hay cuatro clases con LCOM4 = 2 o 3; el reporte las lista.
+  dominio con estado. Un método que no usa ningún campo cuenta como grupo aparte, y solo se ven los
+  accesos de la forma `this.campo`. Fuera del dominio hay cuatro clases con LCOM4 = 2 o 3; el reporte las lista.
 - **Zona de dolor.** Cuatro paquetes son concretos y estables: `game/domain/entities` (carta y
   baraja), `identity/domain`, `shared` y `health`. Martin advierte que esa zona duele cuando el
   código además cambia mucho; estos paquetes casi no cambian, y por eso la regla solo prohíbe la
   zona de inutilidad y exige que las reglas de juego se mantengan lejos de las dos.
 - **Cobertura.** Mínimos de 90 % de líneas, 88 % de ramas y 92 % de funciones en el servidor, y 95 %
-  de líneas en el dominio del juego. No se miden los archivos que solo tienen tipos ni `main.ts`. El
+  de líneas en el dominio del juego. No se miden los archivos que solo tienen tipos, nombrados uno por
+  uno, ni `main.ts`. El
   cliente real de `pg` queda sin cubrir porque las pruebas usan PGlite; se verifica en cada
   despliegue.
 - **Navegador.** Un trabajo aparte del pipeline compila la aplicación y juega con Playwright, en
