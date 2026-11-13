@@ -7,7 +7,8 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "arch": "depcruise src --config .dependency-cruiser.cjs"
   },
   "dependencies": {
     "@apuntado/contracts": "*",
