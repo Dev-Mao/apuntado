@@ -191,7 +191,7 @@ para apostar; y el pipeline mide y vigila las métricas de arquitectura.
   se pierde la conexión.
 
 ```
-320 pruebas  ·  259 de servidor + 15 de arquitectura y métricas + 29 de esquema, historial y fichas + 17 de punta a punta
+333 pruebas  ·  272 de servidor + 15 de arquitectura y métricas + 29 de esquema, historial y fichas + 17 de punta a punta
 1 partida en el navegador (Playwright), en escritorio y en celular
 cobertura del servidor: 95 % de líneas, 93 % de ramas  ·  complejidad máxima 10  ·  0 violaciones de Deméter
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
