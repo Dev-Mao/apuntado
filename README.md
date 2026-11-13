@@ -58,12 +58,16 @@ npm run test:arch         # fitness functions
 npm run test:integration  # esquema, migraciones e historial sobre PostgreSQL (PGlite, sin Docker)
 npm run typecheck         # TypeScript estricto del servidor y los contratos
 npm run lint              # incluye el límite de complejidad ciclomática (CC ≤ 10)
-npm run arch:deps         # reglas de dependencia (dependency-cruiser)
+npm run arch:deps         # reglas de dependencia del servidor (dependency-cruiser)
+npm run arch:web          # reglas de dependencia de la interfaz web
 npm run test:e2e          # servidor real y clientes Socket.IO de punta a punta
 npm run api:build         # compilación de producción del servidor
 npm run web:check         # tipos, estilo y build de la interfaz web
-npm run verificar         # todo lo anterior: exactamente lo que corre el pipeline
+npm run test:coverage     # pruebas del servidor con cobertura (reports/coverage)
+npm run arch:metrics      # reporte de métricas en reports/metricas.md
+npm run verificar         # reglas, pruebas con cobertura y builds, como el pipeline
 npm run build             # compila la interfaz web y el servidor
+npm run test:browser      # partida en Chromium con Playwright (requiere npm run build)
 npm start                 # arranca el servidor en http://localhost:3000 con la interfaz incluida
 ```
 
@@ -115,6 +119,11 @@ Las reglas de los ADR no se sostienen con disciplina sino con pruebas que fallan
 | FF-06 | Los casos de uso no dependen de reglas concretas | ADR-03 | TSArch |
 | FF-07 | `shared/` no contiene lógica de negocio | ADR-01 | dependency-cruiser |
 | FF-08 | Complejidad ciclomática ≤ 10 por función | §5.3 de la guía | ESLint |
+| FF-09 | Ninguna expresión atraviesa más de dos objetos ajenos (aproximación a Deméter) | Guía del E3, §2 | Analizador propio con el compilador de TypeScript |
+| FF-10 | Las reglas de juego quedan lejos de las zonas de dolor e inutilidad; ningún paquete en la de inutilidad; contratos y puertos sobre la secuencia principal | Guía del E3, §4.2 | Analizador propio |
+| FF-11 | Toda clase del dominio con estado es cohesiva (LCOM4 = 1) | ADR-01 | Analizador propio |
+| FF-12 | La interfaz web no alcanza el servidor ni la persistencia; `components`, `lib` y `hooks` no importan funcionalidades; las funcionalidades se usan por su `index.ts`; solo el cliente del socket importa Socket.IO | ADR-01 | dependency-cruiser |
+| FF-13 | `packages/contracts` contiene solo tipos | ADR-01 | TypeScript |
 
 Además, `packages/contracts` no puede importar nada de las aplicaciones, y la capa de aplicación de
 cada módulo no puede importar NestJS, Socket.IO ni otras librerías de infraestructura. El dominio
@@ -131,20 +140,36 @@ introduciendo violaciones deliberadas y comprobando que **fallan**:
 | Un archivo de `game/` importa `economy/domain/chip-ledger.ts` | FF-01 | Detectada |
 | `interfaces/http/` importa un repositorio de `infrastructure/` | FF-05 | Detectada |
 | `packages/contracts` importa un archivo de `apps/api` | Contratos sin dependencias | Detectada |
+| Un archivo del dominio lee `session.currentRound.discardTop?.rank` | FF-09 | Detectada |
+| Una clase del dominio con dos grupos de métodos que no comparten campos | FF-11 | Detectada |
+| `packages/contracts` exporta una constante | FF-13 | Detectada |
+| `lib/` importa Socket.IO, una funcionalidad y un archivo de `apps/api` | FF-12 | Detectada (4 violaciones) |
+| Una funcionalidad importa un archivo interno de otra | FF-12 | Detectada |
 
 Ese control negativo reveló un defecto real: el atajo `inFolder()` de TSArch genera un patrón que
 **nunca coincide con rutas relativas**, de modo que FF-01 y FF-05 pasaban aunque estuvieran
 violadas. Se reescribieron con `matchingPattern` explícito. El análisis está en
 [`docs/entregable-2/5-gobernanza-fitness-functions.md`](docs/entregable-2/5-gobernanza-fitness-functions.md).
 
+### Métricas en cada ejecución del pipeline
+
+`npm run arch:metrics` analiza el servidor y los contratos con el compilador de TypeScript y ESLint,
+y escribe `reports/metricas.md`: complejidad ciclomática de cada función, Ca, Ce, inestabilidad,
+abstracción y distancia a la secuencia principal por módulo y por paquete, las expresiones que
+violan la aproximación a Deméter y la cohesión LCOM4 de cada clase. El pipeline lo publica en el
+resumen de la ejecución y lo guarda como artefacto junto con el reporte de cobertura. La cobertura
+mínima es 90 % de líneas, 88 % de ramas y 92 % de funciones, y 95 % de líneas en el dominio del
+juego. Un segundo trabajo del pipeline compila la aplicación y juega en Chromium, en escritorio y en
+celular, una partida contra la máquina con turnos completos y un cierre inválido.
+
 ---
 
 ## Estado actual
 
-Fases 3, 4 y 5 del [plan de construcción](docs/entregable-3/plan-de-construccion.md) completas: el
+Fases 0 a 6 del [plan de construcción](docs/entregable-3/plan-de-construccion.md) completas: el
 juego se puede jugar de punta a punta desde varios navegadores; cada partida terminada queda
-archivada en PostgreSQL y aparece en el perfil del jugador; y las cuentas registradas tienen fichas
-para apostar.
+archivada en PostgreSQL y aparece en el perfil del jugador; las cuentas registradas tienen fichas
+para apostar; y el pipeline mide y vigila las métricas de arquitectura.
 
 - Dominio completo: ronda, partida en las modalidades Clásica, Apuntado y Ambas, acumulación y
   eliminación por umbral, vencimiento del turno.
@@ -166,6 +191,8 @@ para apostar.
   se pierde la conexión.
 
 ```
-311 pruebas  ·  259 de servidor + 6 de arquitectura + 29 de esquema, historial y fichas + 17 de punta a punta
+320 pruebas  ·  259 de servidor + 15 de arquitectura y métricas + 29 de esquema, historial y fichas + 17 de punta a punta
+1 partida en el navegador (Playwright), en escritorio y en celular
+cobertura del servidor: 95 % de líneas, 93 % de ramas  ·  complejidad máxima 10  ·  0 violaciones de Deméter
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
 ```

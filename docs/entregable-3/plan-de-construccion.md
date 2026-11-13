@@ -132,6 +132,43 @@ Decisiones y límites de esta fase:
 - Cualquiera puede crear muchas cuentas para recibir el bono, porque no se verifica el correo. Las
   fichas no tienen valor en dinero.
 
+## Cómo quedó la gobernanza (fase 6)
+
+- **Reglas nuevas.** FF-09 (aproximación a Deméter), FF-10 (distancia a la secuencia principal),
+  FF-11 (cohesión del dominio), FF-12 (dependencias de la interfaz web) y FF-13 (contratos solo con
+  tipos). Cada una se probó con una violación deliberada que la hizo fallar.
+- **Métricas.** `tools/metrics` usa el compilador de TypeScript para el grafo de dependencias, las
+  declaraciones abstractas, la cohesión y Deméter, y ESLint para la complejidad ciclomática. El
+  pipeline publica el reporte en el resumen de cada ejecución y lo guarda como artefacto.
+- **Cómo se cuenta.** Ca y Ce siguen la definición original de Martin con archivos en lugar de
+  clases: Ca cuenta los archivos de fuera que dependen del componente y Ce los del componente que
+  dependen de fuera. Cuentan también las importaciones de solo tipos, porque así se depende de un
+  puerto. Las librerías externas no cuentan. Un componente es una carpeta (paquete) o un módulo
+  completo. A es la proporción de interfaces, tipos de objeto o función y clases abstractas sobre
+  ese total más las clases y funciones concretas.
+- **Deméter.** Se marca una expresión que atraviesa más de dos objetos cuyos tipos son del proyecto
+  (`a.b.c.d`). `this` no cuenta como salto y las cadenas sobre arreglos, cadenas, promesas o
+  librerías tampoco, porque esas interfaces fluidas devuelven objetos del mismo tipo. Es una
+  aproximación: no distingue un objeto de datos de un colaborador. La primera medición encontró 8
+  expresiones (siete `socket.data.player.id` en el gateway y una en el coordinador de mesas) y se
+  corrigieron.
+- **Cohesión.** LCOM4 cuenta los grupos de métodos que no comparten campos ni se llaman. En una
+  clase sin estado cada método queda solo, así que la regla solo exige LCOM4 = 1 a las clases del
+  dominio con estado. Fuera del dominio hay cuatro clases con LCOM4 = 2 o 3; el reporte las lista.
+- **Zona de dolor.** Cuatro paquetes son concretos y estables: `game/domain/entities` (carta y
+  baraja), `identity/domain`, `shared` y `health`. Martin advierte que esa zona duele cuando el
+  código además cambia mucho; estos paquetes casi no cambian, y por eso la regla solo prohíbe la
+  zona de inutilidad y exige que las reglas de juego se mantengan lejos de las dos.
+- **Cobertura.** Mínimos de 90 % de líneas, 88 % de ramas y 92 % de funciones en el servidor, y 95 %
+  de líneas en el dominio del juego. No se miden los archivos que solo tienen tipos ni `main.ts`. El
+  cliente real de `pg` queda sin cubrir porque las pruebas usan PGlite; se verifica en cada
+  despliegue.
+- **Navegador.** Un trabajo aparte del pipeline compila la aplicación y juega con Playwright, en
+  escritorio y en celular, una partida contra la máquina: turnos completos y un cierre inválido que
+  el servidor rechaza con su motivo.
+- **Código muerto.** La cobertura mostró dos restos sin uso, `history/domain/game-result.ts` y
+  `canPlaceStakes`, y se borraron.
+
 ## Interfaz
 
 Se construye en paralelo desde la fase 1, en una rama propia, empezando por el sistema de diseño
