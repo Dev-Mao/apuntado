@@ -41,7 +41,7 @@ export class GameSession {
   }
 
   static start(ids: SessionIds, playerIds: readonly string[], config: SessionConfig, deps: SessionDependencies): GameSession {
-    const resolved = { newDeck: () => shuffle(createDeck(), deps.random), ...deps };
+    const resolved = { newDeck: () => shuffle(createDeck(config.jokers), deps.random), ...deps };
     const match = Match.create(playerIds, { mode: config.mode, eliminationThreshold: config.eliminationThreshold });
     return new GameSession(ids, config, match, GameSession.deal(match, resolved), resolved);
   }

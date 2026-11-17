@@ -13,7 +13,7 @@ import { PgliteSqlClient } from "../support/pglite-sql-client.js";
 
 type Client = Socket<ServerToClientEvents, ClientToServerEvents>;
 
-const STAKED = { mode: "CLASICA", eliminationThreshold: 101, turnSeconds: 60, stake: 100 } as const;
+const STAKED = { mode: "CLASICA", eliminationThreshold: 101, turnSeconds: 60, stake: 100, jokers: false } as const;
 const GAME_TIMEOUT_MS = 30_000;
 
 let app: INestApplication;

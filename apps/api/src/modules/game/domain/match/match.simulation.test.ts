@@ -23,11 +23,11 @@ const playRound = (round: Round): void => {
   }
 };
 
-const playMatch = (mode: GameMode, players: number, seed: number): Match => {
+const playMatch = (mode: GameMode, players: number, seed: number, jokers = false): Match => {
   const random = new SeededRandom(seed);
   const match = Match.create(Array.from({ length: players }, (_, i) => `j${i}`), { mode, eliminationThreshold: 101 });
   while (match.currentStatus === "PLAYING" && match.roundsPlayed < MAX_ROUNDS) {
-    const round = Round.start(match.activePlayerIds, shuffle(createDeck(), random), match.firstTurnIndex, random);
+    const round = Round.start(match.activePlayerIds, shuffle(createDeck(jokers), random), match.firstTurnIndex, random);
     playRound(round);
     match.recordRound(settleRound(round), round.result?.winnerId ?? null);
   }
@@ -51,6 +51,14 @@ describe("Partidas completas simuladas, sin red ni interfaz", () => {
       expect(match.roundsPlayed).toBeGreaterThan(1);
       expect(match.activePlayerIds).toEqual([match.winnerId]);
       expect(match.isEliminated(match.winnerId!)).toBe(false);
+    }
+  });
+
+  it.each([["CLASICA", 4], ["APUNTADO", 3], ["AMBAS", 2]] as const)("con comodines, una partida %s de %i jugadores termina con un ganador", (mode, players) => {
+    for (const seed of [1, 2, 3]) {
+      const match = playMatch(mode, players, seed, true);
+      expect(match.currentStatus).toBe("FINISHED");
+      expect(match.playerIds).toContain(match.winnerId);
     }
   });
 });

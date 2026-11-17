@@ -68,6 +68,7 @@ export function HomeEntry({ form, linkCode }: HomeEntryProps) {
         serverError={form.createError}
         onModeChange={form.handleModeChange}
         onNumberChange={form.handleNumberChange}
+        onJokersChange={form.handleJokersChange}
         onSubmit={form.handleCreate}
       />
       <div className="flex items-center gap-4">

@@ -5,6 +5,7 @@ export interface TableSettings {
   readonly eliminationThreshold: number;
   readonly turnSeconds: number;
   readonly stake: number;
+  readonly jokers: boolean;
 }
 
 export const GAME_MODES: readonly GameMode[] = ["CLASICA", "APUNTADO", "AMBAS"];
@@ -14,4 +15,5 @@ export const DEFAULT_TABLE_SETTINGS: TableSettings = {
   eliminationThreshold: 101,
   turnSeconds: 60,
   stake: 0,
+  jokers: false,
 };

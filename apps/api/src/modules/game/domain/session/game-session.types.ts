@@ -7,6 +7,7 @@ export interface SessionConfig {
   readonly mode: GameMode;
   readonly eliminationThreshold: number;
   readonly turnSeconds: number;
+  readonly jokers: boolean;
 }
 
 export type SessionStatus = "PLAYING" | "ROUND_OVER" | "FINISHED";

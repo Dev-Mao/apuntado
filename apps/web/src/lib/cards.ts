@@ -7,9 +7,15 @@ export const SUIT_SYMBOL: Readonly<Record<Suit, string>> = {
   S: "♠",
 };
 
-export const RANK_ORDER: readonly Rank[] = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+export const RANK_ORDER: readonly Rank[] = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "X"];
 export const SUIT_ORDER: readonly Suit[] = ["H", "S", "D", "C"];
 export const FACE_RANKS: readonly Rank[] = ["J", "Q", "K"];
+
+export const JOKER_IMAGE_SRC = "/joker.png";
+
+export function isJoker(card: CardDto): boolean {
+  return card.rank === "X";
+}
 
 export function isRedSuit(suit: Suit): boolean {
   return suit === "H" || suit === "D";
@@ -24,7 +30,7 @@ function compareBy(primary: (card: CardDto) => number, secondary: (card: CardDto
 }
 
 const rankIndex = (card: CardDto) => RANK_ORDER.indexOf(card.rank);
-const suitIndex = (card: CardDto) => SUIT_ORDER.indexOf(card.suit);
+const suitIndex = (card: CardDto) => (isJoker(card) ? SUIT_ORDER.length : SUIT_ORDER.indexOf(card.suit));
 
 export function sortByRank(cards: readonly CardDto[]): CardDto[] {
   return [...cards].sort(compareBy(rankIndex, suitIndex));

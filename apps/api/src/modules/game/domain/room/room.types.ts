@@ -5,6 +5,7 @@ export interface RoomSettings {
   readonly eliminationThreshold: number;
   readonly turnSeconds: number;
   readonly stake: number;
+  readonly jokers: boolean;
 }
 
 export interface RoomMember {

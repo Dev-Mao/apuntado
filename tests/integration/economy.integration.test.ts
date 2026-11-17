@@ -50,7 +50,7 @@ const started = (stake: number): MatchStarted => ({
   gameId: "ABCD",
   matchId: MATCH,
   at: new Date(),
-  config: { mode: "CLASICA", eliminationThreshold: 101, turnSeconds: 60 },
+  config: { mode: "CLASICA", eliminationThreshold: 101, turnSeconds: 60, jokers: false },
   stake,
   seats: [
     { playerId: EVA, nickname: "Eva", isBot: false },

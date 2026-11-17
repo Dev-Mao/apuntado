@@ -15,7 +15,7 @@ import { SimpleBotStrategy } from "./simple-bot-strategy.js";
 
 const MAX_TURNS = 20_000;
 
-const playBotMatch = (mode: GameMode, seed: number) => {
+const playBotMatch = (mode: GameMode, seed: number, jokers = false) => {
   const games = new InMemoryGameRepository();
   const clock = new ManualClock();
   const journal = new JournalSpy();
@@ -30,7 +30,7 @@ const playBotMatch = (mode: GameMode, seed: number) => {
   new StartGame({ games, random: new SeededRandom(seed), clock, ids: { next: () => "m1" }, events, stakes: new FakeStakes() }).execute({
     gameId: "g1",
     seats: seatsOf(["bot-a", "bot-b"]),
-    config: { mode, eliminationThreshold: 101, turnSeconds: 60 },
+    config: { mode, eliminationThreshold: 101, turnSeconds: 60, jokers },
     stake: 0,
   });
   const session = games.find("g1")!;
@@ -60,5 +60,13 @@ describe("Hito de la fase 2: partida 1v1 contra la máquina sin red ni interfaz"
         .map((e) => (e.payload["summary"] as { closureType: string | null }).closureType),
     );
     expect(closures.some((type) => type === "CLASICO" || type === "APUNTADO")).toBe(true);
+  });
+
+  it.each(["CLASICA", "APUNTADO", "AMBAS"] as const)("con comodines, una partida %s entre dos bots termina y ningún bot descarta un comodín", (mode) => {
+    for (const seed of [1, 2, 3, 4, 5]) {
+      const { session, journal } = playBotMatch(mode, seed, true);
+      expect(session.currentStatus).toBe("FINISHED");
+      expect(journal.entries.filter((e) => e.action === "DESCARTAR" && e.cardId?.startsWith("X"))).toEqual([]);
+    }
   });
 });

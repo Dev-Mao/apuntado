@@ -52,7 +52,7 @@ export class EventSpy implements EventBus {
 export const harness = (deck: readonly Card[], mode: GameMode = "AMBAS", players = ["luis", "ana"]) => {
   const clock = new ManualClock();
   const games = new InMemoryGameRepository();
-  const session = GameSession.start({ gameId: "g1", matchId: "m1" }, players, { mode, eliminationThreshold: 101, turnSeconds: 60 }, {
+  const session = GameSession.start({ gameId: "g1", matchId: "m1" }, players, { mode, eliminationThreshold: 101, turnSeconds: 60, jokers: false }, {
     random: new SeededRandom(3),
     clock,
     newDeck: () => [...deck],

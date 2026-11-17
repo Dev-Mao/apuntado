@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { memo } from "react";
 
-import { cardImageSrc, cn, FACE_RANKS } from "@/lib";
+import { cardImageSrc, cn, FACE_RANKS, isJoker, JOKER_IMAGE_SRC } from "@/lib";
 
 import { CardBack, CardFace } from "./card-face";
 
@@ -41,8 +41,8 @@ interface PlayingCardProps {
 
 function CardArtwork({ card }: { card: CardDto | null }) {
   if (!card) return <CardBack />;
-  if (FACE_RANKS.includes(card.rank)) {
-    return <Image src={cardImageSrc(card)} alt="" fill sizes="8rem" className="object-cover" />;
+  if (isJoker(card) || FACE_RANKS.includes(card.rank)) {
+    return <Image src={isJoker(card) ? JOKER_IMAGE_SRC : cardImageSrc(card)} alt="" fill sizes="8rem" className="object-cover" />;
   }
   return <CardFace card={card} />;
 }

@@ -10,7 +10,7 @@ import type { AppConfig } from "../../apps/api/src/config.js";
 
 type Client = Socket<ServerToClientEvents, ClientToServerEvents>;
 
-const SETTINGS = { mode: "CLASICA", eliminationThreshold: 101, turnSeconds: 60, stake: 0 } as const;
+const SETTINGS = { mode: "CLASICA", eliminationThreshold: 101, turnSeconds: 60, stake: 0, jokers: false } as const;
 const WAIT_MS = 5000;
 const DEV_ORIGIN = "http://localhost:3001";
 

@@ -1,6 +1,6 @@
 export type Suit = "H" | "D" | "C" | "S";
 
-export type Rank = "A" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K";
+export type Rank = "A" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K" | "X";
 
 export interface CardDto {
   readonly rank: Rank;
@@ -144,6 +144,7 @@ export interface RoomSettings {
   readonly eliminationThreshold: number;
   readonly turnSeconds: number;
   readonly stake: number;
+  readonly jokers: boolean;
 }
 
 export type RoomStatus = "LOBBY" | "PLAYING" | "FINISHED";

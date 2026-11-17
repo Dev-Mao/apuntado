@@ -14,7 +14,7 @@ import type { CreateTableFormProps } from "../types";
 
 const SETTING_FIELDS = [HOME_FIELD.THRESHOLD, HOME_FIELD.TURN, HOME_FIELD.STAKE] as const;
 
-function CreateTableFormBase({ settings, errors, pending, invited, serverError, onModeChange, onNumberChange, onSubmit }: CreateTableFormProps) {
+function CreateTableFormBase({ settings, errors, pending, invited, serverError, onModeChange, onNumberChange, onJokersChange, onSubmit }: CreateTableFormProps) {
   const { t } = useTranslation();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const settingsInvalid = SETTING_FIELDS.some((field) => errors[field]);
@@ -27,7 +27,7 @@ function CreateTableFormBase({ settings, errors, pending, invited, serverError, 
       </h3>
       <ModeCards value={settings.mode} onChange={onModeChange} />
       <p className="flex flex-wrap items-baseline gap-x-2 text-paper/75 italic">
-        {t("home.settingsSummary", { threshold: settings.eliminationThreshold, seconds: settings.turnSeconds, stake })}
+        {t(settings.jokers ? "home.settingsSummaryJokers" : "home.settingsSummary", { threshold: settings.eliminationThreshold, seconds: settings.turnSeconds, stake })}
         <button type="button" onClick={() => setSettingsOpen(true)} className="label-caps -my-3 inline-flex min-h-11 items-center text-[0.65rem] text-coral not-italic underline-offset-4 hover:underline">
           {t("home.settingsEdit")}
         </button>
@@ -49,6 +49,7 @@ function CreateTableFormBase({ settings, errors, pending, invited, serverError, 
         settings={settings}
         errors={errors}
         onNumberChange={onNumberChange}
+        onJokersChange={onJokersChange}
         onClose={() => setSettingsOpen(false)}
       />
     </form>

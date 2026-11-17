@@ -172,7 +172,7 @@ archivada en PostgreSQL y aparece en el perfil del jugador; las cuentas registra
 para apostar; y el pipeline mide y vigila las métricas de arquitectura.
 
 - Dominio completo: ronda, partida en las modalidades Clásica, Apuntado y Ambas, acumulación y
-  eliminación por umbral, vencimiento del turno.
+  eliminación por umbral, vencimiento del turno y comodines opcionales por mesa.
 - Salas con código de 4 caracteres, anfitrión, bots, inicio y reconexión con la vista completa.
   Las mesas terminadas o abandonadas se borran tras diez minutos.
 - En producción, la sesión y el socket solo aceptan peticiones del propio origen y de los listados
@@ -191,7 +191,7 @@ para apostar; y el pipeline mide y vigila las métricas de arquitectura.
   se pierde la conexión.
 
 ```
-333 pruebas  ·  272 de servidor + 15 de arquitectura y métricas + 29 de esquema, historial y fichas + 17 de punta a punta
+360 pruebas  ·  299 de servidor + 15 de arquitectura y métricas + 29 de esquema, historial y fichas + 17 de punta a punta
 1 partida en el navegador (Playwright), en escritorio y en celular
 cobertura del servidor: 95 % de líneas, 93 % de ramas  ·  complejidad máxima 10  ·  0 violaciones de Deméter
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias

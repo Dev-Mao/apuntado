@@ -34,6 +34,10 @@
   },
   "cards": {
     "label": "{{rank}} de {{suit}}",
+    "joker": {
+      "red": "Comodín rojo",
+      "black": "Comodín negro"
+    },
     "rank": {
       "A": "As",
       "2": "Dos",
@@ -47,7 +51,8 @@
       "10": "Diez",
       "J": "Jota",
       "Q": "Reina",
-      "K": "Rey"
+      "K": "Rey",
+      "X": "Comodín"
     },
     "suit": {
       "H": "corazones",
@@ -68,8 +73,8 @@
     "stakeGuestAction": "Crear cuenta",
     "stakeBalance": "0 significa jugar sin apuesta. Tu saldo: {{chips}}.",
     "jokers": "Comodines",
-    "comingSoon": "Próximamente",
-    "jokersHint": "Dos comodines en el mazo que reemplazan cualquier carta en una combinación."
+    "modeWithJokers": "{{mode}} con comodines",
+    "jokersHint": "Dos comodines en el mazo. Cada uno reemplaza cualquier carta en una combinación; suelto vale 25 puntos."
   },
   "home": {
     "title": "Apuntado",
@@ -125,6 +130,7 @@
     "thresholdLabel": "Eliminación a",
     "thresholdHint": "En puntos",
     "settingsSummary": "Eliminación a {{threshold}}, turnos de {{seconds}} s, {{stake}}.",
+    "settingsSummaryJokers": "Eliminación a {{threshold}}, turnos de {{seconds}} s, {{stake}}, con comodines.",
     "settingsEdit": "Cambiar",
     "settingsDone": "Listo",
     "settingsInvalid": "Revisa los ajustes de la mesa.",
@@ -221,6 +227,7 @@
       "item4": "Cierre clásico: una cuarta, dos ternas y una carta de descarte.",
       "item5": "Cierre por apuntado: exactamente tres ternas, y las cartas sobrantes deben sumar menos de 5 puntos. El as vale 1, del 2 al 10 valen su número, y J, Q y K valen 10.",
       "item6": "Al cerrar una ronda, los demás suman los puntos de sus cartas sin combinar. Quien llega a {{threshold}} puntos queda eliminado.",
+      "item7": "Si la mesa juega con comodines, hay dos en el mazo. Cada uno reemplaza cualquier carta en una terna, cuarta o escalera, máximo uno por combinación. Suelto en la mano vale 25 puntos.",
       "note": "El servidor es el árbitro: revisa cada jugada y cada cierre."
     },
     "codeTag": "Mesa",
