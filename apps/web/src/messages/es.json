@@ -66,7 +66,10 @@
     "stakeHint": "0 significa jugar sin apuesta",
     "stakeGuest": "Apostar requiere una cuenta con fichas.",
     "stakeGuestAction": "Crear cuenta",
-    "stakeBalance": "0 significa jugar sin apuesta. Tu saldo: {{chips}}."
+    "stakeBalance": "0 significa jugar sin apuesta. Tu saldo: {{chips}}.",
+    "jokers": "Comodines",
+    "comingSoon": "Próximamente",
+    "jokersHint": "Dos comodines en el mazo que reemplazan cualquier carta en una combinación."
   },
   "home": {
     "title": "Apuntado",
