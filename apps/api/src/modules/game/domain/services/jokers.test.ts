@@ -100,4 +100,10 @@ describe("Comodín · cierres", () => {
     expect(found?.type).toBe("APUNTADO");
     expect(found?.melds.flat().map(cardId)).toContain("XH");
   });
+
+  it("el buscador prefiere quedarse con el comodín y descartar una carta real", () => {
+    const found = findClosure(cards("XH 7H 7S 7D 7C KH KS KD 4C 4D 4H"), ["CLASICO"], null);
+    expect(found?.type).toBe("CLASICO");
+    expect(found?.discard).toEqual(c("7H"));
+  });
 });
