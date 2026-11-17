@@ -15,7 +15,7 @@ const CLASSIC = {
 };
 
 const session = (mode: GameMode = "AMBAS", clock = new ManualClock()) =>
-  GameSession.start({ gameId: "g1", matchId: "m1" }, ["ana", "luis"], { mode, eliminationThreshold: 101, turnSeconds: 60 }, {
+  GameSession.start({ gameId: "g1", matchId: "m1" }, ["ana", "luis"], { mode, eliminationThreshold: 101, turnSeconds: 60, jokers: false }, {
     random: new SeededRandom(9),
     clock,
     newDeck: () => [...CLOSING_DECK],

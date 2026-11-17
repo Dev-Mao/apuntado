@@ -218,4 +218,26 @@ describe("Ronda · tiempo agotado", () => {
     expect(round.discardTop).toEqual(c("KH"));
     expect(ids(round.handOf("ana"))).toContain("QS");
   });
+
+  it("nunca descarta un comodín por tiempo: si lo robó del mazo, se lo queda y bota su carta más alta", () => {
+    const round = start(["ana", "luis"], riggedDeck(["AC 2C 3C 4C 5C 6C 7C 8C 9C KH", "2D 3D 4D 5D 6D 7D 8D 9D 10D JD"], "KS", "XH"));
+    round.timeOut("ana");
+    expect(round.discardTop).toEqual(c("KH"));
+    expect(ids(round.handOf("ana"))).toContain("XH");
+  });
+
+  it("si tomó del pozo y tiene un comodín, descarta su carta de mayor valor que no sea comodín", () => {
+    const round = start(["ana", "luis"], riggedDeck(["AC 2C 3C 4C 5C 6C 7C 8C XS KH", "2D 3D 4D 5D 6D 7D 8D 9D 10D JD"], "QS"));
+    round.drawFromDiscard("ana");
+    round.timeOut("ana");
+    expect(round.discardTop).toEqual(c("KH"));
+    expect(ids(round.handOf("ana"))).toContain("XS");
+  });
+});
+
+describe("Ronda · mazo con comodines", () => {
+  it("acepta el mazo de 54 cartas y deja dos cartas más en el mazo", () => {
+    const round = start(["ana", "luis"], shuffle(createDeck(true), random));
+    expect(round.stockSize).toBe(33);
+  });
 });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SeededRandom } from "../../../../shared/random.js";
-import { cardId } from "./card.js";
+import { cardId, isJoker } from "./card.js";
 import { DECK_SIZE, createDeck, shuffle } from "./deck.js";
 
 const ids = (cards: readonly { rank: string; suit: string }[]) => cards.map((c) => `${c.rank}${c.suit}`);
@@ -31,5 +31,12 @@ describe("Baraja", () => {
     const before = ids(deck);
     shuffle(deck, new SeededRandom(3));
     expect(ids(deck)).toEqual(before);
+  });
+
+  it("con comodines agrega un comodín rojo y uno negro a las 52 cartas", () => {
+    const deck = createDeck(true);
+    expect(deck).toHaveLength(DECK_SIZE + 2);
+    expect(new Set(deck.map(cardId)).size).toBe(54);
+    expect(deck.filter(isJoker).map(cardId)).toEqual(["XH", "XS"]);
   });
 });

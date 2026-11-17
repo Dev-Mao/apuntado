@@ -40,6 +40,7 @@ export interface SettingsDraft {
   readonly eliminationThreshold: string;
   readonly turnSeconds: string;
   readonly stake: string;
+  readonly jokers: boolean;
 }
 
 export interface CreateTableFormProps {
@@ -50,6 +51,7 @@ export interface CreateTableFormProps {
   serverError: string | undefined;
   onModeChange: (mode: GameMode) => void;
   onNumberChange: (field: NumericSettingField, value: string) => void;
+  onJokersChange: (jokers: boolean) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
 

@@ -39,7 +39,7 @@ const exhaustRound = (session: GameSession) => {
 const DECK = riggedDeck(["2C 3C 4C 6C 8C 10C JC QC 2D 3D", "7H 7S 7D 9H 9S 9D KH KS KD 5D"], "QS", "AC 4H");
 
 describe("Iniciar partida", () => {
-  const config = { mode: "APUNTADO" as const, eliminationThreshold: 101, turnSeconds: 60 };
+  const config = { mode: "APUNTADO" as const, eliminationThreshold: 101, turnSeconds: 60, jokers: false };
 
   it("crea la sesión y la guarda", () => {
     const games = new InMemoryGameRepository();
@@ -88,7 +88,7 @@ describe("Iniciar partida", () => {
 });
 
 describe("Iniciar partida con apuesta", () => {
-  const config = { mode: "CLASICA" as const, eliminationThreshold: 101, turnSeconds: 60 };
+  const config = { mode: "CLASICA" as const, eliminationThreshold: 101, turnSeconds: 60, jokers: false };
 
   it("retiene la apuesta de los jugadores con el identificador de la partida", () => {
     const games = new InMemoryGameRepository();

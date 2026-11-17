@@ -38,7 +38,7 @@ node "Render: Web Service apuntado\n(plan free, 1 instancia)" <<device>> as REND
 }
 
 node "Neon: PostgreSQL administrado\n(proyecto apuntado, rama production)" <<device>> as NEON {
-  database "PostgreSQL\nschema.sql del E2\n+ migraciones 002 a 005" as DB
+  database "PostgreSQL\nschema.sql del E2\n+ migraciones 002 a 006" as DB
 }
 
 node "GitHub" <<device>> as GITHUB {

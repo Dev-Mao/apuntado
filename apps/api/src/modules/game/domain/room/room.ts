@@ -13,6 +13,7 @@ const isWhole = (value: number, min: number): boolean => Number.isInteger(value)
 
 export const invalidSettings = (s: RoomSettings): string | null => {
   if (!MODES.includes(s.mode)) return "La modalidad no existe";
+  if (typeof s.jokers !== "boolean") return "Los comodines deben estar activados o desactivados";
   if (!isWhole(s.eliminationThreshold, 1) || s.eliminationThreshold > MAX_THRESHOLD) {
     return `El umbral debe estar entre 1 y ${MAX_THRESHOLD} puntos`;
   }

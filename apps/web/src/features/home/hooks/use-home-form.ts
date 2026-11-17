@@ -19,6 +19,7 @@ const INITIAL_SETTINGS: SettingsDraft = {
   eliminationThreshold: String(DEFAULT_TABLE_SETTINGS.eliminationThreshold),
   turnSeconds: String(DEFAULT_TABLE_SETTINGS.turnSeconds),
   stake: String(DEFAULT_TABLE_SETTINGS.stake),
+  jokers: DEFAULT_TABLE_SETTINGS.jokers,
 };
 
 function toRoomSettings(draft: SettingsDraft): RoomSettings {
@@ -27,6 +28,7 @@ function toRoomSettings(draft: SettingsDraft): RoomSettings {
     eliminationThreshold: Number(draft.eliminationThreshold),
     turnSeconds: Number(draft.turnSeconds),
     stake: Number(draft.stake),
+    jokers: draft.jokers,
   };
 }
 
@@ -101,6 +103,8 @@ export function useHomeForm(linkCode: string | null) {
     [],
   );
 
+  const handleJokersChange = useCallback((jokers: boolean) => setSettings((prev) => ({ ...prev, jokers })), []);
+
   const handleCodeChange = useCallback((value: string) => setCodeDraft(value.toUpperCase()), []);
 
   const errorFor = (form: HomeForm) => (serverError?.form === form ? serverError.message : undefined);
@@ -119,6 +123,7 @@ export function useHomeForm(linkCode: string | null) {
     handleNicknameSubmit,
     handleModeChange,
     handleNumberChange,
+    handleJokersChange,
     handleCodeChange,
     handleCreate,
     handleJoin,

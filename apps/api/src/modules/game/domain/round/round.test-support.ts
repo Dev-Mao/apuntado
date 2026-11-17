@@ -1,4 +1,4 @@
-import { type Card, type Rank, type Suit, card, cardId } from "../entities/card.js";
+import { type Card, type Rank, type Suit, card, cardId, isJoker } from "../entities/card.js";
 import { createDeck } from "../entities/deck.js";
 
 export const cards = (codes: string): Card[] =>
@@ -10,6 +10,6 @@ export const riggedDeck = (hands: readonly string[], discardTop: string, nextDra
   const fixed = [...hands.flatMap(cards), c(discardTop)];
   const draws = cards(nextDraws);
   const taken = new Set([...fixed, ...draws].map(cardId));
-  const filler = createDeck().filter((x) => !taken.has(cardId(x)));
+  const filler = createDeck([...fixed, ...draws].some(isJoker)).filter((x) => !taken.has(cardId(x)));
   return [...fixed, ...filler, ...draws.reverse()];
 };

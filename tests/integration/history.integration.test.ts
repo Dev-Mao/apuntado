@@ -14,7 +14,7 @@ const ANA = "00000000-0000-4000-8000-000000000001";
 const LUIS = "00000000-0000-4000-8000-000000000002";
 const BOT = "bot:1";
 const MATCH = "10000000-0000-4000-8000-000000000001";
-const CONFIG = { mode: "APUNTADO", eliminationThreshold: 101, turnSeconds: 60 } as const;
+const CONFIG = { mode: "APUNTADO", eliminationThreshold: 101, turnSeconds: 60, jokers: false } as const;
 const T0 = new Date("2026-11-12T15:00:00Z");
 const at = (minutes: number) => new Date(T0.getTime() + minutes * 60_000);
 const HAND = (suit: string) => ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10"].map((rank) => `${rank}${suit}`);
@@ -98,11 +98,12 @@ const setUp = () => {
 describe("Migraciones", () => {
   it("aplican el esquema del E2 y el catálogo de cartas una sola vez", async () => {
     const fresh = new PgliteSqlClient();
-    expect(await runMigrations(fresh)).toEqual(["001-esquema-e2", "002-catalogo-de-cartas", "003-ronda-sin-ganador", "004-devolucion-de-apuestas", "005-liquidacion-unica"]);
+    expect(await runMigrations(fresh)).toEqual(["001-esquema-e2", "002-catalogo-de-cartas", "003-ronda-sin-ganador", "004-devolucion-de-apuestas", "005-liquidacion-unica", "006-comodines"]);
     expect(await runMigrations(fresh)).toEqual([]);
     const [{ total }] = (await fresh.query<{ total: number }>("SELECT COUNT(*)::int AS total FROM carta")) as [{ total: number }];
-    expect(total).toBe(52);
+    expect(total).toBe(54);
     expect(await fresh.query("SELECT codigo FROM carta WHERE codigo = '10H'")).toHaveLength(1);
+    expect(await fresh.query("SELECT codigo FROM carta WHERE codigo IN ('XH', 'XS')")).toHaveLength(2);
     await fresh.close();
   }, 60_000);
 });

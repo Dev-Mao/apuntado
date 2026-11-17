@@ -43,4 +43,10 @@ describe("Estrategia simple del oponente virtual", () => {
     const action = bot.decide(projectPlayerView(session, "ana", NOW));
     expect(action).toEqual({ kind: "DISCARD", card: c("10H") });
   });
+
+  it("nunca descarta un comodín, aunque sea su carta suelta de mayor valor", () => {
+    const { session } = harness(riggedDeck([LUIS, "AH 8H 3S 10S 5D QD 7C KC XH 9D"], "QS", "4H"));
+    session.drawFromStock("ana");
+    expect(bot.decide(projectPlayerView(session, "ana", NOW))).toEqual({ kind: "DISCARD", card: c("10S") });
+  });
 });

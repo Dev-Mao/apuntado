@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Room } from "./room.js";
 import type { RoomMember, RoomSettings } from "./room.types.js";
 
-const SETTINGS: RoomSettings = { mode: "APUNTADO", eliminationThreshold: 101, turnSeconds: 60, stake: 0 };
+const SETTINGS: RoomSettings = { mode: "APUNTADO", eliminationThreshold: 101, turnSeconds: 60, stake: 0, jokers: false };
 const ANA: RoomMember = { id: "ana", nickname: "Ana", guest: true };
 const LUIS: RoomMember = { id: "luis", nickname: "Luis", guest: true };
 const EVA: RoomMember = { id: "eva", nickname: "Eva", guest: false };
@@ -28,6 +28,7 @@ describe("Sala · apertura", () => {
     ["un turno de 5 segundos", { ...SETTINGS, turnSeconds: 5 }, "La duración del turno debe estar entre 10 y 600 segundos"],
     ["una apuesta negativa", { ...SETTINGS, stake: -1 }, "La apuesta debe estar entre 0 y 100000 fichas"],
     ["una apuesta desmedida", { ...SETTINGS, stake: 100_001 }, "La apuesta debe estar entre 0 y 100000 fichas"],
+    ["comodines sin un sí o un no", { ...SETTINGS, jokers: "sí" as never }, "Los comodines deben estar activados o desactivados"],
   ])("rechaza %s", (_caso, settings, reason) => {
     expect(Room.open("K7Q2", ANA, settings)).toBe(reason);
   });

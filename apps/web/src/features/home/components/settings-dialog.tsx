@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Dialog, TextField } from "@/components";
 
 import { HOME_FIELD } from "../types";
-import { JokersComingSoon } from "./jokers-coming-soon";
+import { JokersField } from "./jokers-field";
 import { StakeField } from "./stake-field";
 
 import type { HomeErrors, NumericSettingField, SettingsDraft } from "../types";
@@ -15,10 +15,11 @@ interface SettingsDialogProps {
   settings: SettingsDraft;
   errors: HomeErrors;
   onNumberChange: (field: NumericSettingField, value: string) => void;
+  onJokersChange: (jokers: boolean) => void;
   onClose: () => void;
 }
 
-export function SettingsDialog({ open, settings, errors, onNumberChange, onClose }: SettingsDialogProps) {
+export function SettingsDialog({ open, settings, errors, onNumberChange, onJokersChange, onClose }: SettingsDialogProps) {
   const { t } = useTranslation();
   const errorText = (field: keyof HomeErrors) => (errors[field] ? t(`home.errors.${errors[field]}`) : undefined);
 
@@ -46,7 +47,7 @@ export function SettingsDialog({ open, settings, errors, onNumberChange, onClose
           onChange={(event) => onNumberChange(HOME_FIELD.TURN, event.target.value)}
         />
         <StakeField value={settings.stake} error={errorText(HOME_FIELD.STAKE)} onChange={(value) => onNumberChange(HOME_FIELD.STAKE, value)} />
-        <JokersComingSoon />
+        <JokersField checked={settings.jokers} onChange={onJokersChange} />
         <Button onClick={onClose} className="self-start">
           {t("home.settingsDone")}
         </Button>

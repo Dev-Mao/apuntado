@@ -24,7 +24,7 @@ export class MatchArchiver {
       kind: kindOf(event),
       threshold: config.eliminationThreshold,
       stake: event.stake,
-      rules: { modalidad: config.mode, umbral: config.eliminationThreshold, segundosPorTurno: config.turnSeconds },
+      rules: { modalidad: config.mode, umbral: config.eliminationThreshold, segundosPorTurno: config.turnSeconds, comodines: config.jokers },
       participants: event.seats.map((seat, index) => ({ ...seat, seat: index + 1 })),
     });
   }

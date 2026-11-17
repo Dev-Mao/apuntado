@@ -1,6 +1,6 @@
 import type { RandomSource } from "../../../../shared/random.js";
-import { type Card, cardId, points } from "../entities/card.js";
-import { DECK_SIZE, shuffle } from "../entities/deck.js";
+import { type Card, cardId, isJoker, points } from "../entities/card.js";
+import { DECK_SIZE, JOKER_COUNT, shuffle } from "../entities/deck.js";
 import { type ClosureDeclaration, type GameRule, type ValidationResult, invalid } from "../rules/game-rule.js";
 import { OK, type Outcome, type RoundClosure, type RoundPhase, type RoundStatus, rejected } from "./round.types.js";
 
@@ -40,7 +40,7 @@ export class Round {
   static start(playerIds: readonly string[], deck: readonly Card[], firstTurn: number, random: RandomSource): Round {
     if (playerIds.length < MIN_PLAYERS || playerIds.length > MAX_PLAYERS) throw new Error("A round needs 2 to 4 players");
     if (new Set(playerIds).size !== playerIds.length) throw new Error("Players must be distinct");
-    if (deck.length !== DECK_SIZE) throw new Error("A round needs a full deck");
+    if (deck.length !== DECK_SIZE && deck.length !== DECK_SIZE + JOKER_COUNT) throw new Error("A round needs a full deck");
     const hands = new Map(playerIds.map((id, i) => [id, deck.slice(i * HAND_SIZE, (i + 1) * HAND_SIZE)]));
     const dealt = playerIds.length * HAND_SIZE;
     return new Round(playerIds, hands, deck.slice(dealt + 1), [deck[dealt]!], firstTurn % playerIds.length, random);
@@ -157,8 +157,8 @@ export class Round {
 
   private automaticDiscard(playerId: string): Card {
     const last = this.lastDraw!;
-    if (!last.fromDiscard) return last.card;
-    const candidates = this.handOf(playerId).filter((c) => !sameCard(c, last.card));
+    if (!last.fromDiscard && !isJoker(last.card)) return last.card;
+    const candidates = this.handOf(playerId).filter((c) => !isJoker(c) && !(last.fromDiscard && sameCard(c, last.card)));
     return candidates.reduce((highest, c) => (points(c) > points(highest) ? c : highest));
   }
 

@@ -19,7 +19,7 @@ export interface MatchOpening {
   readonly kind: MatchKind;
   readonly threshold: number;
   readonly stake: number;
-  readonly rules: Readonly<Record<string, string | number>>;
+  readonly rules: Readonly<Record<string, string | number | boolean>>;
   readonly participants: readonly Participant[];
 }
 

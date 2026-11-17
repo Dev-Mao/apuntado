@@ -90,7 +90,7 @@ describe("Historial · al terminar una partida aparece en el perfil", () => {
     expect(before).toMatchObject({ nickname: "Carla", guest: true, played: 0, recent: [] });
 
     const carla = await connect(cookie);
-    await carla.emitWithAck("room:create", { mode: "CLASICA", eliminationThreshold: 101, turnSeconds: 60, stake: 0 });
+    await carla.emitWithAck("room:create", { mode: "CLASICA", eliminationThreshold: 101, turnSeconds: 60, stake: 0, jokers: false });
     await carla.emitWithAck("room:addBot");
     const finished = playUntilFinished(carla);
     expect(await carla.emitWithAck("room:start")).toEqual({ ok: true });

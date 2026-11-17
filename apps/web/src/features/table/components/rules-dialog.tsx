@@ -11,6 +11,7 @@ const RULE_KEYS = [
   "table.rules.item4",
   "table.rules.item5",
   "table.rules.item6",
+  "table.rules.item7",
 ] as const;
 
 interface RulesDialogProps {

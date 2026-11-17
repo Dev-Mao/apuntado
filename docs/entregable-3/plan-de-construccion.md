@@ -41,6 +41,27 @@ Cada fase deja algo verificable y no se avanza sin que la anterior funcione.
   puntos acumulados; si empatan, quien haya ganado más rondas; si siguen empatados, quien esté
   primero en el orden de la mesa (el anfitrión y después por orden de llegada). Aplica cuando los
   últimos jugadores cruzan juntos el umbral y cuando una ronda de la Clásica termina sin cierre.
+- **Comodines (opcional por mesa):** el anfitrión puede activar dos comodines, uno rojo y uno negro,
+  y el mazo pasa a 54 cartas. Un comodín reemplaza cualquier carta en una terna, una cuarta o una
+  escalera, con máximo uno por combinación y siempre junto a cartas reales. Suelto en la mano vale
+  25 puntos, así que nunca cabe entre las sobrantes de un apuntado. Se puede descartar y tomar del
+  pozo como cualquier carta, pero ni el bot ni el turno vencido lo descartan si hay otra opción.
+
+### Cómo entró el comodín
+
+El ADR-02 lo preveía como una estrategia más, junto a `ClassicRule` y `ApuntadoRule`. Al
+construirlo resultó que no es una forma de cerrar, sino una propiedad del mazo y de qué cuenta como
+combinación, y que se combina con los dos cierres. Por eso vive en el evaluador de combinaciones y
+en el mazo, y las dos reglas lo aprovechan sin cambiar una línea. Así se resolvió el riesgo que el
+ADR-02 dejó anotado sobre variaciones que se combinan. Los cambios fueron:
+
+- `Card` admite el valor `X` (comodines `XH` y `XS`) y `createDeck(true)` agrega los dos.
+- `hand-evaluator` acepta un comodín por combinación; `meld-candidates` conserva los generadores
+  sin comodín y agrega aparte las combinaciones que lo usan, para que una mesa sin comodines no
+  pague nada extra.
+- `RoomSettings` y `SessionConfig` llevan `jokers`, y el historial lo guarda en `config_reglas`.
+- La migración `006-comodines` agrega los dos comodines al catálogo de cartas y amplía los CHECK
+  de `valor_carta` (puntos hasta 25, orden hasta 14).
 
 ## Cómo quedó la persistencia (fase 4)
 
@@ -195,8 +216,8 @@ hooks, `index.ts` por carpeta, accesibilidad y textos con i18n.
 
 ## Lo que queda fuera
 
-Comodín, reingreso de eliminados, penalización por apuntado y bajada progresiva siguen siendo
-puntos de variación diseñados y no construidos. Sirven de ejemplo de extensibilidad en la
+Reingreso de eliminados, penalización por apuntado y bajada progresiva siguen siendo puntos de
+variación diseñados y no construidos. Sirven de ejemplo de extensibilidad en la
 sustentación.
 
 La versión del repositorio entregada con el Entregable 2 está en la etiqueta `entregable-2`.

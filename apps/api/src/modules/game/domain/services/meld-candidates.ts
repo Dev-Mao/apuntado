@@ -1,4 +1,5 @@
-import { type Card, order } from "../entities/card.js";
+import { type Card, isJoker, order } from "../entities/card.js";
+import { isQuarta, isSet } from "./hand-evaluator.js";
 
 export const combinationsOf = (cards: readonly Card[], size: number): Card[][] => {
   if (size === 0) return [[]];
@@ -23,12 +24,28 @@ const runsOf = (suited: readonly Card[], size: number): Card[][] => {
 const runCandidates = (cards: readonly Card[], size: number): Card[][] =>
   groupBy(cards, (c) => c.suit).flatMap((suited) => runsOf(suited, size));
 
-export const setCandidates = (cards: readonly Card[]): Card[][] => [
-  ...groupBy(cards, (c) => c.rank).flatMap((group) => combinationsOf(group, 3)),
-  ...runCandidates(cards, 3),
-];
+const withJoker = (cards: readonly Card[], size: number, isMeld: (meld: readonly Card[]) => boolean): Card[][] => {
+  const naturals = cards.filter((c) => !isJoker(c));
+  return cards
+    .filter(isJoker)
+    .flatMap((joker) => combinationsOf(naturals, size - 1).map((rest) => [...rest, joker]))
+    .filter(isMeld);
+};
 
-export const quartaCandidates = (cards: readonly Card[]): Card[][] => [
-  ...groupBy(cards, (c) => c.rank).filter((group) => group.length === 4),
-  ...runCandidates(cards, 4),
-];
+export const setCandidates = (cards: readonly Card[]): Card[][] => {
+  const naturals = cards.filter((c) => !isJoker(c));
+  return [
+    ...groupBy(naturals, (c) => c.rank).flatMap((group) => combinationsOf(group, 3)),
+    ...runCandidates(naturals, 3),
+    ...withJoker(cards, 3, isSet),
+  ];
+};
+
+export const quartaCandidates = (cards: readonly Card[]): Card[][] => {
+  const naturals = cards.filter((c) => !isJoker(c));
+  return [
+    ...groupBy(naturals, (c) => c.rank).filter((group) => group.length === 4),
+    ...runCandidates(naturals, 4),
+    ...withJoker(cards, 4, isQuarta),
+  ];
+};

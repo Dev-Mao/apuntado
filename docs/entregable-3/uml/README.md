@@ -24,7 +24,7 @@ completo no se puede leer al ancho de una página.
   el sitio estático de `apps/web/out`, la API REST y el gateway de Socket.IO desde el mismo origen,
   así que la cookie de sesión es de primera parte. Render termina TLS en su borde y reenvía al
   puerto del contenedor.
-- **Neon.** PostgreSQL administrado con el `schema.sql` del Entregable 2 y las migraciones 002 a 005,
+- **Neon.** PostgreSQL administrado con el `schema.sql` del Entregable 2 y las migraciones 002 a 006,
   que el servidor aplica al arrancar. El driver es `pg` con un pool de cinco conexiones sobre TLS.
 - **GitHub.** Cada solicitud de integración corre `gobernanza.yml` en GitHub Actions. Al integrar en
   `main`, Render compila y despliega automáticamente.

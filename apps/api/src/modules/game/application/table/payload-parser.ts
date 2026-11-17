@@ -1,15 +1,17 @@
-import { type Card, type Rank, type Suit, card } from "../../domain/entities/card.js";
+import { type Card, JOKER_RANK, type Rank, type Suit, card } from "../../domain/entities/card.js";
 import type { RoomSettings } from "../../domain/room/room.types.js";
 import type { ClosureDeclaration } from "../../domain/rules/game-rule.js";
 
 const RANKS: readonly string[] = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const SUITS: readonly string[] = ["H", "D", "C", "S"];
+const JOKER_SUITS: readonly string[] = ["H", "S"];
 const CLOSURES: readonly string[] = ["CLASICO", "APUNTADO"];
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null;
 
 export const parseCard = (raw: unknown): Card | null => {
   if (!isRecord(raw) || typeof raw["rank"] !== "string" || typeof raw["suit"] !== "string") return null;
+  if (raw["rank"] === JOKER_RANK) return JOKER_SUITS.includes(raw["suit"]) ? card(JOKER_RANK, raw["suit"] as Suit) : null;
   if (!RANKS.includes(raw["rank"]) || !SUITS.includes(raw["suit"])) return null;
   return card(raw["rank"] as Rank, raw["suit"] as Suit);
 };
@@ -39,11 +41,13 @@ export const parseSettings = (raw: unknown): RoomSettings | null => {
   if (!isRecord(raw) || typeof raw["mode"] !== "string") return null;
   const numbers = [raw["eliminationThreshold"], raw["turnSeconds"], raw["stake"]];
   if (!numbers.every((n) => typeof n === "number")) return null;
+  if (raw["jokers"] !== undefined && typeof raw["jokers"] !== "boolean") return null;
   return {
     mode: raw["mode"] as RoomSettings["mode"],
     eliminationThreshold: raw["eliminationThreshold"] as number,
     turnSeconds: raw["turnSeconds"] as number,
     stake: raw["stake"] as number,
+    jokers: raw["jokers"] === true,
   };
 };
 
