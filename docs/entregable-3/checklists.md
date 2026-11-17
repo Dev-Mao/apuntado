@@ -36,7 +36,7 @@ Estado al 13/11/2026, revisión `main` posterior a la PR #19.
 | Persistencia y economía | Cumple | `tests/integration` sobre PostgreSQL (PGlite): migraciones, archivo de partidas, libro de fichas y doble liquidación rechazada |
 | Cobertura | Cumple, verificado en CI | 95 % de líneas y 93 % de ramas en el servidor; mínimos de 90 % y 88 %, y 95 % en el dominio del juego |
 
-Total: 360 pruebas con Vitest y una partida con Playwright, todas en el pipeline.
+Total: 361 pruebas con Vitest y una partida con Playwright, todas en el pipeline.
 
 ## Software release checklist
 

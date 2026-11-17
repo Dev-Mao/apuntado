@@ -1,4 +1,4 @@
-import { type Card, cardId } from "../entities/card.js";
+import { type Card, cardId, isJoker } from "../entities/card.js";
 import { LEFTOVER_LIMIT } from "../rules/apuntado-rule.js";
 import type { ClosureDeclaration, ClosureType } from "../rules/game-rule.js";
 import { quartaCandidates, setCandidates } from "./meld-candidates.js";
@@ -15,6 +15,8 @@ const disjoint = (melds: readonly (readonly Card[])[]): boolean => {
   const ids = melds.flat().map(cardId);
   return new Set(ids).size === ids.length;
 };
+
+const jokersLast = (cards: readonly Card[]): Card[] => [...cards.filter((c) => !isJoker(c)), ...cards.filter(isJoker)];
 
 const canDiscard = (card: Card, forbidden: Card | null): boolean => !forbidden || cardId(card) !== cardId(forbidden);
 
@@ -39,7 +41,7 @@ const classicWithDiscard = (hand: readonly Card[], discard: Card): ClosureDeclar
 };
 
 const findClassic = (hand: readonly Card[], forbidden: Card | null): ClosureDeclaration | null => {
-  for (const discard of hand) {
+  for (const discard of jokersLast(hand)) {
     if (!canDiscard(discard, forbidden)) continue;
     const found = classicWithDiscard(hand, discard);
     if (found) return found;
@@ -49,7 +51,7 @@ const findClassic = (hand: readonly Card[], forbidden: Card | null): ClosureDecl
 
 const apuntadoWith = (melds: Card[][], leftovers: readonly Card[], forbidden: Card | null): ClosureDeclaration | null => {
   if (pointsOf(leftovers) < LEFTOVER_LIMIT) return { type: "APUNTADO", melds, leftovers, discard: null };
-  for (const discard of leftovers) {
+  for (const discard of jokersLast(leftovers)) {
     const kept = without(leftovers, [discard]);
     if (canDiscard(discard, forbidden) && pointsOf(kept) < LEFTOVER_LIMIT) {
       return { type: "APUNTADO", melds, leftovers: kept, discard };
