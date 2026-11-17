@@ -65,4 +65,4 @@ Las 10 u 11 cartas se solapan en un abanico que siempre cabe en el ancho: el pas
 
 ## Cartas
 
-Caras crema con pips de tinta (rojos en coral tinta), índices serif y figuras enmarcadas con trazos finos. El dorso es coral liso con un filo crema. Para usar las imágenes del equipo basta cambiar `CARD_ART` en `src/components/ui/playing-card.tsx` a `CARD_ART.IMAGES`; se leerán de `/cards/{rango}{palo}.png` y `/cards/back.png`.
+Las numéricas son caras crema con pips de tinta (rojos en coral tinta) e índices serif, dibujadas en código. Las figuras (J, Q y K) son las ilustraciones del equipo, en `public/cards/{rango}{palo}.png`. El dorso es coral liso con un filo crema.

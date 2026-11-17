@@ -34,8 +34,6 @@ export function sortBySuit(cards: readonly CardDto[]): CardDto[] {
   return [...cards].sort(compareBy(suitIndex, rankIndex));
 }
 
-export const CARD_BACK_SRC = "/cards/back.png";
-
 export function cardImageSrc(card: CardDto): string {
   return `/cards/${cardId(card)}.png`;
 }
