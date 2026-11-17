@@ -1,21 +1,12 @@
 import Image from "next/image";
 import { memo } from "react";
 
-import { CARD_BACK_SRC, cardImageSrc, cn } from "@/lib";
+import { cardImageSrc, cn, FACE_RANKS } from "@/lib";
 
 import { CardBack, CardFace } from "./card-face";
 
 import type { CardDto } from "@apuntado/contracts";
 import type { CSSProperties } from "react";
-
-export const CARD_ART = {
-  CSS: "css",
-  IMAGES: "images",
-} as const;
-
-type CardArt = (typeof CARD_ART)[keyof typeof CARD_ART];
-
-const ART: CardArt = process.env.NEXT_PUBLIC_CARD_ART === CARD_ART.IMAGES ? CARD_ART.IMAGES : CARD_ART.CSS;
 
 export const CARD_SIZE = {
   XS: "xs",
@@ -49,10 +40,11 @@ interface PlayingCardProps {
 }
 
 function CardArtwork({ card }: { card: CardDto | null }) {
-  if (ART === CARD_ART.IMAGES) {
-    return <Image src={card ? cardImageSrc(card) : CARD_BACK_SRC} alt="" fill sizes="8rem" className="object-cover" />;
+  if (!card) return <CardBack />;
+  if (FACE_RANKS.includes(card.rank)) {
+    return <Image src={cardImageSrc(card)} alt="" fill sizes="8rem" className="object-cover" />;
   }
-  return card ? <CardFace card={card} /> : <CardBack />;
+  return <CardFace card={card} />;
 }
 
 function PlayingCardBase({ card, size = CARD_SIZE.MD, className, style }: PlayingCardProps) {

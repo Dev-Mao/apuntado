@@ -1,4 +1,4 @@
-import { cn, FACE_RANKS, isRedSuit } from "@/lib";
+import { cn, isRedSuit } from "@/lib";
 
 import { PIP_LAYOUT } from "./card-pips";
 import { SuitGlyph } from "./suit-glyph";
@@ -45,27 +45,7 @@ function AcePip({ card }: { card: CardDto }) {
   );
 }
 
-function CourtHalf({ card, flipped }: { card: CardDto; flipped?: boolean }) {
-  return (
-    <span className={cn("absolute inset-0 flex flex-col items-start p-[8%]", flipped && "rotate-180")}>
-      <span className="font-display text-[length:32cqw] leading-[0.8] font-semibold italic">{card.rank}</span>
-      <SuitGlyph suit={card.suit} className="mt-[3cqw] ml-[2cqw] size-[12cqw]" />
-    </span>
-  );
-}
-
-function CourtFrame({ card }: { card: CardDto }) {
-  return (
-    <span className="absolute inset-x-[20%] inset-y-[13%] overflow-hidden rounded-[5%/3.5%] border border-current/40 bg-[repeating-linear-gradient(135deg,transparent_0_2.6cqw,color-mix(in_srgb,currentColor_12%,transparent)_2.6cqw_3.2cqw)]">
-      <span className="absolute inset-0 bg-[linear-gradient(to_bottom_right,transparent_calc(50%-0.5px),color-mix(in_srgb,currentColor_45%,transparent)_50%,transparent_calc(50%+0.5px))]" />
-      <CourtHalf card={card} />
-      <CourtHalf card={card} flipped />
-    </span>
-  );
-}
-
 function CardCenter({ card }: { card: CardDto }) {
-  if (FACE_RANKS.includes(card.rank)) return <CourtFrame card={card} />;
   if (card.rank === "A") return <AcePip card={card} />;
   return <Pips card={card} />;
 }
