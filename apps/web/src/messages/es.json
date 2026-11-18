@@ -180,7 +180,7 @@
       "selected_other": "{{count}} seleccionadas",
       "lockedCard": "{{card}}, tomada del pozo, no la puedes descartar en este turno",
       "lockedTag": "Pozo",
-      "sortLabel": "Ordenar"
+      "sortLabel": "Ordenar por"
     },
     "turn": {
       "title": "Turno",

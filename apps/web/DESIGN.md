@@ -21,9 +21,13 @@ Las líneas finas son tinta al 15 %.
 
 - **Playfair Display** (600): el título, los números grandes del marcador y los títulos de cada pantalla.
 - **Source Serif 4**: nombres, filas, texto corrido y la cursiva de lemas y estados.
-- **Jost**: etiquetas pequeñas en mayúsculas muy espaciadas y botones, con moderación.
+- **Jost** (600): etiquetas pequeñas en mayúsculas muy espaciadas y botones, con moderación. Una etiqueta que presenta opciones va en cursiva serif («Ordenar por»), para no confundirse con ellas.
 - Las tres se cargan con `next/font` en `src/app/layout.tsx` y se exponen como `--font-display`, `--font-serif` y `--font-sans` en `globals.css`; cambiar una familia es tocar una línea.
 - Escala 1.25: 12.8 · 16 · 20 · 25 · 31 · 39 · 49 px; el título de inicio llega a 122 px.
+
+## Formas
+
+Los botones, las píldoras de jugador y las etiquetas son redondos del todo, como en la referencia. Los campos de texto, las tarjetas de modalidad y la opción de comodines usan esquinas de 12 px: se leen como lugares para escribir o elegir, no como acciones. Los interruptores (comodines) son coral cuando están activos.
 
 ## Pantallas
 
