@@ -36,7 +36,7 @@ export function TextField({ label, hint, error, tone = "paper", className, id, .
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
         className={cn(
-          "h-12 w-full rounded-full border-[1.5px] px-5 text-lg transition-colors duration-200 placeholder:italic focus-visible:outline-offset-2",
+          "h-12 w-full rounded-xl border-[1.5px] px-5 text-lg transition-colors duration-200 placeholder:italic focus-visible:outline-offset-2",
           INPUT_CLASSES[tone],
           error && "border-coral-ink",
         )}

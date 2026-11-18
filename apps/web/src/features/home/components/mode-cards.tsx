@@ -31,7 +31,7 @@ export function ModeCards({ value, onChange }: ModeCardsProps) {
             <label
               key={mode}
               className={cn(
-                "relative flex cursor-pointer flex-col items-center gap-1 overflow-hidden rounded-2xl border-[1.5px] px-1.5 pt-3 pb-2.5 text-center transition-[border-color,background-color] duration-200 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-paper short:pt-2 short:pb-2",
+                "relative flex cursor-pointer flex-col items-center gap-1 overflow-hidden rounded-xl border-[1.5px] px-1.5 pt-3 pb-2.5 text-center transition-[border-color,background-color] duration-200 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-paper short:pt-2 short:pb-2",
                 checked ? "border-coral bg-coral/15" : "border-paper/20 hover:border-paper/45",
               )}
             >
