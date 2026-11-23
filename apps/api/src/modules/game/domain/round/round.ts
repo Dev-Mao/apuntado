@@ -112,6 +112,10 @@ export class Round {
   declareClosure(playerId: string, declaration: ClosureDeclaration, rule: GameRule): ValidationResult {
     const reason = this.denial(playerId, "DISCARD") ?? (declaration.discard ? this.discardDenial(declaration.discard) : null);
     if (reason) return invalid(reason);
+    const missing = this.handOf(playerId).length - declaredCards(declaration).length;
+    if (missing > 0) {
+      return invalid(missing === 1 ? "Te falta 1 carta por ubicar en el cierre" : `Te faltan ${missing} cartas por ubicar en el cierre`);
+    }
     if (!sameCards(declaredCards(declaration), this.handOf(playerId))) {
       return invalid("Las cartas declaradas no coinciden con su mano");
     }

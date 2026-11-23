@@ -37,6 +37,11 @@ export function ClosureTray({ cards, selectedIds, lockedId, isSubmitting, onTogg
         {cards.length === 0 ? (
           <p className="text-ink italic">{t("closure.allAssigned")}</p>
         ) : (
+          <p id="closure-missing" className="text-sm text-ink-soft italic">
+            {t("closure.missing", { count: cards.length })}
+          </p>
+        )}
+        {cards.length > 0 && (
           <ul className="flex flex-wrap gap-1.5 pt-2.5">
             {cards.map((card) => (
               <li key={cardId(card)}>
@@ -58,6 +63,8 @@ export function ClosureTray({ cards, selectedIds, lockedId, isSubmitting, onTogg
         </Button>
         <Button
           onClick={onSubmit}
+          disabled={cards.length > 0}
+          aria-describedby={cards.length > 0 ? "closure-missing" : undefined}
           aria-disabled={isSubmitting}
           aria-busy={isSubmitting}
           className="flex-1 aria-disabled:cursor-wait aria-disabled:opacity-70 sm:flex-none"

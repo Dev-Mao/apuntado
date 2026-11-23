@@ -140,6 +140,14 @@ describe("Ronda · cierre clásico", () => {
     expect(round.declareClosure("ana", tampered, new ClassicRule()).reason).toBe("Las cartas declaradas no coinciden con su mano");
   });
 
+  it("si faltan cartas por ubicar, el rechazo dice cuántas", () => {
+    const round = start(["ana", "luis"], deck);
+    round.drawFromStock("ana");
+    const incomplete = { ...closure, melds: [cards("7H 7S 7D 7C"), cards("KH KS KD")] };
+    expect(round.declareClosure("ana", incomplete, new ClassicRule()).reason).toBe("Te faltan 3 cartas por ubicar en el cierre");
+    expect(round.declareClosure("ana", { ...closure, discard: null }, new ClassicRule()).reason).toBe("Te falta 1 carta por ubicar en el cierre");
+  });
+
   it("un cierre inválido no altera el estado ni consume el turno", () => {
     const round = start(["ana", "luis"], deck);
     round.drawFromStock("ana");
