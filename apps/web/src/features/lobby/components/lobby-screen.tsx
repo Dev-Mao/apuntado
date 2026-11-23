@@ -4,7 +4,9 @@ import { useTranslation } from "react-i18next";
 
 import { AppHeader, ArrowIcon, Button, BUTTON_VARIANT, LiveNotice } from "@/components";
 import { ChipBalance } from "@/features/account";
+import { RulesDialog } from "@/features/table";
 
+import { useFirstVisitRules } from "../hooks";
 import { LobbyTable } from "./lobby-table";
 import { SettingsSummary } from "./settings-summary";
 
@@ -14,6 +16,7 @@ export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave 
   const { t } = useTranslation();
   const isHost = lobby.hostId === selfId;
   const stake = lobby.settings.stake;
+  const rules = useFirstVisitRules();
 
   return (
     <div className="relative isolate h-dvh overflow-hidden">
@@ -64,6 +67,7 @@ export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave 
           </div>
           <SettingsSummary settings={lobby.settings} />
         </main>
+        <RulesDialog open={rules.open} threshold={lobby.settings.eliminationThreshold} onClose={rules.close} />
       </div>
     </div>
   );
