@@ -245,6 +245,8 @@
     "type": "Tipo de cierre",
     "unassigned": "Cartas sin asignar",
     "allAssigned": "Ya asignaste todas tus cartas",
+    "missing_one": "Ubica la carta que falta para poder enviar el cierre.",
+    "missing_other": "Ubica las {{count}} cartas que faltan para poder enviar el cierre.",
     "group": "Combinación {{count}}",
     "leftovers": "Sobrantes",
     "discard": "Descarte",
