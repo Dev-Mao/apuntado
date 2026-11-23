@@ -11,6 +11,10 @@ async function openTableAgainstTheBot(page: Page): Promise<void> {
   await page.getByRole("radio", { name: /^Clásica/ }).check({ force: true });
   await page.getByRole("button", { name: "Crear mesa", exact: true }).click();
   await page.waitForURL(/\/sala\/\?codigo=/);
+  const rules = page.locator("dialog[open]");
+  await expect(rules.getByRole("heading", { name: "Reglas en breve" })).toBeVisible();
+  await rules.getByRole("button", { name: "Cerrar" }).click();
+  await expect(rules).toHaveCount(0);
   await page.getByRole("button", { name: "Agregar bot", exact: true }).click();
   await expect(page.getByText("Máquina 1").first()).toBeVisible();
   await page.getByRole("button", { name: "Iniciar partida", exact: true }).click();
