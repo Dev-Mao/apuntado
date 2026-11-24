@@ -20,7 +20,6 @@ export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave 
 
   return (
     <div className="relative isolate h-dvh overflow-hidden">
-      <span aria-hidden="true" className="absolute -top-32 -right-36 -z-10 size-80 rounded-full bg-coral sm:-top-48 sm:-right-40 sm:size-[30rem]" />
       <div className="mx-auto flex h-full max-w-5xl flex-col">
         <AppHeader homeLink={false}>
           <div className="flex items-center gap-3">

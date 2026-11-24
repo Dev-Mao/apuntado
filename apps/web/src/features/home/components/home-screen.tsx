@@ -29,7 +29,6 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
 
   return (
     <div className="relative isolate h-dvh overflow-hidden">
-      <span aria-hidden="true" className="absolute -top-44 -left-48 -z-10 size-[26rem] rounded-full bg-coral sm:-top-56 sm:-left-40 sm:size-[38rem]" />
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <AppHeader>
           <nav aria-label={t("home.nav")} className="flex items-center gap-2 sm:gap-6">

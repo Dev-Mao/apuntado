@@ -1,4 +1,4 @@
-import { Gloock, Hanken_Grotesk } from "next/font/google";
+import { Gloock, Nunito } from "next/font/google";
 
 import { AppProviders } from "@/components";
 import { AccountProvider } from "@/features/account";
@@ -17,7 +17,7 @@ const display = Gloock({
   display: "swap",
 });
 
-const text = Hanken_Grotesk({
+const text = Nunito({
   subsets: ["latin"],
   style: ["normal", "italic"],
   variable: "--font-face-text",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f5eee6",
+  themeColor: "#f6eee3",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
