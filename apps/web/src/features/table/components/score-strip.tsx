@@ -31,7 +31,7 @@ export function ScoreStrip({ entries, seats, selfId, turnPlayerId, onOpen }: Sco
           className={cn(
             "flex min-w-0 shrink-0 items-baseline gap-2 rounded-full px-3 pt-1.5 pb-1",
             entry.playerId === selfId ? "bg-coral" : "bg-paper-light shadow-[inset_0_0_0_1px_var(--color-line)]",
-            entry.eliminated && "opacity-55",
+            (entry.eliminated || entry.abandoned) && "opacity-55",
           )}
         >
           {entry.playerId === turnPlayerId && <span className="size-1.5 self-center rounded-full bg-ink" />}

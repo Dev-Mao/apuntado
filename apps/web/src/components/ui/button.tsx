@@ -8,6 +8,7 @@ export const BUTTON_VARIANT = {
   DARK: "dark",
   LIGHT: "light",
   GHOST: "ghost",
+  DANGER: "danger",
 } as const;
 
 export type ButtonVariant = (typeof BUTTON_VARIANT)[keyof typeof BUTTON_VARIANT];
@@ -19,6 +20,7 @@ const VARIANT_CLASSES: Readonly<Record<ButtonVariant, string>> = {
   dark: "bg-ink text-paper not-disabled:hover:bg-ink-soft",
   light: "border-[1.5px] border-paper/60 text-paper not-disabled:hover:bg-paper not-disabled:hover:text-ink",
   ghost: "text-ink underline-offset-4 not-disabled:hover:underline",
+  danger: "bg-coral-ink text-paper not-disabled:hover:bg-ink",
 };
 
 const BASE_CLASSES =

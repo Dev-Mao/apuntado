@@ -1,3 +1,4 @@
+export * from "./use-abandon-game";
 export * from "./use-game-socket";
 export * from "./use-leave-room";
 export * from "./use-realtime-store";

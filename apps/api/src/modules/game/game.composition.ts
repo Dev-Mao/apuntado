@@ -7,6 +7,7 @@ import { LobbyCommands } from "./application/table/lobby-commands.js";
 import { TableCommands } from "./application/table/table-commands.js";
 import { TableCoordinator, type TableTiming } from "./application/table/table-coordinator.js";
 import { TableQueries } from "./application/table/table-queries.js";
+import { AbandonGame } from "./application/use-cases/abandon-game.js";
 import { DeclareClosure } from "./application/use-cases/declare-closure.js";
 import { DiscardCard } from "./application/use-cases/discard-card.js";
 import { DrawCard } from "./application/use-cases/draw-card.js";
@@ -43,6 +44,7 @@ export const composeGame = (infra: GameInfrastructure): GameComponents => {
   const draw = new DrawCard(games, journal, events, clock);
   const discard = new DiscardCard(games, journal, events, clock);
   const declare = new DeclareClosure(games, new RuleResolver(), journal, events, clock);
+  const abandon = new AbandonGame(games, rooms, events);
   const nextRound = new StartNextRound(games, events);
   const bot = new BotPlayer(games, new SimpleBotStrategy(), { draw, discard, declare }, clock);
   const timeOut = new TimeOutTurn(games, journal, events, clock);
@@ -50,7 +52,7 @@ export const composeGame = (infra: GameInfrastructure): GameComponents => {
   const startGame = new StartGame({ games, random, clock, ids, events, stakes });
   return {
     lobby: new LobbyCommands({ rooms, startGame, coordinator, notifier, random, stakes }),
-    table: new TableCommands({ rooms, draw, discard, declare, coordinator }),
+    table: new TableCommands({ rooms, draw, discard, declare, abandon, coordinator }),
     queries: new TableQueries(rooms, games, presence, clock),
   };
 };

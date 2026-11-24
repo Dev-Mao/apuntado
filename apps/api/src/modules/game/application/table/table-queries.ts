@@ -27,7 +27,7 @@ export class TableQueries {
   snapshot(code: string, playerId: string): TableSnapshot | null {
     const room = this.rooms.find(code);
     const session = this.games.find(code);
-    if (!room || !session || !room.hasPlayer(playerId)) return null;
+    if (!room || !session || !room.isSeated(playerId)) return null;
     return buildTableSnapshot(room, session, playerId, this.clock.now(), this.presence);
   }
 }

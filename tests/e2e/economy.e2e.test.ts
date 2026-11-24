@@ -118,6 +118,30 @@ describe("Economía · el libro cuadra con el saldo", () => {
     expect(writeErrors).toEqual([]);
   }, 60_000);
 
+  it("si un jugador abandona, el rival gana el bote y quien abandonó pierde su apuesta", async () => {
+    const [ana, leo] = [await register("Ana2"), await register("Leo")];
+    const anaSocket = await connect(ana);
+    const leoSocket = await connect(leo);
+    const created = await anaSocket.emitWithAck("room:create", STAKED);
+    const code = created.ok ? created.code : "";
+    expect(await leoSocket.emitWithAck("room:join", code)).toEqual({ ok: true, code });
+    expect(await anaSocket.emitWithAck("room:start")).toEqual({ ok: true });
+
+    const finished = playUntilFinished(anaSocket);
+    expect(await leoSocket.emitWithAck("game:abandon")).toEqual({ ok: true });
+    const final = await finished;
+    await database.queue.idle();
+
+    expect(final.view.winnerId).toBe(final.view.playerId);
+    expect(final.view.scoreboard.filter((line) => line.abandoned)).toHaveLength(1);
+    const [anaWallet, leoWallet] = [await wallet(ana), await wallet(leo)];
+    expect([anaWallet.balance, leoWallet.balance]).toEqual([1100, 900]);
+    expect(anaWallet.movements.map((m) => m.reason)).toContain("BOTE_GANADO");
+    expect(leoWallet.movements.map((m) => m.reason)).not.toContain("BOTE_GANADO");
+    expect(await leoSocket.emitWithAck("room:create", STAKED)).toMatchObject({ ok: true });
+    expect(writeErrors).toEqual([]);
+  }, 60_000);
+
   it("un invitado no puede apostar ni tiene fichas", async () => {
     const guest = cookieOf(await post("guest", { nickname: "Invi" }));
     expect((await fetch(`${baseUrl}/api/wallet`, { headers: { cookie: guest } })).status).toBe(403);

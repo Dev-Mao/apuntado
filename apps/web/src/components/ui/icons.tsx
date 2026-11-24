@@ -38,6 +38,14 @@ export function RulesIcon({ className }: IconProps) {
   );
 }
 
+export function ExitIcon({ className }: IconProps) {
+  return (
+    <Icon className={className}>
+      <path d="M10 4H5v16h5M14 8l4 4-4 4M18 12H9" />
+    </Icon>
+  );
+}
+
 export function SheetIcon({ className }: IconProps) {
   return (
     <Icon className={className}>

@@ -2,16 +2,17 @@
 
 import { useTranslation } from "react-i18next";
 
-import { BarsIcon, RulesIcon } from "@/components";
+import { BarsIcon, ExitIcon, RulesIcon } from "@/components";
 
 interface TableLinksProps {
   onShowRules: () => void;
   onShowScores: () => void;
+  onAbandon: () => void;
 }
 
 const LINK_CLASSES = "label-caps flex items-center gap-2.5 py-2 text-[0.65rem] transition-colors hover:text-coral-ink";
 
-export function TableLinks({ onShowRules, onShowScores }: TableLinksProps) {
+export function TableLinks({ onShowRules, onShowScores, onAbandon }: TableLinksProps) {
   const { t } = useTranslation();
 
   return (
@@ -24,6 +25,11 @@ export function TableLinks({ onShowRules, onShowScores }: TableLinksProps) {
       <button type="button" onClick={onShowScores} className={LINK_CLASSES}>
         <BarsIcon className="size-5" />
         {t("table.footer.scoreboard")}
+      </button>
+      <span aria-hidden="true" className="h-5 w-px bg-ink/30" />
+      <button type="button" onClick={onAbandon} className={LINK_CLASSES}>
+        <ExitIcon className="size-5" />
+        {t("table.abandon.action")}
       </button>
     </nav>
   );

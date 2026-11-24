@@ -4,7 +4,7 @@ import type { ResultRow } from "./types";
 
 function weight(row: ResultRow): number {
   if (row.status === RESULT_STATUS.WINNER) return 0;
-  return row.eliminated ? 2 : 1;
+  return row.eliminated || row.abandoned ? 2 : 1;
 }
 
 export function rankRows(rows: readonly ResultRow[]): ResultRow[] {

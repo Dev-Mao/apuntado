@@ -6,6 +6,7 @@ import { Dialog } from "@/components";
 import { ClosureDialog } from "@/features/closure";
 
 import { useTableScreen } from "../hooks";
+import { AbandonDialog } from "./abandon-dialog";
 import { PlayerHand } from "./player-hand";
 import { RulesDialog } from "./rules-dialog";
 import { ScoreStrip } from "./score-strip";
@@ -46,7 +47,7 @@ export function TableScreen(props: TableScreenProps) {
   return (
     <div className="relative isolate grid grid-cols-[minmax(0,1fr)] grid-rows-[auto_auto_minmax(0,1fr)_auto] h-dvh overflow-clip lg:grid-cols-[minmax(0,1fr)_19rem] xl:grid-cols-[minmax(0,1fr)_22rem] lg:grid-rows-[auto_minmax(0,1fr)_auto]">
       <TableBackdrop />
-      <TableHeader code={snapshot.code} round={view.roundNumber} onShowRules={panels.showRules} onShowScores={panels.showScores} />
+      <TableHeader code={snapshot.code} round={view.roundNumber} onShowRules={panels.showRules} onShowScores={panels.showScores} onAbandon={panels.showAbandon} />
       <ScoreStrip entries={view.scoreboard} seats={seats} selfId={view.playerId} turnPlayerId={view.currentPlayerId} onOpen={panels.showScores} />
       <span
         aria-hidden="true"
@@ -90,6 +91,7 @@ export function TableScreen(props: TableScreenProps) {
         )}
       </Dialog>
       <RulesDialog open={panels.rulesOpen} threshold={view.eliminationThreshold} onClose={panels.close} />
+      <AbandonDialog open={panels.abandonOpen} stake={snapshot.stake} onClose={panels.close} />
       <ClosureDialog
         key={closure.attempt}
         open={closure.open}

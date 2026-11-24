@@ -75,7 +75,8 @@ export class GameSession {
   }
 
   get turnDeadline(): Date {
-    return new Date(this.turnStartedAt.getTime() + this.config.turnSeconds * 1000);
+    const seconds = this.match.isAbandoned(this.round.currentPlayerId) ? 0 : this.config.turnSeconds;
+    return new Date(this.turnStartedAt.getTime() + seconds * 1000);
   }
 
   get scoreboard(): ScoreLine[] {
@@ -83,7 +84,12 @@ export class GameSession {
       playerId,
       total: this.match.totalOf(playerId),
       eliminated: this.match.isEliminated(playerId),
+      abandoned: this.match.isAbandoned(playerId),
     }));
+  }
+
+  isEliminated(playerId: string): boolean {
+    return this.match.isEliminated(playerId);
   }
 
   seatOf(playerId: string): number {
@@ -108,6 +114,21 @@ export class GameSession {
 
   timeOut(playerId: string): Outcome {
     return this.act(() => this.round.timeOut(playerId));
+  }
+
+  abandon(playerId: string): Outcome {
+    if (this.status === "FINISHED") return rejected("La partida ya terminó");
+    if (!this.match.playerIds.includes(playerId)) return rejected("No está jugando en esta partida");
+    if (this.match.isAbandoned(playerId)) return rejected("Ya abandonó la partida");
+    this.match.abandon(playerId);
+    if (this.match.currentStatus === "FINISHED") this.finish();
+    return OK;
+  }
+
+  concludeByBest(): void {
+    if (this.status === "FINISHED") return;
+    this.match.finishByBest();
+    this.finish();
   }
 
   declareClosure(playerId: string, declaration: ClosureDeclaration, rule: GameRule): ValidationResult {

@@ -154,3 +154,50 @@ describe("Sesión de juego · fin de ronda", () => {
     expect(s.currentRound.cardTakenFromDiscard).toEqual(c("AC"));
   });
 });
+
+describe("Sesión de juego · abandono", () => {
+  const three = (clock = new ManualClock()) =>
+    GameSession.start({ gameId: "g1", matchId: "m1" }, ["ana", "luis", "eva"], { mode: "APUNTADO", eliminationThreshold: 101, turnSeconds: 60, jokers: false }, {
+      random: new SeededRandom(9),
+      clock,
+    });
+
+  it("con dos jugadores, el rival gana de inmediato y se emite PartidaFinalizada", () => {
+    const s = session();
+    s.pullEvents();
+    expect(s.abandon("ana")).toEqual({ ok: true });
+    expect(s.currentStatus).toBe("FINISHED");
+    expect(s.winnerId).toBe("luis");
+    const [event] = s.pullEvents();
+    expect(event).toMatchObject({ name: "PartidaFinalizada", winnerId: "luis" });
+    expect(s.scoreboard.find((l) => l.playerId === "ana")).toMatchObject({ abandoned: true, eliminated: true });
+  });
+
+  it("rechaza abandonar dos veces, a un desconocido o una partida terminada", () => {
+    const s = three();
+    expect(s.abandon("ana")).toEqual({ ok: true });
+    expect(s.abandon("ana")).toEqual({ ok: false, reason: "Ya abandonó la partida" });
+    expect(s.abandon("zoe").ok).toBe(false);
+    s.abandon("luis");
+    expect(s.abandon("eva")).toEqual({ ok: false, reason: "La partida ya terminó" });
+  });
+
+  it("con tres jugadores la partida sigue y el turno del que abandonó vence al instante", () => {
+    const s = three();
+    const current = s.currentRound.currentPlayerId;
+    s.abandon(current);
+    expect(s.currentStatus).toBe("PLAYING");
+    expect(s.isTurnExpired()).toBe(true);
+    expect(s.timeOut(current).ok).toBe(true);
+    expect(s.currentRound.currentPlayerId).not.toBe(current);
+    expect(s.isTurnExpired()).toBe(false);
+  });
+
+  it("concludeByBest cierra la partida con el mejor puesto restante", () => {
+    const s = three();
+    s.abandon("ana");
+    s.concludeByBest();
+    expect(s.currentStatus).toBe("FINISHED");
+    expect(s.winnerId).toBe("luis");
+  });
+});

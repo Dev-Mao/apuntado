@@ -3,6 +3,7 @@ import type { ClosureType, GameMode, TableSnapshot } from "@apuntado/contracts";
 export const RESULT_STATUS = {
   WINNER: "winner",
   ELIMINATED: "eliminated",
+  ABANDONED: "abandoned",
   CLOSED: "closed",
   FINISHED: "finished",
   PLAYING: "playing",
@@ -16,6 +17,7 @@ export interface ResultRow {
   readonly roundPoints: number;
   readonly total: number;
   readonly eliminated: boolean;
+  readonly abandoned: boolean;
   readonly status: ResultStatus;
 }
 

@@ -69,7 +69,7 @@ const roundClosed = (
   matchId,
   at: at(roundNumber * 10 + 5),
   summary: { roundNumber, winnerId, closureType, scores: lines.map(([playerId, points]) => ({ playerId, points })) },
-  scoreboard: lines.map(([playerId, , total, eliminated]) => ({ playerId, total, eliminated })),
+  scoreboard: lines.map(([playerId, , total, eliminated]) => ({ playerId, total, eliminated, abandoned: false })),
 });
 
 const playFullMatch = async (archiver: MatchArchiver, journal: PgPlayJournal) => {
