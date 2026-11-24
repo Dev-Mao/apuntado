@@ -2,6 +2,8 @@ import { cn } from "@/lib";
 
 import { CARD_SIZE, PlayingCard } from "./playing-card";
 
+import type { CardSize } from "./playing-card";
+
 import type { CardDto } from "@apuntado/contracts";
 import type { CSSProperties } from "react";
 
@@ -12,6 +14,8 @@ interface CardFanProps {
   cards: readonly CardDto[];
   spreadDeg?: number;
   delayMs?: number;
+  size?: CardSize;
+  overlapClassName?: string;
   className?: string | undefined;
 }
 
@@ -26,15 +30,15 @@ function fanStyle(index: number, count: number, spreadDeg: number, delayMs: numb
   return style as CSSProperties;
 }
 
-export function CardFan({ cards, spreadDeg = 9, delayMs = 200, className }: CardFanProps) {
+export function CardFan({ cards, spreadDeg = 9, delayMs = 200, size = CARD_SIZE.XL, overlapClassName = OVERLAP_CLASSES, className }: CardFanProps) {
   return (
     <span aria-hidden="true" className={cn("flex justify-center", className)}>
       {cards.map((card, index) => (
         <PlayingCard
           key={`${card.rank}${card.suit}`}
           card={card}
-          size={CARD_SIZE.XL}
-          className={cn("origin-bottom animate-hero-card", OVERLAP_CLASSES)}
+          size={size}
+          className={cn("origin-bottom animate-hero-card", overlapClassName)}
           style={fanStyle(index, cards.length, spreadDeg, delayMs)}
         />
       ))}

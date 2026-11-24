@@ -39,7 +39,6 @@ export function ProfileScreen() {
 
   return (
     <div className="relative isolate mx-auto flex h-dvh max-w-3xl flex-col overflow-hidden">
-      <span aria-hidden="true" className="fixed top-28 -right-44 -z-10 size-[26rem] rounded-full bg-coral max-md:hidden" />
       <AppHeader>
         <AccountMenu />
       </AppHeader>

@@ -10,15 +10,26 @@ import { HOME_FIELD } from "../types";
 import { ModeCards } from "./mode-cards";
 import { SettingsDialog } from "./settings-dialog";
 
-import type { CreateTableFormProps } from "../types";
+import type { CreateTableFormProps, SettingsDraft } from "../types";
+import type { TFunction } from "i18next";
 
 const SETTING_FIELDS = [HOME_FIELD.THRESHOLD, HOME_FIELD.TURN, HOME_FIELD.STAKE] as const;
+
+function settingChips(settings: SettingsDraft, t: TFunction): string[] {
+  const stake = Number(settings.stake);
+  return [
+    t("home.chips.threshold", { threshold: settings.eliminationThreshold }),
+    t("home.chips.turn", { seconds: settings.turnSeconds }),
+    stake > 0 ? t("common.chips", { count: stake }) : t("home.chips.noStake"),
+    ...(settings.jokers ? [t("home.chips.jokers")] : []),
+  ];
+}
 
 function CreateTableFormBase({ settings, errors, pending, invited, serverError, onModeChange, onNumberChange, onJokersChange, onSubmit }: CreateTableFormProps) {
   const { t } = useTranslation();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const settingsInvalid = SETTING_FIELDS.some((field) => errors[field]);
-  const stake = Number(settings.stake) > 0 ? t("common.chips", { count: Number(settings.stake) }) : t("home.stakeNone");
+  const chips = settingChips(settings, t);
 
   return (
     <form noValidate onSubmit={onSubmit} aria-labelledby="create-title" className="flex flex-col gap-4 short:gap-3">
@@ -26,31 +37,36 @@ function CreateTableFormBase({ settings, errors, pending, invited, serverError, 
         {t("home.create.title")}
       </h3>
       <ModeCards value={settings.mode} onChange={onModeChange} />
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-2xl border border-dashed border-paper/30 py-2 pr-2 pl-4">
-        <p className="min-w-0 flex-1 basis-48 text-paper/80">
-          {t(settings.jokers ? "home.settingsSummaryJokers" : "home.settingsSummary", { threshold: settings.eliminationThreshold, seconds: settings.turnSeconds, stake })}
-        </p>
-        <button
-          type="button"
-          onClick={() => setSettingsOpen(true)}
-          className="label-caps inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-coral px-4 text-[0.68rem] text-coral transition-colors hover:bg-coral hover:text-ink"
-        >
-          <SlidersIcon className="size-4" />
-          {t("home.settingsEdit")}
-        </button>
+      <div className="flex flex-col gap-2.5">
+        <p className="label-caps text-[0.65rem] text-ink-soft">{t("home.tableLegend")}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          {chips.map((chip) => (
+            <span key={chip} className="rounded-full border-[1.5px] border-ink/70 bg-card px-3 py-1 text-sm font-semibold">
+              {chip}
+            </span>
+          ))}
+          <button
+            type="button"
+            onClick={() => setSettingsOpen(true)}
+            className="label-caps inline-flex min-h-9 items-center gap-2 rounded-full border-2 border-dashed border-coral-ink px-3.5 text-[0.65rem] text-coral-ink transition-colors hover:border-solid hover:bg-peach"
+          >
+            <SlidersIcon className="size-4" />
+            {t("home.settingsEdit")}
+          </button>
+        </div>
       </div>
-      {settingsInvalid && <LiveNotice message={t("home.settingsInvalid")} className="text-salmon" />}
+      {settingsInvalid && <LiveNotice message={t("home.settingsInvalid")} className="font-semibold text-coral-ink" />}
       <Button
         type="submit"
-        variant={invited ? BUTTON_VARIANT.LIGHT : BUTTON_VARIANT.PRIMARY}
+        variant={invited ? BUTTON_VARIANT.OUTLINE : BUTTON_VARIANT.PRIMARY}
         disabled={pending}
         aria-busy={pending}
-        className="w-full sm:w-auto sm:self-start"
+        className="w-full min-h-13 text-[0.8rem] sm:w-auto sm:self-start sm:px-8"
       >
         {t("home.create.submit")}
         <ArrowIcon />
       </Button>
-      <LiveNotice message={serverError} className="text-salmon" />
+      <LiveNotice message={serverError} className="font-semibold text-coral-ink" />
       <SettingsDialog
         open={settingsOpen}
         settings={settings}

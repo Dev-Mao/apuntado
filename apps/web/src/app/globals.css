@@ -10,25 +10,27 @@
 }
 
 @theme {
-  --color-paper: #f5eee6;
-  --color-paper-light: #fbf6f1;
-  --color-paper-deep: #ecdfd3;
-  --color-card: #fcf8f2;
-  --color-ink: #1f1b19;
-  --color-ink-soft: #5e544c;
-  --color-coral: #ec7a60;
-  --color-coral-deep: #d8654b;
-  --color-salmon: #f29c84;
-  --color-coral-ink: #a8452c;
-  --color-suit-red: #b3402a;
-  --color-line: #1f1b1926;
+  --color-paper: #f6eee3;
+  --color-paper-light: #fcf9f2;
+  --color-paper-deep: #ecdfd0;
+  --color-card: #fcf9f2;
+  --color-ink: #271f1c;
+  --color-ink-soft: #5f534b;
+  --color-coral: #d4755a;
+  --color-coral-deep: #c4644a;
+  --color-salmon: #f0c4b0;
+  --color-peach: #f7e1d4;
+  --color-coral-ink: #ac4f36;
+  --color-suit-red: #ac4f36;
+  --color-line: #271f1c26;
 
   --ease-glide: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --shadow-card: 0 1px 1px rgb(31 27 25 / 0.18), 0 8px 16px -8px rgb(31 27 25 / 0.55);
-  --shadow-lift: 0 2px 3px rgb(31 27 25 / 0.2), 0 22px 30px -14px rgb(31 27 25 / 0.7);
-  --shadow-sheet: 0 1px 2px rgb(31 27 25 / 0.12), 0 24px 50px -28px rgb(31 27 25 / 0.55);
+  --shadow-card: 0 0 0 1px rgb(39 31 28 / 0.55), 2px 3px 0 rgb(39 31 28 / 0.8);
+  --shadow-lift: 0 0 0 1.5px var(--color-ink), 4px 5px 0 var(--color-ink);
+  --shadow-stamp: 3px 3px 0 var(--color-ink);
+  --shadow-sheet: 0 0 0 2px var(--color-ink), 7px 8px 0 var(--color-ink);
 
   --animate-turn-in: turn-in 420ms var(--ease-glide) both;
   --animate-sheet-rise: sheet-rise 620ms var(--ease-glide) both;

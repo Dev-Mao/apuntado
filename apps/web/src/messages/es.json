@@ -80,7 +80,7 @@
     "title": "La Terna",
     "kicker": "Apuntado en línea",
     "tagline": "Roba, combina y cierra antes que nadie.",
-    "heroCaption": "7, 8 y 9 de corazones forman una terna.",
+    "heroCaption": "Tres reinas forman una terna.",
     "intro": "Comparte el código con tus amigos o juega contra un bot.",
     "rules": "Cómo se juega",
     "nickname": {
@@ -132,12 +132,18 @@
     },
     "thresholdLabel": "Eliminación a",
     "thresholdHint": "En puntos",
-    "settingsSummary": "Eliminación a {{threshold}}, turnos de {{seconds}} s, {{stake}}.",
-    "settingsSummaryJokers": "Eliminación a {{threshold}}, turnos de {{seconds}} s, {{stake}}, con comodines.",
     "settingsEdit": "Cambiar ajustes",
     "settingsDone": "Listo",
     "settingsInvalid": "Revisa los ajustes de la mesa.",
-    "stakeNone": "sin apuesta"
+    "heroCredit": "Las figuras de la baraja las dibujó nuestro equipo.",
+    "modesLegend": "¿A qué jugamos?",
+    "tableLegend": "La mesa",
+    "chips": {
+      "threshold": "Eliminación a {{threshold}}",
+      "turn": "Turnos de {{seconds}} s",
+      "noStake": "Sin apuesta",
+      "jokers": "Con comodines"
+    }
   },
   "lobby": {
     "heading": "Sala de espera",

@@ -17,7 +17,6 @@ function JoinTableFormBase({ code, error, pending, serverError, emphasized, onCo
       </h2>
       <div className="flex items-start gap-2">
         <TextField
-          tone="ink"
           label={t("home.join.label")}
           placeholder={t("home.join.placeholder")}
           autoComplete="off"
@@ -29,7 +28,7 @@ function JoinTableFormBase({ code, error, pending, serverError, emphasized, onCo
         />
         <Button
           type="submit"
-          variant={emphasized ? BUTTON_VARIANT.PRIMARY : BUTTON_VARIANT.LIGHT}
+          variant={emphasized ? BUTTON_VARIANT.PRIMARY : BUTTON_VARIANT.OUTLINE}
           disabled={pending}
           aria-busy={pending}
           className="mt-[1.6rem] h-12 px-5"
@@ -37,7 +36,7 @@ function JoinTableFormBase({ code, error, pending, serverError, emphasized, onCo
           {t("home.join.submit")}
         </Button>
       </div>
-      <LiveNotice message={serverError} className="text-salmon" />
+      <LiveNotice message={serverError} className="font-semibold text-coral-ink" />
     </form>
   );
 }

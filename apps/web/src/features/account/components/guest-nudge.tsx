@@ -15,9 +15,9 @@ export function GuestNudge({ className }: { className?: string | undefined }) {
   if (session.status === "ready" && !session.session.guest) return null;
 
   return (
-    <p className={cn("text-paper/75 italic", className)}>
+    <p className={cn("text-ink-soft", className)}>
       {t("account.guestNudge")}{" "}
-      <button type="button" onClick={() => openAuth(AUTH_MODE.REGISTER)} className="label-caps text-[0.65rem] text-coral not-italic underline-offset-4 hover:underline">
+      <button type="button" onClick={() => openAuth(AUTH_MODE.REGISTER)} className="label-caps text-[0.65rem] text-coral-ink underline underline-offset-4 hover:no-underline">
         {t("account.guestNudgeAction")}
       </button>
     </p>

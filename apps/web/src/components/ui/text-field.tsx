@@ -10,7 +10,7 @@ const LABEL_CLASSES: Readonly<Record<FieldTone, string>> = {
 };
 
 const INPUT_CLASSES: Readonly<Record<FieldTone, string>> = {
-  paper: "bg-paper-light/80 text-ink placeholder:text-ink-soft/60 border-ink/25 hover:border-ink/50 focus-visible:border-ink",
+  paper: "bg-card text-ink placeholder:text-ink-soft/55 border-ink/70 hover:border-ink focus-visible:border-ink focus-visible:shadow-stamp",
   ink: "bg-paper/[0.06] text-paper placeholder:text-paper/45 border-paper/30 hover:border-paper/55 focus-visible:border-paper",
 };
 
@@ -36,7 +36,7 @@ export function TextField({ label, hint, error, tone = "paper", className, id, .
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
         className={cn(
-          "h-12 w-full rounded-xl border-[1.5px] px-5 text-lg transition-colors duration-200 placeholder:italic focus-visible:outline-offset-2",
+          "h-12 w-full rounded-xl border-2 px-5 text-lg transition-[border-color,box-shadow] duration-200 placeholder:italic focus-visible:outline-offset-2",
           INPUT_CLASSES[tone],
           error && "border-coral-ink",
         )}
