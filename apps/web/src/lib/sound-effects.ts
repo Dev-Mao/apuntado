@@ -56,7 +56,7 @@ const EFFECTS: Record<SoundEffect, (ctx: AudioContext, output: AudioNode, at: nu
 export function playSound(effect: SoundEffect): void {
   if (!soundPrefs().effects) return;
   const ctx = audioContext();
-  if (!ctx) return;
+  if (!ctx || ctx.state !== "running") return;
   bus ??= outputBus(ctx, EFFECTS_LEVEL);
   EFFECTS[effect](ctx, bus, ctx.currentTime + 0.01);
 }

@@ -2,10 +2,14 @@
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 
-import { DEFAULT_SOUND_PREFS, soundPrefs, startMusic, stopMusic, subscribeSoundPrefs, updateSoundPrefs } from "@/lib";
+import { audioContext, DEFAULT_SOUND_PREFS, soundPrefs, startMusic, stopMusic, subscribeSoundPrefs, updateSoundPrefs } from "@/lib";
 
 export function useSoundPrefs() {
   const prefs = useSyncExternalStore(subscribeSoundPrefs, soundPrefs, () => DEFAULT_SOUND_PREFS);
+
+  useEffect(() => {
+    if (prefs.effects) audioContext();
+  }, [prefs.effects]);
 
   useEffect(() => {
     if (prefs.music) startMusic();
