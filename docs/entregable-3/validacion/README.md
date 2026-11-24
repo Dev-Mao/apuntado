@@ -14,6 +14,13 @@ Cada participante aparece solo con su código. No se guardan nombres, correos ni
 
 Tres participantes escribieron U03 como apodo y en el formulario. Se distinguieron por la fecha y la hora de su respuesta y se recodificaron como U02, U03 y U04. La columna `codigo_escrito` del cuestionario guarda el código que escribió cada uno. En las capturas de U02 el apodo que aparece es U03.
 
+## Grabaciones
+
+Grabaciones de pantalla de las dos sesiones en celular:
+
+- [Sesión de U02, 19 de noviembre](https://drive.google.com/file/d/15tkE_LXNDrma0I1Qez15Hx4M8Ve9Wjd2/view?usp=sharing)
+- [Sesión de U03, 20 de noviembre](https://drive.google.com/file/d/1t8etVkOrz9ULeKVnd2NFdG0REzql4s71/view?usp=sharing)
+
 ## Cuestionario
 
 [cuestionario.csv](cuestionario.csv) tiene las respuestas de las cinco personas: las diez frases de la escala SUS tal como las marcaron, el puntaje SUS calculado, las cuatro calificaciones de 1 a 5 y las tres preguntas abiertas.
