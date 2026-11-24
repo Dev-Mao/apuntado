@@ -23,7 +23,6 @@ export function SettingsSummary({ settings }: { settings: TableSettings }) {
     <section aria-labelledby="settings-title" className="flex flex-col gap-3 tiny:hidden">
       <h2 id="settings-title" className="label-caps flex items-center gap-4 text-[0.65rem] max-sm:sr-only">
         {t("settings.title")}
-        <span aria-hidden="true" className="h-px w-12 bg-ink/40" />
       </h2>
       <dl className="grid grid-cols-4 gap-x-3 sm:gap-x-6">
         {rows.map((row) => (

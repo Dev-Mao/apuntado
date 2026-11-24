@@ -42,7 +42,6 @@ export function AppHeader({ className, homeLink = true, children }: AppHeaderPro
             <Wordmark />
           </p>
         )}
-        <span aria-hidden="true" className="hidden h-px w-14 bg-ink/40 sm:block" />
       </div>
       <div className="flex items-center gap-2 sm:gap-4">
         <SoundControls />

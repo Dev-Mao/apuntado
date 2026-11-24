@@ -16,8 +16,7 @@ export function HomeHero() {
   const { t } = useTranslation();
   return (
     <section aria-labelledby="home-title" className="flex flex-col items-start">
-      <p className="label-caps flex items-center gap-3 text-[0.7rem] text-coral-ink">
-        <span aria-hidden="true" className="h-0.5 w-8 rounded-full bg-coral-ink" />
+      <p className="label-caps text-[0.7rem] text-coral-ink">
         {t("home.kicker")}
       </p>
       <h1
@@ -35,9 +34,7 @@ export function HomeHero() {
           overlapClassName="-ml-[4.6rem] first:ml-0 shadow-lift"
           className="pl-4 [--card-w:9.5rem] [@media(max-height:46rem)]:[--card-w:7.5rem]"
         />
-        <figcaption className="max-w-[22rem] text-ink-soft">
-          <span className="font-semibold text-ink">{t("home.heroCaption")}</span> {t("home.heroCredit")}
-        </figcaption>
+        <figcaption className="text-ink-soft">{t("home.heroCaption")}</figcaption>
       </figure>
     </section>
   );

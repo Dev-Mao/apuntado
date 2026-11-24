@@ -31,7 +31,7 @@ function JoinTableFormBase({ code, error, pending, serverError, emphasized, onCo
           variant={emphasized ? BUTTON_VARIANT.PRIMARY : BUTTON_VARIANT.OUTLINE}
           disabled={pending}
           aria-busy={pending}
-          className="mt-[1.6rem] h-12 px-5"
+          className="mt-[1.6rem] h-12 px-6"
         >
           {t("home.join.submit")}
         </Button>
