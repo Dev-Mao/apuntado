@@ -18,8 +18,15 @@ function assignCards(prev: Assignments, ids: readonly string[], slot: ClosureSlo
   return first ? { ...withoutDiscard, [first]: slot } : withoutDiscard;
 }
 
-export function useClosureDraft(cards: readonly CardDto[], enabledClosures: readonly ClosureType[], lockedId: string | null) {
-  const [assignments, setAssignments] = useState<Assignments>({});
+function fromGroups(cards: readonly CardDto[], groups: readonly (readonly string[])[]): Assignments {
+  const present = new Set(cards.map(cardId));
+  return Object.fromEntries(
+    groups.slice(0, GROUP_SLOTS.length).flatMap((group, index) => group.filter((id) => present.has(id)).map((id) => [id, GROUP_SLOTS[index] ?? CLOSURE_SLOT.GROUP_1])),
+  );
+}
+
+export function useClosureDraft(cards: readonly CardDto[], enabledClosures: readonly ClosureType[], lockedId: string | null, groups: readonly (readonly string[])[] = []) {
+  const [assignments, setAssignments] = useState<Assignments>(() => fromGroups(cards, groups));
   const [selectedIds, setSelectedIds] = useState<ReadonlySet<string>>(() => new Set());
   const [type, setType] = useState<ClosureType>(enabledClosures[0] ?? "CLASICO");
 

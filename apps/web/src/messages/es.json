@@ -188,14 +188,18 @@
     "opponentDisconnected": "Desconectado.",
     "hand": {
       "label": "Tu mano",
-      "instructions": "Pulsa una carta para seleccionarla. Arrástrala o usa Alt y las flechas para moverla.",
+      "instructions": "Pulsa una carta para seleccionarla. Con 3 o 4 seleccionadas puedes agruparlas: los grupos pasan solos al cierre. Arrastra una carta o usa Alt y las flechas para moverla.",
       "sortByRank": "Por valor",
       "sortBySuit": "Por palo",
       "selected_one": "{{count}} seleccionada",
       "selected_other": "{{count}} seleccionadas",
       "lockedCard": "{{card}}, tomada del pozo, no la puedes descartar en este turno",
       "lockedTag": "Pozo",
-      "sortLabel": "Ordenar por"
+      "sortLabel": "Ordenar por",
+      "group": "Agrupar {{count}} cartas",
+      "groupTag": "Grupo {{group}} · {{count}}",
+      "ungroup": "Deshacer el grupo {{group}}",
+      "inGroup": "{{card}}, grupo {{group}}"
     },
     "turn": {
       "title": "Turno",
@@ -258,7 +262,7 @@
   "closure": {
     "title": "Declarar cierre",
     "timeLeft": "Tiempo de tu turno",
-    "intro": "Selecciona cartas abajo y toca el grupo donde van. Arma tus combinaciones, marca las sobrantes y elige la carta que descartas. El servidor revisa el cierre.",
+    "intro": "Selecciona cartas abajo y toca el grupo donde van. Los grupos que armaste en la mano ya están puestos. Marca las sobrantes y elige la carta que descartas. El servidor revisa el cierre.",
     "type": "Tipo de cierre",
     "unassigned": "Cartas sin asignar",
     "allAssigned": "Ya asignaste todas tus cartas",
