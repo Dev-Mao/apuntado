@@ -9,8 +9,31 @@ import { useCardLabel } from "@/hooks/use-card-label";
 import { cardId, cn } from "@/lib";
 
 import type { HandCardProps } from "../types";
+import type { TFunction } from "i18next";
 
 export const HAND_HELP_ID = "hand-help";
+
+export const GROUP_COLORS = ["bg-coral-ink", "bg-ink", "bg-coral"] as const;
+
+function handCardLabel(name: string, isLocked: boolean, group: number | null, t: TFunction): string {
+  const base = isLocked ? t("table.hand.lockedCard", { card: name }) : name;
+  return group === null ? base : t("table.hand.inGroup", { card: base, group: group + 1 });
+}
+
+function GroupMark({ group, numbered }: { group: number | null; numbered: boolean }) {
+  if (group === null) return null;
+  const color = GROUP_COLORS[group % GROUP_COLORS.length];
+  return (
+    <>
+      <span aria-hidden="true" className={cn("absolute inset-x-1 -top-3 h-1.5 rounded-full", color)} />
+      {numbered && (
+        <span aria-hidden="true" className={cn("absolute -top-5 -left-2 z-10 grid size-5 place-items-center rounded-full border-2 border-paper text-[0.7rem] font-bold text-paper", color)}>
+          {group + 1}
+        </span>
+      )}
+    </>
+  );
+}
 
 function HandCardBase({
   card,
@@ -18,6 +41,8 @@ function HandCardBase({
   isSelected,
   isLocked,
   isDragging,
+  group,
+  groupStart,
   fanStyle,
   onToggle,
   onKeyDown,
@@ -29,10 +54,10 @@ function HandCardBase({
   const { t } = useTranslation();
   const cardLabel = useCardLabel();
   const id = cardId(card);
-  const label = isLocked ? t("table.hand.lockedCard", { card: cardLabel(card) }) : cardLabel(card);
+  const label = handCardLabel(cardLabel(card), isLocked, group, t);
 
   return (
-    <li style={fanStyle} className={cn("origin-[50%_120%] transition-[rotate,translate] duration-300 ease-glide", isDragging && "z-10")}>
+    <li style={fanStyle} className={cn("origin-[50%_120%] transition-[rotate,translate] duration-300 ease-glide", groupStart && "ml-3 sm:ml-5", isDragging && "z-10")}>
       <button
         type="button"
         data-hand-index={index}
@@ -61,6 +86,7 @@ function HandCardBase({
           )}
         />
         {isSelected && <SparkStrokes className="absolute -top-6 -left-4 size-6 animate-spark text-coral sm:-top-7 sm:-left-5 sm:size-7" />}
+        <GroupMark group={group} numbered={groupStart || index === 0} />
         {isLocked && (
           <span
             aria-hidden="true"

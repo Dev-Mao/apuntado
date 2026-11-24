@@ -26,6 +26,8 @@ export interface HandCardProps {
   isSelected: boolean;
   isLocked: boolean;
   isDragging: boolean;
+  group: number | null;
+  groupStart: boolean;
   fanStyle: CSSProperties;
   onToggle: (id: string) => void;
   onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
@@ -39,8 +41,13 @@ export interface PlayerHandProps {
   cards: readonly CardDto[];
   selectedIds: ReadonlySet<string>;
   lockedId: string | null;
+  groups: readonly (readonly string[])[];
+  groupOf: ReadonlyMap<string, number>;
+  canGroup: boolean;
   onToggle: (id: string) => void;
   onMove: (from: number, to: number) => void;
+  onGroup: () => void;
+  onUngroup: (index: number) => void;
   onSortByRank: () => void;
   onSortBySuit: () => void;
 }

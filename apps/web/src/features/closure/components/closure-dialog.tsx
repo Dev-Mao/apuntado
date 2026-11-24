@@ -13,7 +13,7 @@ import { ClosureForm } from "./closure-form";
 import type { ClosureDialogProps } from "../types";
 import type { ClosureDeclarationDto } from "@apuntado/contracts";
 
-export function ClosureDialog({ open, cards, enabledClosures, cannotDiscard, timer, onClose, onSubmit }: ClosureDialogProps) {
+export function ClosureDialog({ open, cards, groups, enabledClosures, cannotDiscard, timer, onClose, onSubmit }: ClosureDialogProps) {
   const { t } = useTranslation();
   const { state, submit, reset } = useClosureSubmit(onSubmit);
   const isSubmitting = state.status === SUBMIT_STATUS.SUBMITTING;
@@ -41,6 +41,7 @@ export function ClosureDialog({ open, cards, enabledClosures, cannotDiscard, tim
           </div>
           <ClosureForm
             cards={cards}
+            groups={groups}
             enabledClosures={enabledClosures}
             cannotDiscard={cannotDiscard}
             state={state}

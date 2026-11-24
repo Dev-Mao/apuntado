@@ -9,8 +9,10 @@ import { cardId } from "@/lib";
 import { fanStyles } from "../fan-layout";
 import { useHandDrag } from "../hooks";
 import { HAND_HELP_ID, HandCard } from "./hand-card";
+import { HandGroupsBar } from "./hand-groups-bar";
 
 import type { PlayerHandProps } from "../types";
+import type { CardDto } from "@apuntado/contracts";
 import type { CSSProperties } from "react";
 
 const HAND_SPREAD_DEG = 1.8;
@@ -19,7 +21,14 @@ const EMPTY_STYLE = {};
 const SORT_CLASSES =
   "label-caps min-h-8 rounded-full border-[1.5px] border-ink/25 px-3 pt-[0.45rem] pb-[0.35rem] text-[0.6rem] whitespace-nowrap text-ink transition-colors hover:border-ink hover:bg-ink hover:text-paper";
 
-function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSortByRank, onSortBySuit }: PlayerHandProps) {
+function startsGroup(cards: readonly CardDto[], groupOf: ReadonlyMap<string, number>, index: number): boolean {
+  const current = cards[index];
+  const previous = cards[index - 1];
+  if (!current || !previous) return false;
+  return groupOf.get(cardId(current)) !== groupOf.get(cardId(previous));
+}
+
+function PlayerHandBase({ cards, selectedIds, lockedId, groups, groupOf, canGroup, onToggle, onMove, onGroup, onUngroup, onSortByRank, onSortBySuit }: PlayerHandProps) {
   const { t } = useTranslation();
   const drag = useHandDrag(onMove, cards.length);
   const styles = useMemo(() => fanStyles(cards.length, HAND_SPREAD_DEG, HAND_ARC_PX), [cards.length]);
@@ -61,11 +70,14 @@ function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSort
           </button>
         </div>
       </div>
+      <HandGroupsBar groups={groups} canGroup={canGroup} selectedCount={selectedIds.size} onGroup={onGroup} onUngroup={onUngroup} />
       <p id={HAND_HELP_ID} className="sr-only">
         {t("table.hand.instructions")}
       </p>
       <ul style={fanVars} className="hand-fan flex justify-center px-3 pt-8 pb-9 short:pt-5 short:pb-7 sm:pt-10 lg:pb-6 lg:short:pt-7">
-        {cards.map((card, index) => (
+        {cards.map((card, index) => {
+          const group = groupOf.get(cardId(card)) ?? null;
+          return (
           <HandCard
             key={cardId(card)}
             card={card}
@@ -73,6 +85,8 @@ function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSort
             isSelected={selectedIds.has(cardId(card))}
             isLocked={lockedId === cardId(card)}
             isDragging={drag.draggingIndex === index}
+            group={group}
+            groupStart={startsGroup(cards, groupOf, index)}
             fanStyle={styles[index] ?? EMPTY_STYLE}
             onToggle={handleToggle}
             onKeyDown={drag.handleKeyDown}
@@ -81,7 +95,8 @@ function PlayerHandBase({ cards, selectedIds, lockedId, onToggle, onMove, onSort
             onPointerUp={drag.handlePointerUp}
             onPointerCancel={drag.handlePointerCancel}
           />
-        ))}
+          );
+        })}
       </ul>
     </section>
   );

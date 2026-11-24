@@ -67,8 +67,13 @@ export function TableScreen(props: TableScreenProps) {
           cards={hand.cards}
           selectedIds={hand.selectedIds}
           lockedId={screen.lockedId}
+          groups={hand.groups}
+          groupOf={hand.groupOf}
+          canGroup={hand.canGroup}
           onToggle={hand.toggle}
           onMove={hand.move}
+          onGroup={hand.group}
+          onUngroup={hand.ungroup}
           onSortByRank={hand.handleSortByRank}
           onSortBySuit={hand.handleSortBySuit}
           />
@@ -96,6 +101,7 @@ export function TableScreen(props: TableScreenProps) {
         key={closure.attempt}
         open={closure.open}
         cards={hand.cards}
+        groups={hand.groups}
         enabledClosures={view.enabledClosures}
         cannotDiscard={view.cannotDiscard}
         timer={

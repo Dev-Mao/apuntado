@@ -32,6 +32,7 @@ export type SubmitClosure = (declaration: ClosureDeclarationDto) => Promise<Acti
 export interface ClosureDialogProps {
   open: boolean;
   cards: readonly CardDto[];
+  groups: readonly (readonly string[])[];
   enabledClosures: readonly ClosureType[];
   cannotDiscard: CardDto | null;
   timer: ReactNode;

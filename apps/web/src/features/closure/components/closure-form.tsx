@@ -17,10 +17,10 @@ import type { ClosureFormProps, ClosureSlot } from "../types";
 
 const ALL_SLOTS: readonly ClosureSlot[] = [...GROUP_SLOTS, CLOSURE_SLOT.LEFTOVERS, CLOSURE_SLOT.DISCARD];
 
-export function ClosureForm({ cards, enabledClosures, cannotDiscard, state, onClose, onEdit, onSubmit }: ClosureFormProps) {
+export function ClosureForm({ cards, groups, enabledClosures, cannotDiscard, state, onClose, onEdit, onSubmit }: ClosureFormProps) {
   const { t } = useTranslation();
   const lockedId = cannotDiscard ? cardId(cannotDiscard) : null;
-  const draft = useClosureDraft(cards, enabledClosures, lockedId);
+  const draft = useClosureDraft(cards, enabledClosures, lockedId, groups);
 
   const typeOptions = useMemo(
     () => enabledClosures.map((type) => ({ value: type, label: t(`closureType.${type}`) })),
