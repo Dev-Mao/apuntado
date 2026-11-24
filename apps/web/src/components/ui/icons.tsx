@@ -87,3 +87,33 @@ export function SparkStrokes({ className }: IconProps) {
     </svg>
   );
 }
+
+export function SlidersIcon({ className }: IconProps) {
+  return (
+    <Icon className={className}>
+      <path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
+      <circle cx="15" cy="7" r="2" />
+      <circle cx="9" cy="17" r="2" />
+    </Icon>
+  );
+}
+
+export function MusicIcon({ className, muted = false }: IconProps & { muted?: boolean }) {
+  return (
+    <Icon className={className}>
+      <path d="M9 17.5V5.5l10-2v12" />
+      <circle cx="6.5" cy="17.5" r="2.5" />
+      <circle cx="16.5" cy="15.5" r="2.5" />
+      {muted && <path d="M3.5 3.5l17 17" />}
+    </Icon>
+  );
+}
+
+export function SpeakerIcon({ className, muted = false }: IconProps & { muted?: boolean }) {
+  return (
+    <Icon className={className}>
+      <path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" />
+      {muted ? <path d="M16 9.5l5 5M21 9.5l-5 5" /> : <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" />}
+    </Icon>
+  );
+}

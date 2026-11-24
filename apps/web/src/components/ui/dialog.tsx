@@ -48,7 +48,7 @@ export function Dialog({ open, title, closeLabel, dismissible = true, onClose, c
         >
           <CloseIcon className="size-4" />
         </button>
-        <h2 id={titleId} className="pr-14 font-display font-semibold text-[2rem] leading-tight short:text-[1.6rem] sm:text-[2.6rem] sm:short:text-[1.9rem]">
+        <h2 id={titleId} className="pr-14 font-display text-[2rem] leading-tight short:text-[1.6rem] sm:text-[2.6rem] sm:short:text-[1.9rem]">
           {title}
         </h2>
         {children}

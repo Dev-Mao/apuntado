@@ -29,6 +29,7 @@ export type HomeErrorKey =
   | "thresholdInvalid"
   | "turnInvalid"
   | "stakeInvalid"
+  | "stakeOverBalance"
   | "codeRequired";
 
 export type HomeErrors = Partial<Record<HomeField, HomeErrorKey>>;

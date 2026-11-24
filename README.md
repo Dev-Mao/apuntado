@@ -1,7 +1,7 @@
 # Apuntado, sistema digital de juego de cartas
 
 Proyecto de la asignatura **Fundamentos de Arquitectura de Software** · Universidad Nacional de
-Colombia, Facultad de Minas.
+Colombia, Facultad de Minas. En la interfaz el juego se presenta como **La Terna**.
 
 | Rol arquitectónico | Integrante |
 |---|---|

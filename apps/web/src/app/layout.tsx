@@ -1,4 +1,4 @@
-import { Jost, Playfair_Display, Source_Serif_4 } from "next/font/google";
+import { Gloock, Hanken_Grotesk } from "next/font/google";
 
 import { AppProviders } from "@/components";
 import { AccountProvider } from "@/features/account";
@@ -10,24 +10,17 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
-const display = Playfair_Display({
+const display = Gloock({
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  weight: "400",
   variable: "--font-face-display",
   display: "swap",
 });
 
-const text = Source_Serif_4({
+const text = Hanken_Grotesk({
   subsets: ["latin"],
   style: ["normal", "italic"],
-  axes: ["opsz"],
   variable: "--font-face-text",
-  display: "swap",
-});
-
-const label = Jost({
-  subsets: ["latin"],
-  variable: "--font-face-label",
   display: "swap",
 });
 
@@ -42,7 +35,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es" className={`${display.variable} ${text.variable} ${label.variable}`}>
+    <html lang="es" className={`${display.variable} ${text.variable}`}>
       <body>
         <AppProviders>
           <RealtimeProvider>

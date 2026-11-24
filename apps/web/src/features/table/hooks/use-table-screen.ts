@@ -13,6 +13,7 @@ import { useHand } from "./use-hand";
 import { usePileActions } from "./use-pile-actions";
 import { useTableMotion } from "./use-table-motion";
 import { useTablePanels } from "./use-table-panels";
+import { useTableSounds } from "./use-table-sounds";
 import { useTurnMessage } from "./use-turn-message";
 
 import type { TableScreenProps } from "../types";
@@ -32,6 +33,7 @@ export function useTableScreen({ snapshot, pending, onDrawFromStock, onDrawFromD
   const canDiscard = hand.selectedIds.size === 1 && !selectedIsLocked;
   const { clearSelection } = hand;
   useTableMotion(view);
+  useTableSounds(view);
 
   const handleDiscard = useCallback(() => {
     const card = hand.cards.find((held) => hand.selectedIds.has(cardId(held)));

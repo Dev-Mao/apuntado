@@ -8,7 +8,8 @@ import { useRealtime } from "@/features/realtime";
 import { DEFAULT_TABLE_SETTINGS } from "@/lib";
 
 import { HOME_FORM } from "../types";
-import { validateCode, validateNickname, validateSettings } from "../validation";
+import { validateCode, validateNickname, validateSettings, withBalanceError } from "../validation";
+import { useOverBalance } from "./use-over-balance";
 
 import type { HomeErrors, HomeForm, NumericSettingField, ServerError, SettingsDraft } from "../types";
 import type { GameMode, RoomResult, RoomSettings } from "@apuntado/contracts";
@@ -48,6 +49,7 @@ export function useHomeForm(linkCode: string | null) {
     [registered, draftSettings],
   );
   const code = codeDraft ?? linkCode?.toUpperCase() ?? "";
+  const overBalance = useOverBalance(registered, settings.stake);
 
   const enter = useCallback(
     async (form: HomeForm, nextErrors: HomeErrors, command: () => Promise<RoomResult>) => {
@@ -74,9 +76,13 @@ export function useHomeForm(linkCode: string | null) {
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const nextErrors = { ...validateNickname(nickname), ...validateSettings(settings) };
+      if (overBalance) {
+        setErrors(nextErrors);
+        return;
+      }
       void enter(HOME_FORM.CREATE, nextErrors, () => commands.createRoom(toRoomSettings(settings)));
     },
-    [nickname, settings, enter, commands],
+    [nickname, settings, overBalance, enter, commands],
   );
 
   const handleJoin = useCallback(
@@ -115,7 +121,7 @@ export function useHomeForm(linkCode: string | null) {
     settings,
     code,
     entryNotice,
-    errors,
+    errors: withBalanceError(errors, overBalance),
     pending,
     createError: errorFor(HOME_FORM.CREATE),
     joinError: errorFor(HOME_FORM.JOIN),

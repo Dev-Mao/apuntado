@@ -53,8 +53,8 @@ export function ResultsHero(props: ResultsHeroProps) {
       <h1
         className={
           summary.isFinished
-            ? "animate-turn-in font-display text-[clamp(2.6rem,7vw,4.6rem)] leading-[0.95] font-semibold tracking-[-0.02em] text-balance [animation-delay:650ms] tiny:text-[2rem]"
-            : "font-display text-[clamp(2.4rem,6vw,4rem)] leading-[0.95] font-semibold tracking-[-0.02em] text-balance tiny:text-[2rem]"
+            ? "animate-turn-in font-display text-[clamp(2.6rem,7vw,4.6rem)] leading-[0.95] tracking-[-0.02em] text-balance [animation-delay:650ms] tiny:text-[2rem]"
+            : "font-display text-[clamp(2.4rem,6vw,4rem)] leading-[0.95] tracking-[-0.02em] text-balance tiny:text-[2rem]"
         }
       >
         {headline}

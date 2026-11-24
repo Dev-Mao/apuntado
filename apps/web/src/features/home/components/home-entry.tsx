@@ -34,7 +34,7 @@ export function HomeEntry({ form, linkCode }: HomeEntryProps) {
         <h2
           id="entry-title"
           className={cn(
-            "mt-2 font-display leading-[0.95] font-semibold italic short:mt-0",
+            "mt-2 font-display leading-[0.95] short:mt-0",
             invited ? "text-[2rem] short:text-[1.7rem] sm:text-[2.4rem]" : "text-[2.3rem] short:text-[1.9rem] sm:text-[2.9rem]",
           )}
         >

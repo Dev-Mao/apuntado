@@ -2,7 +2,7 @@
 
 import { useTranslation } from "react-i18next";
 
-import { RulesIcon, SuitGlyph } from "@/components";
+import { RulesIcon, SoundControls, SuitGlyph } from "@/components";
 
 import { TableLinks } from "./table-links";
 
@@ -21,16 +21,17 @@ export function TableHeader({ code, round, onShowRules, onShowScores }: TableHea
       <h1 className="sr-only">{t("table.title", { code })}</h1>
       <div className="flex items-center gap-3">
         <SuitGlyph suit="S" className="size-6 sm:size-7" />
-        <span className="label-caps text-[0.75rem] tracking-[0.3em]">{t("brand.name")}</span>
+        <span className="font-display text-[1.3rem] leading-none whitespace-nowrap max-[26rem]:sr-only">{t("brand.name")}</span>
         <span aria-hidden="true" className="hidden h-px w-14 bg-ink/40 sm:block" />
       </div>
       <TableLinks onShowRules={onShowRules} onShowScores={onShowScores} />
-      <div className="flex items-center gap-4 lg:hidden">
+      <div className="flex items-center gap-2 sm:gap-4">
+        <SoundControls />
         <span className="label-caps text-[0.65rem] lg:hidden">{t("table.round", { count: round })}</span>
         <button
           type="button"
           onClick={onShowRules}
-          className="label-caps flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full py-2 text-[0.65rem] transition-colors hover:text-coral-ink"
+          className="label-caps flex lg:hidden min-h-11 min-w-11 items-center justify-center gap-2 rounded-full py-2 text-[0.65rem] transition-colors hover:text-coral-ink"
         >
           <RulesIcon className="size-5" />
           <span className="max-sm:sr-only">{t("table.footer.rules")}</span>

@@ -23,7 +23,7 @@ function ProfileIdentity({ profile }: { profile: ProfileView }) {
         {profile.nickname.slice(0, 1).toUpperCase()}
       </span>
       <div className="min-w-0">
-        <h1 className="truncate font-display font-semibold text-[clamp(2.6rem,9vw,4.5rem)] leading-[1.15] tracking-[-0.02em]">{profile.nickname}</h1>
+        <h1 className="truncate font-display text-[clamp(2.6rem,9vw,4.5rem)] leading-[1.15] tracking-[-0.02em]">{profile.nickname}</h1>
         <p className="label-caps mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[0.65rem] text-ink-soft">
           {profile.guest ? t("profile.guest") : t("profile.member")}
           <ChipBalance className="text-ink" />

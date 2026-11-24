@@ -40,6 +40,7 @@ export function StakeField({ value, error, onChange }: StakeFieldProps) {
       type="number"
       inputMode="numeric"
       min={0}
+      max={wallet?.balance}
       value={value}
       error={error}
       onChange={(event) => onChange(event.target.value)}
