@@ -8,7 +8,7 @@ import { AppHeader, Button, buttonClasses, BUTTON_VARIANT } from "@/components";
 import { ChipBalance } from "@/features/account";
 import { cn, profileHref } from "@/lib";
 
-import { useResultsSummary } from "../hooks";
+import { useResultsSound, useResultsSummary } from "../hooks";
 import { ResultsHero } from "./results-hero";
 import { ResultsTable } from "./results-table";
 
@@ -18,6 +18,7 @@ export function ResultsScreen({ snapshot, onLeave }: ResultsScreenProps) {
   const { t } = useTranslation();
   const summary = useResultsSummary(snapshot);
   const isSelfWinner = snapshot.view.winnerId !== null && snapshot.view.winnerId === snapshot.view.playerId;
+  useResultsSound(summary.isFinished, isSelfWinner);
 
   return (
     <div className="relative isolate h-dvh overflow-hidden">

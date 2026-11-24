@@ -4,7 +4,7 @@ import { memo, useState } from "react";
 
 import { useTranslation } from "react-i18next";
 
-import { ArrowIcon, Button, BUTTON_VARIANT, LiveNotice } from "@/components";
+import { ArrowIcon, Button, BUTTON_VARIANT, LiveNotice, SlidersIcon } from "@/components";
 
 import { HOME_FIELD } from "../types";
 import { ModeCards } from "./mode-cards";
@@ -26,12 +26,19 @@ function CreateTableFormBase({ settings, errors, pending, invited, serverError, 
         {t("home.create.title")}
       </h3>
       <ModeCards value={settings.mode} onChange={onModeChange} />
-      <p className="flex flex-wrap items-baseline gap-x-2 text-paper/75 italic">
-        {t(settings.jokers ? "home.settingsSummaryJokers" : "home.settingsSummary", { threshold: settings.eliminationThreshold, seconds: settings.turnSeconds, stake })}
-        <button type="button" onClick={() => setSettingsOpen(true)} className="label-caps -my-3 inline-flex min-h-11 items-center text-[0.65rem] text-coral not-italic underline-offset-4 hover:underline">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-2xl border border-dashed border-paper/30 py-2 pr-2 pl-4">
+        <p className="min-w-0 flex-1 basis-48 text-paper/80">
+          {t(settings.jokers ? "home.settingsSummaryJokers" : "home.settingsSummary", { threshold: settings.eliminationThreshold, seconds: settings.turnSeconds, stake })}
+        </p>
+        <button
+          type="button"
+          onClick={() => setSettingsOpen(true)}
+          className="label-caps inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border border-coral px-4 text-[0.68rem] text-coral transition-colors hover:bg-coral hover:text-ink"
+        >
+          <SlidersIcon className="size-4" />
           {t("home.settingsEdit")}
         </button>
-      </p>
+      </div>
       {settingsInvalid && <LiveNotice message={t("home.settingsInvalid")} className="text-salmon" />}
       <Button
         type="submit"

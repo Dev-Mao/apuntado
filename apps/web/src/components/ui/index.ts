@@ -6,6 +6,7 @@ export * from "./icons";
 export * from "./live-notice";
 export * from "./pill";
 export * from "./playing-card";
+export * from "./sound-controls";
 export * from "./suit-glyph";
 export * from "./text-field";
 export * from "./threshold-bar";

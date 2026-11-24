@@ -38,7 +38,7 @@ export function MovementList() {
               {format.date(movement.at)}
             </time>
           </p>
-          <p className={cn("font-display text-[1.6rem] leading-none font-semibold tabular-nums lining-nums", movement.amount > 0 ? "text-coral-ink" : "text-ink")}>
+          <p className={cn("font-display text-[1.6rem] leading-none tabular-nums lining-nums", movement.amount > 0 ? "text-coral-ink" : "text-ink")}>
             {signed(movement.amount)}
           </p>
         </li>

@@ -5,8 +5,8 @@
 
 @theme inline {
   --font-display: var(--font-face-display), Georgia, serif;
-  --font-serif: var(--font-face-text), Georgia, serif;
-  --font-sans: var(--font-face-label), "Futura", system-ui, sans-serif;
+  --font-serif: var(--font-face-text), "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-face-text), "Helvetica Neue", Arial, sans-serif;
 }
 
 @theme {
@@ -88,9 +88,9 @@
 
 @utility label-caps {
   font-family: var(--font-sans);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.1em;
 }
 
 @utility hand-fan {
@@ -132,6 +132,7 @@
     background-color: var(--color-paper);
     color: var(--color-ink);
     font-variant-numeric: lining-nums;
+    font-synthesis: none;
   }
 
   body {

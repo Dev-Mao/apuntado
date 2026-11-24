@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { useTranslation } from "react-i18next";
 
-import { SuitGlyph } from "@/components/ui";
+import { SoundControls, SuitGlyph } from "@/components/ui";
 import { cn, ROUTES } from "@/lib";
 
 import type { ReactNode } from "react";
@@ -22,7 +22,7 @@ function Wordmark() {
   return (
     <>
       <SuitGlyph suit="S" className="size-7 text-ink" />
-      <span className="label-caps text-[0.8rem] tracking-[0.3em]">{t("brand.name")}</span>
+      <span className="font-display text-[1.45rem] leading-none whitespace-nowrap max-[26rem]:sr-only">{t("brand.name")}</span>
     </>
   );
 }
@@ -44,7 +44,10 @@ export function AppHeader({ className, homeLink = true, children }: AppHeaderPro
         )}
         <span aria-hidden="true" className="hidden h-px w-14 bg-ink/40 sm:block" />
       </div>
-      {children}
+      <div className="flex items-center gap-2 sm:gap-4">
+        <SoundControls />
+        {children}
+      </div>
     </header>
   );
 }

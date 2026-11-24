@@ -32,7 +32,7 @@ export function LobbyScreen({ lobby, selfId, notice, onAddBot, onStart, onLeave 
         </AppHeader>
         <main className="flex min-h-0 flex-1 flex-col gap-5 px-4 pb-5 short:gap-3 short:pb-3 sm:px-8">
           <div className="flex flex-col gap-2">
-            <h1 className="font-display text-[clamp(2.6rem,9vw,4.6rem)] leading-[0.9] font-semibold tracking-[-0.02em] short:text-[2.2rem]">{t("lobby.heading")}</h1>
+            <h1 className="font-display text-[clamp(2.6rem,9vw,4.6rem)] leading-[0.9] tracking-[-0.02em] short:text-[2.2rem]">{t("lobby.heading")}</h1>
             <p className="text-lg italic short:hidden sm:text-xl">
               {t("lobby.tagline")} <span className="text-coral-ink">{t("lobby.playersCount", { count: lobby.seats.length, max: lobby.maxSeats })}</span>
             </p>

@@ -24,6 +24,10 @@ export function validateSettings(settings: SettingsDraft): HomeErrors {
   return errors;
 }
 
+export function withBalanceError(errors: HomeErrors, overBalance: boolean): HomeErrors {
+  return overBalance ? { ...errors, stake: "stakeOverBalance" } : errors;
+}
+
 export function validateCode(code: string): HomeErrors {
   return code.trim() ? {} : { code: "codeRequired" };
 }

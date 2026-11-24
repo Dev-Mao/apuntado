@@ -10,7 +10,7 @@ function CardIndex({ card, className }: { card: CardDto; className: string }) {
     <span className={cn("absolute flex w-[18%] flex-col items-center", className)}>
       <span
         className={cn(
-          "font-display text-[length:24cqw] leading-[0.85] font-bold",
+          "font-display text-[length:24cqw] leading-[0.85]",
           card.rank === "10" ? "-translate-x-[0.06em] tracking-[-0.12em]" : "tracking-tight",
         )}
       >

@@ -9,3 +9,4 @@ export * from "./use-turn-message";
 export * from "./use-pile-actions";
 export * from "./use-table-panels";
 export * from "./use-table-screen";
+export * from "./use-table-sounds";

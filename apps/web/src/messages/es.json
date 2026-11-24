@@ -1,11 +1,11 @@
 {
   "meta": {
-    "title": "Apuntado",
-    "description": "Juego de cartas multijugador en tiempo real"
+    "title": "La Terna",
+    "description": "Apuntado en línea: juego de cartas multijugador en tiempo real"
   },
   "brand": {
-    "name": "Apuntado",
-    "home": "Apuntado, ir al inicio"
+    "name": "La Terna",
+    "home": "La Terna, ir al inicio"
   },
   "common": {
     "close": "Cerrar",
@@ -77,8 +77,10 @@
     "jokersHint": "Dos comodines en el mazo. Cada uno reemplaza cualquier carta en una combinación; suelto vale 25 puntos."
   },
   "home": {
-    "title": "Apuntado",
+    "title": "La Terna",
+    "kicker": "Apuntado en línea",
     "tagline": "Roba, combina y cierra antes que nadie.",
+    "heroCaption": "7, 8 y 9 de corazones forman una terna.",
     "intro": "Comparte el código con tus amigos o juega contra un bot.",
     "rules": "Cómo se juega",
     "nickname": {
@@ -104,7 +106,8 @@
       "thresholdInvalid": "Escribe un número entero mayor que 0",
       "turnInvalid": "El turno debe durar al menos 10 segundos",
       "stakeInvalid": "La apuesta debe ser un número entero, 0 o más",
-      "codeRequired": "Escribe el código que te compartieron"
+      "codeRequired": "Escribe el código que te compartieron",
+      "stakeOverBalance": "Tu saldo no alcanza para esa apuesta"
     },
     "nav": "Navegación principal",
     "entry": {
@@ -131,7 +134,7 @@
     "thresholdHint": "En puntos",
     "settingsSummary": "Eliminación a {{threshold}}, turnos de {{seconds}} s, {{stake}}.",
     "settingsSummaryJokers": "Eliminación a {{threshold}}, turnos de {{seconds}} s, {{stake}}, con comodines.",
-    "settingsEdit": "Cambiar",
+    "settingsEdit": "Cambiar ajustes",
     "settingsDone": "Listo",
     "settingsInvalid": "Revisa los ajustes de la mesa.",
     "stakeNone": "sin apuesta"
@@ -385,5 +388,14 @@
     "guestNudge": "Con una cuenta gratis tienes 1000 fichas y puedes apostar.",
     "guestNudgeAction": "Crear cuenta",
     "registeredNickname": "Juegas con el apodo de tu cuenta"
+  },
+  "sound": {
+    "label": "Sonido",
+    "music": "Música",
+    "effects": "Efectos de sonido",
+    "musicOn": "Poner música",
+    "musicOff": "Quitar la música",
+    "effectsOn": "Activar los efectos",
+    "effectsOff": "Silenciar los efectos"
   }
 }
