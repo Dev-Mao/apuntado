@@ -19,10 +19,9 @@ Las líneas finas son tinta al 15 %.
 
 ## Tipografía
 
-- **Playfair Display** (600): el título, los números grandes del marcador y los títulos de cada pantalla.
-- **Source Serif 4**: nombres, filas, texto corrido y la cursiva de lemas y estados.
-- **Jost** (600): etiquetas pequeñas en mayúsculas muy espaciadas y botones, con moderación. Una etiqueta que presenta opciones va en cursiva serif («Ordenar por»), para no confundirse con ellas.
-- Las tres se cargan con `next/font` en `src/app/layout.tsx` y se exponen como `--font-display`, `--font-serif` y `--font-sans` en `globals.css`; cambiar una familia es tocar una línea.
+- **Gloock** (400, su único peso): el logotipo La Terna, los números grandes del marcador, los índices de las cartas y los títulos de cada pantalla. Sin negrita ni cursiva: `font-synthesis: none` impide que el navegador las invente.
+- **Hanken Grotesk**: nombres, filas, texto corrido, la cursiva de lemas y estados, y las etiquetas pequeñas en mayúsculas (700, espaciado 0.1em). Una etiqueta que presenta opciones va en cursiva («Ordenar por»), para no confundirse con ellas.
+- Las dos se cargan con `next/font` en `src/app/layout.tsx` y se exponen como `--font-display`, `--font-serif` y `--font-sans` en `globals.css`; cambiar una familia es tocar una línea.
 - Escala 1.25: 12.8 · 16 · 20 · 25 · 31 · 39 · 49 px; el título de inicio llega a 122 px.
 
 ## Formas
