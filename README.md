@@ -17,9 +17,7 @@ Colombia, Facultad de Minas.
 apps/api/             Servidor: módulos de dominio (ADR-01)
 apps/web/             Interfaz web (Next.js, exportación estática)
 packages/contracts/   Tipos compartidos entre servidor e interfaz, sin lógica
-docs/adrs/            ADR-01 a ADR-05 en formato Nygard
-docs/entregable-2/    Secciones del documento del Entregable 2, tal como se entregaron
-docs/entregable-3/    Plan de construcción del MVP
+docs/entregable-3/validacion/  Evidencias de la validación con usuarios: capturas, bitácora y cuestionario
 models/bpmn/          Procesos As-Is y To-Be (BPMN 2.0 editable)
 models/uml/           Casos de uso, componentes y clases (PlantUML y draw.io)
 models/er/            Modelo entidad-relación y esquema SQL
@@ -148,8 +146,7 @@ introduciendo violaciones deliberadas y comprobando que **fallan**:
 
 Ese control negativo reveló un defecto real: el atajo `inFolder()` de TSArch genera un patrón que
 **nunca coincide con rutas relativas**, de modo que FF-01 y FF-05 pasaban aunque estuvieran
-violadas. Se reescribieron con `matchingPattern` explícito. El análisis está en
-[`docs/entregable-2/5-gobernanza-fitness-functions.md`](docs/entregable-2/5-gobernanza-fitness-functions.md).
+violadas. Se reescribieron con `matchingPattern` explícito.
 
 ### Métricas en cada ejecución del pipeline
 
@@ -166,7 +163,7 @@ celular, una partida contra la máquina con turnos completos y un cierre inváli
 
 ## Estado actual
 
-Fases 0 a 6 del [plan de construcción](docs/entregable-3/plan-de-construccion.md) completas: el
+Fases 0 a 6 del plan de construcción completas: el
 juego se puede jugar de punta a punta desde varios navegadores; cada partida terminada queda
 archivada en PostgreSQL y aparece en el perfil del jugador; las cuentas registradas tienen fichas
 para apostar; y el pipeline mide y vigila las métricas de arquitectura.
