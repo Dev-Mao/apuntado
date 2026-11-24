@@ -37,7 +37,7 @@ Extraída de la base de datos del despliegue (tablas `partida`, `ronda` y `turno
 | [tiempos-por-turno.csv](bitacora/tiempos-por-turno.csv) | Turnos jugados, segundos promedio por turno (sin contar los vencidos) y turnos vencidos. |
 | [log-partida-ganada-U03.csv](bitacora/log-partida-ganada-U03.csv) | Las 64 jugadas de la partida que ganó U03 el 20 de noviembre, con su hora. |
 
-- U02 jugó con el apodo U03 y U05 con el apodo U08. A U05 se le atribuyen las tres partidas de ese apodo jugadas entre las 00:02 y las 00:07 del 18 de noviembre, cinco minutos antes de su respuesta al cuestionario.
+- U02 jugó con el apodo U03 y U05 con el apodo U08. A U05 se le atribuyen las tres partidas de ese apodo jugadas entre las 00:02 y las 00:07 del 18 de noviembre, cinco minutos antes de su respuesta al cuestionario. Las otras dos partidas de U08, la noche del 17 de noviembre, no se cuentan porque no se puede asegurar que fueran suyas.
 - U01 jugó en una copia local y U04 no tiene partidas en producción, así que ninguno de los dos aparece.
 - Las partidas con el apodo U02 entre el 17 y el 19 de noviembre no corresponden a ningún participante y se dejaron fuera.
 
