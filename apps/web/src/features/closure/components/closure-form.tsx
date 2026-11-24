@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ChoicePills } from "@/components";
+import { useCardLabel } from "@/hooks/use-card-label";
 import { cardId } from "@/lib";
 
 import { useClosureDraft } from "../hooks";
@@ -19,6 +20,7 @@ const ALL_SLOTS: readonly ClosureSlot[] = [...GROUP_SLOTS, CLOSURE_SLOT.LEFTOVER
 
 export function ClosureForm({ cards, groups, enabledClosures, cannotDiscard, state, onClose, onEdit, onSubmit }: ClosureFormProps) {
   const { t } = useTranslation();
+  const cardLabel = useCardLabel();
   const lockedId = cannotDiscard ? cardId(cannotDiscard) : null;
   const draft = useClosureDraft(cards, enabledClosures, lockedId, groups);
 
@@ -46,6 +48,12 @@ export function ClosureForm({ cards, groups, enabledClosures, cannotDiscard, sta
   return (
     <div className="mt-4 flex flex-col gap-5 short:mt-3 short:gap-3">
       <p className="max-w-xl text-lg leading-snug text-ink-soft italic short:hidden">{t("closure.intro")}</p>
+      {cannotDiscard && (
+        <p className="flex items-center gap-2 text-sm font-semibold text-coral-ink">
+          <span className="label-caps rounded-full border-2 border-ink bg-coral px-2 py-0.5 text-[0.6rem] text-ink">{t("table.hand.lockedTag")}</span>
+          {t("closure.lockedHint", { card: cardLabel(cannotDiscard) })}
+        </p>
+      )}
       {typeOptions.length > 1 && (
         <ChoicePills legend={t("closure.type")} name="closure-type" options={typeOptions} value={draft.type} onChange={edited(draft.setType)} />
       )}
@@ -57,6 +65,7 @@ export function ClosureForm({ cards, groups, enabledClosures, cannotDiscard, sta
             title={slotTitle(slot)}
             cards={draft.cardsIn(slot)}
             canAssign={canAssign(slot)}
+            lockedId={lockedId}
             onAssign={edited(draft.assign)}
             onReturn={edited(draft.unassign)}
           />

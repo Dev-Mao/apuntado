@@ -11,8 +11,9 @@ import { CLOSURE_SLOT } from "../types";
 import { ClosureCardButton } from "./closure-card-button";
 
 import type { SlotPanelProps } from "../types";
+import type { CSSProperties } from "react";
 
-function SlotPanelBase({ slot, title, cards, canAssign, onAssign, onReturn }: SlotPanelProps) {
+function SlotPanelBase({ slot, title, cards, canAssign, lockedId, onAssign, onReturn }: SlotPanelProps) {
   const { t } = useTranslation();
   const cardLabel = useCardLabel();
   const isDiscard = slot === CLOSURE_SLOT.DISCARD;
@@ -45,10 +46,10 @@ function SlotPanelBase({ slot, title, cards, canAssign, onAssign, onReturn }: Sl
           {canAssign ? t("closure.placeHere") : t("closure.slotEmpty")}
         </p>
       ) : (
-        <ul className="flex flex-wrap gap-y-2 px-3 pb-3 [&>li+li]:-ml-7">
+        <ul style={{ "--n": cards.length } as CSSProperties} className="@container flex px-3 pt-1 pb-3 [--cw:3rem] sm:[--cw:3.5rem]">
           {cards.map((card) => (
-            <li key={cardId(card)} className="animate-turn-in">
-              <ClosureCardButton card={card} label={t("closure.returnCard", { card: cardLabel(card) })} onPress={onReturn} />
+            <li key={cardId(card)} className="shrink-0 animate-turn-in not-last:w-[min(calc(var(--cw)*0.62),calc((100cqw-var(--cw))/max(var(--n)-1,1)))]">
+              <ClosureCardButton card={card} label={t("closure.returnCard", { card: cardLabel(card) })} isLocked={cardId(card) === lockedId} onPress={onReturn} />
             </li>
           ))}
         </ul>
