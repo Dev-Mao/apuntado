@@ -3,7 +3,6 @@ import { cn } from "@/lib";
 import { CARD_SIZE, PlayingCard } from "./playing-card";
 
 import type { CardSize } from "./playing-card";
-
 import type { CardDto } from "@apuntado/contracts";
 import type { CSSProperties } from "react";
 
