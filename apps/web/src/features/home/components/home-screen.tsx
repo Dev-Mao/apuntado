@@ -43,9 +43,9 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
             <AccountMenu />
           </nav>
         </AppHeader>
-        <main className="grid min-h-0 w-full flex-1 gap-8 overflow-y-auto overscroll-contain px-4 pt-2 pb-8 [align-content:safe_center] sm:px-8 max-lg:mx-auto max-lg:max-w-xl lg:grid-cols-[minmax(0,1fr)_minmax(0,32rem)] lg:gap-20 lg:[align-items:safe_center]">
+        <main className="grid min-h-0 w-full flex-1 gap-8 overflow-y-auto overscroll-contain px-4 pt-2 pb-8 [align-content:safe_center] sm:px-8 max-lg:mx-auto max-lg:max-w-xl lg:grid-cols-[minmax(0,1fr)_minmax(0,32rem)] lg:gap-20 lg:overflow-hidden lg:py-0 lg:[align-content:stretch]">
           <HomeHero />
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain lg:py-6 lg:pr-3 lg:[justify-content:safe_center] [&>*]:shrink-0">
             <EntryNotice message={form.entryNotice} />
             <HomeEntry form={form} linkCode={linkCode} />
           </div>

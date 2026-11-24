@@ -15,7 +15,7 @@ const QUEENS: readonly CardDto[] = [
 export function HomeHero() {
   const { t } = useTranslation();
   return (
-    <section aria-labelledby="home-title" className="flex flex-col items-start">
+    <section aria-labelledby="home-title" className="flex flex-col items-start lg:self-center">
       <p className="label-caps text-[0.7rem] text-coral-ink">
         {t("home.kicker")}
       </p>
