@@ -59,6 +59,7 @@ export interface SlotPanelProps {
   title: string;
   cards: readonly CardDto[];
   canAssign: boolean;
+  lockedId: string | null;
   onAssign: (slot: ClosureSlot) => void;
   onReturn: (id: string) => void;
 }
