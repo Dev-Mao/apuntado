@@ -282,7 +282,11 @@
     "failedBody": "Revisa tu conexión e inténtalo de nuevo.",
     "moveToSlot": "Mover las cartas seleccionadas a {{slot}}",
     "placeHere": "Poner aquí",
-    "lockedHint": "La carta del pozo ({{card}}) puede ir en una combinación, pero no al descarte."
+    "lockedHint": "La carta del pozo ({{card}}) puede ir en una combinación, pero no al descarte.",
+    "typeRule": {
+      "CLASICO": "Una cuarta y dos ternas, y una carta al descarte. No lleva sobrantes.",
+      "APUNTADO": "Tres ternas. Las cartas que sobren deben sumar menos de 5 puntos."
+    }
   },
   "results": {
     "roundTitle": "Ronda {{count}} terminada",
