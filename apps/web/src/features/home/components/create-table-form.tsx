@@ -37,18 +37,18 @@ function CreateTableFormBase({ settings, errors, pending, invited, serverError, 
         {t("home.create.title")}
       </h3>
       <ModeCards value={settings.mode} onChange={onModeChange} />
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-2">
         <p className="label-caps text-[0.65rem] text-ink-soft">{t("home.tableLegend")}</p>
         <div className="flex flex-wrap items-center gap-2">
           {chips.map((chip) => (
-            <span key={chip} className="rounded-full border-[1.5px] border-ink/70 bg-card px-3 py-1 text-sm font-semibold">
+            <span key={chip} className="rounded-full bg-paper-deep/70 px-3 py-1 text-sm font-semibold">
               {chip}
             </span>
           ))}
           <button
             type="button"
             onClick={() => setSettingsOpen(true)}
-            className="label-caps inline-flex min-h-9 items-center gap-2 rounded-full border-2 border-dashed border-coral-ink px-3.5 text-[0.65rem] text-coral-ink transition-colors hover:border-solid hover:bg-peach"
+            className="label-caps inline-flex min-h-9 items-center gap-2 rounded-full border-2 border-ink bg-card px-3.5 text-[0.65rem] shadow-[2px_2px_0_var(--color-ink)] transition-[translate,box-shadow,background-color] hover:bg-peach active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
           >
             <SlidersIcon className="size-4" />
             {t("home.settingsEdit")}
@@ -61,7 +61,7 @@ function CreateTableFormBase({ settings, errors, pending, invited, serverError, 
         variant={invited ? BUTTON_VARIANT.OUTLINE : BUTTON_VARIANT.PRIMARY}
         disabled={pending}
         aria-busy={pending}
-        className="w-full min-h-13 text-[0.8rem] sm:w-auto sm:self-start sm:px-8"
+        className="mt-1 min-h-13 w-full text-[0.8rem]"
       >
         {t("home.create.submit")}
         <ArrowIcon />

@@ -96,7 +96,7 @@
     "entryFailed": "No pudiste entrar a la mesa",
     "join": {
       "title": "Únete con un código",
-      "label": "Código de la mesa",
+      "label": "¿Te pasaron un código?",
       "placeholder": "K7Q2",
       "submit": "Unirme"
     },
@@ -111,10 +111,8 @@
     },
     "nav": "Navegación principal",
     "entry": {
-      "eyebrow": "Juega ahora",
       "title": "Crea tu mesa",
-      "invitedTitle": "Te esperan en la mesa {{code}}",
-      "or": "o únete con un código"
+      "invitedTitle": "Te esperan en la mesa {{code}}"
     },
     "modes": {
       "CLASICA": {
@@ -135,7 +133,6 @@
     "settingsEdit": "Cambiar ajustes",
     "settingsDone": "Listo",
     "settingsInvalid": "Revisa los ajustes de la mesa.",
-    "heroCredit": "Las figuras de la baraja las dibujó nuestro equipo.",
     "modesLegend": "¿A qué jugamos?",
     "tableLegend": "La mesa",
     "chips": {

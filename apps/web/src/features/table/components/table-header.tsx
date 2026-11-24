@@ -23,7 +23,6 @@ export function TableHeader({ code, round, onShowRules, onShowScores, onAbandon 
       <div className="flex items-center gap-3">
         <SuitGlyph suit="S" className="size-6 sm:size-7" />
         <span className="font-display text-[1.3rem] leading-none whitespace-nowrap max-[26rem]:sr-only">{t("brand.name")}</span>
-        <span aria-hidden="true" className="hidden h-px w-14 bg-ink/40 sm:block" />
       </div>
       <TableLinks onShowRules={onShowRules} onShowScores={onShowScores} onAbandon={onAbandon} />
       <div className="flex items-center gap-2 sm:gap-4">
