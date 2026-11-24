@@ -27,6 +27,20 @@ Tres participantes escribieron U03 como apodo y en el formulario. Se distinguier
 | U05 | 37,5 | 3 | 5 | 1 | 1 |
 | **Promedio** | **57** | **4,6** | **5** | **3,6** | **3,8** |
 
+## Bitácora de producción
+
+Extraída de la base de datos del despliegue (tablas `partida`, `ronda` y `turno_jugada`). Solo guarda jugadas aceptadas: los cierres rechazados no quedan registrados.
+
+| Archivo | Contenido |
+|---|---|
+| [partidas.csv](bitacora/partidas.csv) | Cada partida de los participantes: modalidad, rondas y cierres válidos. |
+| [tiempos-por-turno.csv](bitacora/tiempos-por-turno.csv) | Turnos jugados, segundos promedio por turno (sin contar los vencidos) y turnos vencidos. |
+| [log-partida-ganada-U03.csv](bitacora/log-partida-ganada-U03.csv) | Las 64 jugadas de la partida que ganó U03 el 20 de noviembre, con su hora. |
+
+- U02 jugó con el apodo U03 y U05 con el apodo U08. A U05 se le atribuyen las tres partidas de ese apodo jugadas entre las 00:02 y las 00:07 del 18 de noviembre, cinco minutos antes de su respuesta al cuestionario.
+- U01 jugó en una copia local y U04 no tiene partidas en producción, así que ninguno de los dos aparece.
+- Las partidas con el apodo U02 entre el 17 y el 19 de noviembre no corresponden a ningún participante y se dejaron fuera.
+
 ## U01
 
 Computador, partidas Clásicas contra un bot.
