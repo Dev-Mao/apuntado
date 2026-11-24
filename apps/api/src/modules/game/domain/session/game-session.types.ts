@@ -35,6 +35,7 @@ export interface ScoreLine {
   readonly playerId: string;
   readonly total: number;
   readonly eliminated: boolean;
+  readonly abandoned: boolean;
 }
 
 export interface SessionIds {

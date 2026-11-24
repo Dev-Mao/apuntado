@@ -128,3 +128,43 @@ describe("Partida · desempate", () => {
     expect(m.winnerId).toBe("luis");
   });
 });
+
+describe("Partida · abandono", () => {
+  it("quien abandona queda eliminado y no puede ganar", () => {
+    const m = match("APUNTADO");
+    m.abandon("ana");
+    expect(m.isAbandoned("ana")).toBe(true);
+    expect(m.isEliminated("ana")).toBe(true);
+    expect(m.activePlayerIds).toEqual(["luis", "eva"]);
+    expect(m.currentStatus).toBe("PLAYING");
+  });
+
+  it("si queda un solo jugador en pie, la partida termina con él", () => {
+    const m = match("CLASICA", ["ana", "luis"]);
+    m.abandon("ana");
+    expect(m.currentStatus).toBe("FINISHED");
+    expect(m.winnerId).toBe("luis");
+  });
+
+  it("en Clásica, quien abandonó nunca gana aunque sume menos puntos", () => {
+    const m = match("CLASICA");
+    m.abandon("ana");
+    m.recordRound(scores({ ana: 1, luis: 40, eva: 25 }), null);
+    expect(m.winnerId).toBe("eva");
+  });
+
+  it("si todos los demás quedan eliminados, no gana el que abandonó", () => {
+    const m = match("APUNTADO", ["ana", "luis", "eva"], 50);
+    m.abandon("ana");
+    m.recordRound(scores({ ana: 0, luis: 60, eva: 70 }), null);
+    expect(m.winnerId).toBe("luis");
+  });
+
+  it("puede cerrarse por mejor puntaje entre los que siguen en pie", () => {
+    const m = match("APUNTADO");
+    m.recordRound(scores({ ana: 30, luis: 10, eva: 20 }), "luis");
+    m.abandon("luis");
+    m.finishByBest();
+    expect(m.winnerId).toBe("eva");
+  });
+});

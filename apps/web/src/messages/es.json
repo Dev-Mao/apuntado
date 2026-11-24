@@ -162,6 +162,15 @@
   "table": {
     "title": "Mesa {{code}}",
     "round": "Ronda {{count}}",
+    "abandon": {
+      "action": "Abandonar partida",
+      "title": "¿Abandonar la partida?",
+      "lost": "La partida contará como perdida.",
+      "stake": "Perderás tu apuesta de {{chips}}.",
+      "stay": "Seguir jugando",
+      "confirm": "Abandonar",
+      "done": "Abandonaste la mesa {{code}}"
+    },
     "stock": "Mazo",
     "stockLabel_one": "Mazo, {{count}} carta",
     "stockLabel_other": "Mazo, {{count}} cartas",
@@ -211,6 +220,8 @@
       "title": "Marcador",
       "threshold": "Eliminación a {{count}}",
       "eliminated": "Eliminado",
+      "abandoned": "Abandonó",
+      "entryLabelAbandoned": "{{name}}, {{points}} de {{threshold}} puntos, abandonó la partida",
       "entryLabel": "{{name}}, {{points}} de {{threshold}} puntos",
       "entryLabelEliminated": "{{name}}, {{points}} de {{threshold}} puntos, eliminado",
       "self": "{{name}}, tú",
@@ -282,6 +293,7 @@
       "playing": "Sigue en juego",
       "finished": "Partida terminada",
       "eliminated": "Eliminado",
+      "abandoned": "Abandonó",
       "winner": "Ganador",
       "closed": "Cerró la ronda"
     },

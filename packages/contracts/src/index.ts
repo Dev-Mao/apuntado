@@ -26,6 +26,7 @@ export interface ScoreLineView {
   readonly playerId: string;
   readonly total: number;
   readonly eliminated: boolean;
+  readonly abandoned: boolean;
 }
 
 export interface RoundResultView {
@@ -171,6 +172,7 @@ export interface ClientToServerEvents {
   "game:draw": (source: DrawSource, ack: (result: ActionResult) => void) => void;
   "game:discard": (card: CardDto, ack: (result: ActionResult) => void) => void;
   "game:declare": (declaration: ClosureDeclarationDto, ack: (result: ActionResult) => void) => void;
+  "game:abandon": (ack: (result: ActionResult) => void) => void;
 }
 
 export interface ServerToClientEvents {

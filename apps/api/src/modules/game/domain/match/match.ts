@@ -23,6 +23,7 @@ interface Seat {
   total: number;
   roundsWon: number;
   eliminated: boolean;
+  abandoned: boolean;
 }
 
 export class Match {
@@ -34,7 +35,7 @@ export class Match {
   private constructor(readonly config: MatchConfig, private readonly seats: Seat[]) {}
 
   static create(playerIds: readonly string[], config: MatchConfig): Match {
-    return new Match(config, playerIds.map((playerId) => ({ playerId, total: 0, roundsWon: 0, eliminated: false })));
+    return new Match(config, playerIds.map((playerId) => ({ playerId, total: 0, roundsWon: 0, eliminated: false, abandoned: false })));
   }
 
   get enabledClosures(): readonly ClosureType[] {
@@ -75,6 +76,22 @@ export class Match {
     return this.seat(playerId).eliminated;
   }
 
+  isAbandoned(playerId: string): boolean {
+    return this.seat(playerId).abandoned;
+  }
+
+  abandon(playerId: string): void {
+    const seat = this.seat(playerId);
+    seat.abandoned = true;
+    seat.eliminated = true;
+    const remaining = this.seats.filter((s) => !s.eliminated);
+    if (remaining.length === 1) this.finish(remaining[0]!.playerId);
+  }
+
+  finishByBest(): void {
+    this.finish(this.best(this.seats.filter((s) => !s.eliminated)).playerId);
+  }
+
   recordRound(scores: readonly RoundScore[], roundWinnerId: string | null): void {
     if (this.status === "FINISHED") throw new Error("The match is already finished");
     for (const { playerId, points } of scores) this.seat(playerId).total += points;
@@ -102,7 +119,9 @@ export class Match {
   }
 
   private best(candidates: readonly Seat[]): Seat {
-    return [...candidates].sort((a, b) => a.total - b.total || b.roundsWon - a.roundsWon)[0]!;
+    return candidates
+      .filter((s) => !s.abandoned)
+      .sort((a, b) => a.total - b.total || b.roundsWon - a.roundsWon)[0]!;
   }
 
   private byPlayers(scores: readonly RoundScore[]): Seat[] {

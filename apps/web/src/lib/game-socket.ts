@@ -22,6 +22,7 @@ export interface GameCommands {
   createRoom: (settings: RoomSettings) => Promise<RoomResult>;
   joinRoom: (code: string) => Promise<RoomResult>;
   leaveRoom: () => Promise<ActionResult>;
+  abandon: () => Promise<ActionResult>;
   addBot: () => Promise<ActionResult>;
   startGame: () => Promise<ActionResult>;
   draw: (source: DrawSource) => Promise<ActionResult>;
@@ -88,6 +89,7 @@ export function createGameConnection(): GameConnection {
     createRoom: async (settings) => timed().emitWithAck("room:create", settings),
     joinRoom: async (code) => timed().emitWithAck("room:join", code),
     leaveRoom: async () => timed().emitWithAck("room:leave"),
+    abandon: async () => timed().emitWithAck("game:abandon"),
     addBot: async () => timed().emitWithAck("room:addBot"),
     startGame: async () => timed().emitWithAck("room:start"),
     draw: async (source) => timed().emitWithAck("game:draw", source),

@@ -110,3 +110,35 @@ describe("Sala · inicio", () => {
     expect(room.addBot("ana")).toEqual({ ok: false, reason: "La partida de esta mesa ya empezó" });
   });
 });
+
+describe("Sala · abandono", () => {
+  const playing = (): Room => {
+    const room = openRoom();
+    room.join(LUIS);
+    room.markStarted();
+    return room;
+  };
+
+  it("quien abandona deja de estar sentado pero conserva su puesto para los nombres", () => {
+    const room = playing();
+    expect(room.depart("ana")).toEqual({ ok: true });
+    expect(room.isSeated("ana")).toBe(false);
+    expect(room.hasPlayer("ana")).toBe(true);
+    expect(room.humanIds).toEqual(["luis"]);
+    expect(room.seats).toHaveLength(2);
+  });
+
+  it("rechaza abandonar fuera de una partida en curso o dos veces", () => {
+    expect(openRoom().depart("ana").ok).toBe(false);
+    const room = playing();
+    room.depart("ana");
+    expect(room.depart("ana").ok).toBe(false);
+    expect(room.depart("zoe").ok).toBe(false);
+  });
+
+  it("quien abandonó no puede volver a unirse", () => {
+    const room = playing();
+    room.depart("ana");
+    expect(room.join(ANA)).toEqual({ ok: false, reason: "La partida de esta mesa ya empezó" });
+  });
+});

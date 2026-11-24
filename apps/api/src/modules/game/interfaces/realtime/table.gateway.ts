@@ -96,6 +96,11 @@ export class TableGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     return this.game.table.declare(playerOf(socket).id, declaration);
   }
 
+  @SubscribeMessage("game:abandon")
+  abandon(@ConnectedSocket() socket: TableSocket): ActionResult {
+    return this.game.table.abandon(playerOf(socket).id);
+  }
+
   private announce(code: string): void {
     this.notifier.lobbyChanged(code);
     this.notifier.tableChanged(code);

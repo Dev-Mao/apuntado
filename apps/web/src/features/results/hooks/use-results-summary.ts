@@ -11,6 +11,7 @@ import type { PlayerView, ScoreLineView, TableSnapshot } from "@apuntado/contrac
 
 function statusOf(line: ScoreLineView, view: PlayerView): ResultStatus {
   if (line.playerId === view.winnerId) return RESULT_STATUS.WINNER;
+  if (line.abandoned) return RESULT_STATUS.ABANDONED;
   if (line.eliminated) return RESULT_STATUS.ELIMINATED;
   if (line.playerId === view.lastRound?.roundWinnerId) return RESULT_STATUS.CLOSED;
   return view.status === "FINISHED" ? RESULT_STATUS.FINISHED : RESULT_STATUS.PLAYING;
@@ -35,6 +36,7 @@ function summarize({ seats, stake, view }: TableSnapshot): ResultsSummary {
       roundPoints: roundPoints.get(line.playerId) ?? 0,
       total: line.total,
       eliminated: line.eliminated,
+      abandoned: line.abandoned,
       status: statusOf(line, view),
     })),
   };

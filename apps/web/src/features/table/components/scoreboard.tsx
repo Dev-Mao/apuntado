@@ -24,6 +24,16 @@ interface ScoreRowProps {
   srLabel: string;
 }
 
+function statusKey(entry: ScoreLineView) {
+  if (entry.abandoned) return "table.scoreboard.abandoned";
+  return entry.eliminated ? "table.scoreboard.eliminated" : "table.scoreboard.rival";
+}
+
+function entryLabelKey(entry: ScoreLineView) {
+  if (entry.abandoned) return "table.scoreboard.entryLabelAbandoned";
+  return entry.eliminated ? "table.scoreboard.entryLabelEliminated" : "table.scoreboard.entryLabel";
+}
+
 function SelfRow({ entry, name, threshold, isTurn, srLabel, bandClassName }: ScoreRowProps & { bandClassName: string }) {
   const { t } = useTranslation();
   return (
@@ -51,7 +61,7 @@ function RivalRow({ entry, name, threshold, isTurn, srLabel }: ScoreRowProps) {
         <span className="flex min-w-0 flex-col">
           <span className="label-caps flex items-center gap-2 text-[0.65rem] text-ink-soft">
             {isTurn && <span className="size-1.5 rounded-full bg-coral-ink" />}
-            {entry.eliminated ? t("table.scoreboard.eliminated") : t("table.scoreboard.rival")}
+            {t(statusKey(entry))}
           </span>
           <span className={cn("truncate text-xl", entry.eliminated && "text-ink-soft line-through")}>{name}</span>
         </span>
@@ -69,13 +79,12 @@ export function Scoreboard({ entries, seats, threshold, selfId, turnPlayerId, ba
     <ol className="flex flex-col">
       {entries.map((entry) => {
         const name = nicknameOf(seats, entry.playerId);
-        const labelKey = entry.eliminated ? "table.scoreboard.entryLabelEliminated" : "table.scoreboard.entryLabel";
         const row = {
           entry,
           name,
           threshold,
           isTurn: entry.playerId === turnPlayerId,
-          srLabel: t(labelKey, { name, points: entry.total, threshold }),
+          srLabel: t(entryLabelKey(entry), { name, points: entry.total, threshold }),
         };
         if (entry.playerId === selfId) return <SelfRow key={entry.playerId} {...row} bandClassName={bandClassName} />;
         return <RivalRow key={entry.playerId} {...row} />;

@@ -26,6 +26,7 @@ export const invalidSettings = (s: RoomSettings): string | null => {
 export class Room {
   private state: RoomStatus = "LOBBY";
   private botCount = 0;
+  private readonly departed = new Set<string>();
 
   private constructor(
     readonly code: string,
@@ -58,11 +59,21 @@ export class Room {
   }
 
   get humanIds(): string[] {
-    return this.seated.filter((s) => !s.isBot).map((s) => s.playerId);
+    return this.seated.filter((s) => !s.isBot && !this.departed.has(s.playerId)).map((s) => s.playerId);
   }
 
   hasPlayer(playerId: string): boolean {
     return this.seated.some((s) => s.playerId === playerId);
+  }
+
+  isSeated(playerId: string): boolean {
+    return this.hasPlayer(playerId) && !this.departed.has(playerId);
+  }
+
+  depart(playerId: string): Outcome {
+    if (this.state !== "PLAYING" || !this.isSeated(playerId)) return rejected("No está jugando en ninguna mesa");
+    this.departed.add(playerId);
+    return OK;
   }
 
   isBot(playerId: string): boolean {
@@ -70,7 +81,7 @@ export class Room {
   }
 
   join(member: RoomMember): Outcome {
-    if (this.hasPlayer(member.id)) return OK;
+    if (this.isSeated(member.id)) return OK;
     if (this.state !== "LOBBY") return rejected("La partida de esta mesa ya empezó");
     if (this.seated.length >= MAX_PLAYERS) return rejected("La mesa está llena");
     if (this.settings.stake > 0 && member.guest) return rejected("Un invitado no puede unirse a una mesa con apuesta");

@@ -1,5 +1,6 @@
 import { type Outcome, rejected } from "../../domain/round/round.types.js";
 import type { RoomRepository } from "../ports/index.js";
+import type { AbandonGame } from "../use-cases/abandon-game.js";
 import type { DeclareClosure } from "../use-cases/declare-closure.js";
 import type { DiscardCard } from "../use-cases/discard-card.js";
 import type { DrawCard } from "../use-cases/draw-card.js";
@@ -11,6 +12,7 @@ export interface TableCommandDependencies {
   readonly draw: DrawCard;
   readonly discard: DiscardCard;
   readonly declare: DeclareClosure;
+  readonly abandon: AbandonGame;
   readonly coordinator: TableCoordinator;
 }
 
@@ -35,6 +37,10 @@ export class TableCommands {
       const result = this.deps.declare.execute({ gameId, playerId, declaration });
       return result.valid ? { ok: true } : rejected(result.reason ?? "Cierre inválido");
     });
+  }
+
+  abandon(playerId: string): Outcome {
+    return this.onTable(playerId, (gameId) => this.deps.abandon.execute({ gameId, playerId }));
   }
 
   private onTable(playerId: string, action: (gameId: string) => Outcome): Outcome {
