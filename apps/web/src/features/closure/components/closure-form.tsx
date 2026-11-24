@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 import { ChoicePills } from "@/components";
 import { useCardLabel } from "@/hooks/use-card-label";
-import { cardId } from "@/lib";
+import { cardId, cn } from "@/lib";
 
 import { useClosureDraft } from "../hooks";
 import { CLOSURE_SLOT, GROUP_SLOTS, SUBMIT_STATUS } from "../types";
@@ -35,6 +35,7 @@ export function ClosureForm({ cards, groups, enabledClosures, cannotDiscard, sta
   };
   const canAssign = (slot: ClosureSlot) => (slot === CLOSURE_SLOT.DISCARD ? draft.canDiscardSelection : draft.hasSelection);
   const isSubmitting = state.status === SUBMIT_STATUS.SUBMITTING;
+  const slots = draft.type === "CLASICO" ? ALL_SLOTS.filter((slot) => slot !== CLOSURE_SLOT.LEFTOVERS) : ALL_SLOTS;
   const edited =
     <A extends unknown[]>(action: (...args: A) => void) =>
     (...args: A) => {
@@ -54,11 +55,14 @@ export function ClosureForm({ cards, groups, enabledClosures, cannotDiscard, sta
           {t("closure.lockedHint", { card: cardLabel(cannotDiscard) })}
         </p>
       )}
-      {typeOptions.length > 1 && (
-        <ChoicePills legend={t("closure.type")} name="closure-type" options={typeOptions} value={draft.type} onChange={edited(draft.setType)} />
-      )}
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5">
-        {ALL_SLOTS.map((slot) => (
+      <div className="flex flex-col gap-2">
+        {typeOptions.length > 1 && (
+          <ChoicePills legend={t("closure.type")} name="closure-type" options={typeOptions} value={draft.type} onChange={edited(draft.setType)} />
+        )}
+        <p className="text-sm font-semibold">{t(`closure.typeRule.${draft.type}`)}</p>
+      </div>
+      <div className={cn("grid grid-cols-2 gap-2.5 sm:grid-cols-3", slots.length === ALL_SLOTS.length ? "lg:grid-cols-5" : "lg:grid-cols-4")}>
+        {slots.map((slot) => (
           <SlotPanel
             key={slot}
             slot={slot}

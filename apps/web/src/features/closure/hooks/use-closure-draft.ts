@@ -25,10 +25,16 @@ function fromGroups(cards: readonly CardDto[], groups: readonly (readonly string
   );
 }
 
+function initialType(enabledClosures: readonly ClosureType[], groups: readonly (readonly string[])[]): ClosureType {
+  const threeSets = groups.length === GROUP_SLOTS.length && groups.every((group) => group.length === 3);
+  if (threeSets && enabledClosures.includes("APUNTADO")) return "APUNTADO";
+  return enabledClosures[0] ?? "CLASICO";
+}
+
 export function useClosureDraft(cards: readonly CardDto[], enabledClosures: readonly ClosureType[], lockedId: string | null, groups: readonly (readonly string[])[] = []) {
   const [assignments, setAssignments] = useState<Assignments>(() => fromGroups(cards, groups));
   const [selectedIds, setSelectedIds] = useState<ReadonlySet<string>>(() => new Set());
-  const [type, setType] = useState<ClosureType>(enabledClosures[0] ?? "CLASICO");
+  const [type, setType] = useState<ClosureType>(() => initialType(enabledClosures, groups));
 
   const unassigned = useMemo(() => cards.filter((card) => !assignments[cardId(card)]), [cards, assignments]);
   const selectedUnassigned = useMemo(
@@ -60,6 +66,11 @@ export function useClosureDraft(cards: readonly CardDto[], enabledClosures: read
     [discardable, selectedUnassigned],
   );
 
+  const chooseType = useCallback((next: ClosureType) => {
+    setType(next);
+    if (next === "CLASICO") setAssignments((prev) => Object.fromEntries(Object.entries(prev).filter(([, slot]) => slot !== CLOSURE_SLOT.LEFTOVERS)));
+  }, []);
+
   const unassign = useCallback((id: string) => {
     setAssignments((prev) => Object.fromEntries(Object.entries(prev).filter(([key]) => key !== id)));
   }, []);
@@ -76,7 +87,7 @@ export function useClosureDraft(cards: readonly CardDto[], enabledClosures: read
 
   return {
     type,
-    setType,
+    setType: chooseType,
     unassigned,
     selectedIds,
     hasSelection: selectedUnassigned.length > 0,
