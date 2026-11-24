@@ -116,7 +116,7 @@ Las reglas de los ADR no se sostienen con disciplina sino con pruebas que fallan
 | FF-05 | La presentación no alcanza la persistencia ni las entidades | ADR-01 | TSArch + dependency-cruiser |
 | FF-06 | Los casos de uso no dependen de reglas concretas | ADR-03 | TSArch |
 | FF-07 | `shared/` no contiene lógica de negocio | ADR-01 | dependency-cruiser |
-| FF-08 | Complejidad ciclomática ≤ 10 por función | §5.3 de la guía | ESLint |
+| FF-08 | Complejidad ciclomática ≤ 10 por función | §4.2 de la guía | ESLint |
 | FF-09 | Ninguna expresión atraviesa más de dos objetos ajenos (aproximación a Deméter) | Guía del E3, §2 | Analizador propio con el compilador de TypeScript |
 | FF-10 | Las reglas de juego quedan lejos de las zonas de dolor e inutilidad; ningún paquete en la de inutilidad; contratos y puertos sobre la secuencia principal | Guía del E3, §4.2 | Analizador propio |
 | FF-11 | Toda clase del dominio con estado es cohesiva (LCOM4 = 1) | ADR-01 | Analizador propio |
@@ -188,7 +188,7 @@ para apostar; y el pipeline mide y vigila las métricas de arquitectura.
   se pierde la conexión.
 
 ```
-361 pruebas  ·  300 de servidor + 15 de arquitectura y métricas + 29 de esquema, historial y fichas + 17 de punta a punta
+362 pruebas  ·  301 de servidor + 15 de arquitectura y métricas + 29 de esquema, historial y fichas + 17 de punta a punta
 1 partida en el navegador (Playwright), en escritorio y en celular
 cobertura del servidor: 95 % de líneas, 93 % de ramas  ·  complejidad máxima 10  ·  0 violaciones de Deméter
 typecheck limpio  ·  ESLint limpio  ·  0 errores de dependencias
