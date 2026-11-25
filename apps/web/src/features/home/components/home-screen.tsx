@@ -31,7 +31,7 @@ export function HomeScreen({ linkCode }: HomeScreenProps) {
     <div className="relative isolate h-dvh overflow-hidden">
       <div className="mx-auto flex h-full max-w-6xl flex-col">
         <AppHeader>
-          <nav aria-label={t("home.nav")} className="flex items-center gap-2 sm:gap-6">
+          <nav aria-label={t("home.nav")} className="flex items-center gap-1 sm:gap-6">
             <button
               type="button"
               onClick={() => setRulesOpen(true)}
