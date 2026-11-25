@@ -59,11 +59,3 @@ export function CardFace({ card }: { card: CardDto }) {
     </span>
   );
 }
-
-export function CardBack() {
-  return (
-    <span className="absolute inset-0 bg-card">
-      <span className="card-back absolute inset-[5%] rounded-[5%/3.6%]" />
-    </span>
-  );
-}

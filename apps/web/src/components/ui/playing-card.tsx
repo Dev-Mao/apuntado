@@ -3,7 +3,8 @@ import { memo } from "react";
 
 import { cardImageSrc, cn, FACE_RANKS, isJoker, JOKER_IMAGE_SRC } from "@/lib";
 
-import { CardBack, CardFace } from "./card-face";
+import { CardBack } from "./card-back";
+import { CardFace } from "./card-face";
 
 import type { CardDto } from "@apuntado/contracts";
 import type { CSSProperties } from "react";
