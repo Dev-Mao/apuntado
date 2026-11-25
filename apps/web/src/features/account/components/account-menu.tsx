@@ -18,7 +18,7 @@ export function AccountMenu() {
 
   return (
     <div className="flex items-center gap-1 sm:gap-2">
-      <SessionBadge />
+      <SessionBadge className="max-sm:hidden" />
       <Button variant={BUTTON_VARIANT.GHOST} onClick={() => openAuth(AUTH_MODE.LOGIN)} className="px-3">
         {t("account.enter")}
       </Button>

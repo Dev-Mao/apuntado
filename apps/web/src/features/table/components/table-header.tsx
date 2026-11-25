@@ -20,14 +20,14 @@ export function TableHeader({ code, round, onShowRules, onShowScores, onAbandon 
   return (
     <header className="relative z-10 flex items-center justify-between gap-3 px-4 py-3 short:py-1.5 sm:px-8 lg:col-start-1">
       <h1 className="sr-only">{t("table.title", { code })}</h1>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         <SuitGlyph suit="S" className="size-6 sm:size-7" />
-        <span className="font-display text-[1.3rem] leading-none whitespace-nowrap max-[26rem]:sr-only">{t("brand.name")}</span>
+        <span className="font-display text-[1.15rem] leading-none whitespace-nowrap sm:text-[1.3rem]">{t("brand.name")}</span>
       </div>
       <TableLinks onShowRules={onShowRules} onShowScores={onShowScores} onAbandon={onAbandon} />
-      <div className="flex items-center gap-2 sm:gap-4">
+      <div className="flex items-center gap-1 sm:gap-4">
         <SoundControls />
-        <span className="label-caps text-[0.65rem] lg:hidden">{t("table.round", { count: round })}</span>
+        <span className="label-caps px-1 text-[0.65rem] whitespace-nowrap lg:hidden">{t("table.round", { count: round })}</span>
         <button
           type="button"
           onClick={onShowRules}
