@@ -126,7 +126,7 @@
 }
 
 @utility card-back {
-  background-color: var(--color-coral);
+  background-color: var(--color-suit-red);
 }
 
 @layer base {
