@@ -121,14 +121,14 @@ Las consultas de la ronda 2 filtran desde el 25 de noviembre. En la ronda 1, U05
 | [1-ajustes.jpg](U08/1-ajustes.jpg) | Ajusta la mesa: eliminación a 101, turnos de 120 segundos y apuesta de 500 fichas, con un saldo de 1000. |
 | [2-sala.jpg](U08/2-sala.jpg) | Sala de espera como anfitrión, con U07 sentado. La máquina no se ofrece porque la mesa tiene apuesta. |
 | [3-mesa.jpg](U08/3-mesa.jpg) | Primera ronda con U06 y U07. |
+| [4-fin-ronda-2.jpg](U08/4-fin-ronda-2.jpg) | Fin de la segunda ronda: U07 cierra con cierre clásico, U08 suma 14 puntos y U06 llega a 97. |
+| [5-perfil.jpg](U08/5-perfil.jpg) | Perfil al terminar: una partida ganada, cuatro rondas ganadas, dos cierres por apuntado y un bote de 1500 fichas. |
 
 ### U06
 
-25 de noviembre de 2026, en https://apuntado.onrender.com, en la misma partida que U07 y U08.
+25 de noviembre de 2026, celular, en https://apuntado.onrender.com, en la misma partida que U07 y U08.
 
 | Captura | Qué muestra |
 |---|---|
-| [1-fin-ronda-2.jpg](U06/1-fin-ronda-2.jpg) | Fin de la segunda ronda: U07 cierra con cierre clásico y U06 llega a 97 puntos. |
-| [2-perfil-U08.jpg](U06/2-perfil-U08.jpg) | Perfil de la cuenta de U08 al terminar la partida: una partida ganada, cuatro rondas ganadas, dos cierres por apuntado y un bote de 1500 fichas. |
-| [3-reconectando.jpg](U06/3-reconectando.jpg) | En el celular, durante su turno de la ronda 2 (7:12 p. m.), aparece el aviso «Reconectando con el servidor». El turno se completó: la bitácora registra su descarte a las 19:12:20. |
-| [4-mesa-ya-empezo.jpg](U06/4-mesa-ya-empezo.jpg) | Ya eliminado (7:20 p. m.), intenta volver a la mesa con el código y el juego responde «La partida de esta mesa ya empezó». |
+| [1-reconectando.jpg](U06/1-reconectando.jpg) | Durante su turno de la ronda 2 (7:12 p. m.), aparece el aviso «Reconectando con el servidor». El turno se completó: la bitácora registra su descarte a las 19:12:20. |
+| [2-mesa-ya-empezo.jpg](U06/2-mesa-ya-empezo.jpg) | Ya eliminado (7:20 p. m.), intenta volver a la mesa con el código y el juego responde «La partida de esta mesa ya empezó». |
