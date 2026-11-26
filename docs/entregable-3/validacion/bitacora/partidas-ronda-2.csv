@@ -1,0 +1,5 @@
+participante,apodo_en_el_juego,inicio,partida_id,modalidad,estado,rondas,cierres_validos,tipo_de_cierre
+U08,U08,2026-11-25 19:00,a983dec7-dfff-4abc-98cf-4b0e5201fd46,AMBAS,FINALIZADA,7,4,"APUNTADO, CLASICO"
+U06,U06,2026-11-25 19:00,a983dec7-dfff-4abc-98cf-4b0e5201fd46,AMBAS,FINALIZADA,7,0,
+U07,U07,2026-11-25 19:00,a983dec7-dfff-4abc-98cf-4b0e5201fd46,AMBAS,FINALIZADA,7,3,CLASICO
+U06,U06,2026-11-25 19:27,1df8ae09-ac32-4297-85d1-6d06e74ac40b,AMBAS,FINALIZADA,1,0,

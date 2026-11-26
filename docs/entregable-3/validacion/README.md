@@ -90,6 +90,16 @@ Mismo guion, mismo cuestionario y mismas consultas a la bitácora, con la versi�
 
 Las consultas de la ronda 2 filtran desde el 25 de noviembre. En la ronda 1, U05 jugó con el apodo U08 y sus partidas no deben mezclarse con las del U08 de esta ronda.
 
+### Bitácora de la ronda 2
+
+| Archivo | Contenido |
+|---|---|
+| [partidas-ronda-2.csv](bitacora/partidas-ronda-2.csv) | Partidas de U06, U07 y U08 desde el 25 de noviembre: modalidad, rondas y cierres válidos. |
+| [tiempos-por-turno-ronda-2.csv](bitacora/tiempos-por-turno-ronda-2.csv) | Turnos jugados, segundos promedio por turno (sin contar los vencidos) y turnos vencidos. |
+
+- Los tres jugaron juntos la partida a983dec7, de 7 rondas: U08 cerró 4 (clásico y apuntado) y U07 cerró 3 (clásico).
+- U06 jugó además una segunda partida de una ronda a las 19:27. Sus 22 turnos suman las dos partidas.
+
 ### U08
 
 25 de noviembre de 2026, computador, en https://apuntado.onrender.com. A diferencia de la ronda 1, U08 entró con una cuenta registrada y jugó en la misma mesa con U06 y U07, no contra la máquina. La mesa usó la modalidad Ambas, eliminación a 101 puntos, turnos de 120 segundos y una apuesta de 500 fichas por jugador.
