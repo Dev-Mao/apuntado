@@ -99,7 +99,7 @@ Las consultas de la ronda 2 filtran desde el 25 de noviembre. En la ronda 1, U05
 
 - Los tres jugaron juntos la partida a983dec7, de 7 rondas entre las 19:00 y las 19:35. U08 cerró las rondas 1, 4, 5 y 7 (clásico y apuntado) y U07 las rondas 2, 3 y 6 (clásico). U08 ganó la partida.
 - U06 quedó eliminado al terminar la ronda 3: desde la ronda 4 solo juegan U07 y U08.
-- U06 jugó después una partida contra la máquina a las 19:27. De sus 22 turnos, 20 son de la partida de tres y 2 de la partida contra la máquina, donde está su único turno vencido.
+- Ya eliminado, U06 jugó una partida contra la máquina a las 19:27. No se cuenta: en la ronda 2 solo cuenta la partida entre participantes, y las consultas 1 y 2 dejan fuera las partidas contra la máquina.
 
 ### U08
 
@@ -110,5 +110,12 @@ Las consultas de la ronda 2 filtran desde el 25 de noviembre. En la ronda 1, U05
 | [1-ajustes.jpg](U08/1-ajustes.jpg) | Ajusta la mesa: eliminación a 101, turnos de 120 segundos y apuesta de 500 fichas, con un saldo de 1000. |
 | [2-sala.jpg](U08/2-sala.jpg) | Sala de espera como anfitrión, con U07 sentado. La máquina no se ofrece porque la mesa tiene apuesta. |
 | [3-mesa.jpg](U08/3-mesa.jpg) | Primera ronda con U06 y U07. |
-| [4-fin-ronda-2.jpg](U08/4-fin-ronda-2.jpg) | Fin de la segunda ronda: U07 cierra con cierre clásico y U08 suma 14 puntos. |
-| [5-perfil.jpg](U08/5-perfil.jpg) | Perfil al terminar: una partida ganada, cuatro rondas ganadas, dos cierres por apuntado y un bote de 1500 fichas. |
+
+### U06
+
+25 de noviembre de 2026, en https://apuntado.onrender.com, en la misma partida que U07 y U08.
+
+| Captura | Qué muestra |
+|---|---|
+| [1-fin-ronda-2.jpg](U06/1-fin-ronda-2.jpg) | Fin de la segunda ronda: U07 cierra con cierre clásico y U06 llega a 97 puntos. |
+| [2-perfil-U08.jpg](U06/2-perfil-U08.jpg) | Perfil de la cuenta de U08 al terminar la partida: una partida ganada, cuatro rondas ganadas, dos cierres por apuntado y un bote de 1500 fichas. |
