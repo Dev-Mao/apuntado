@@ -90,6 +90,17 @@ Mismo guion, mismo cuestionario y mismas consultas a la bitácora, con la versi�
 
 Las consultas de la ronda 2 filtran desde el 25 de noviembre. En la ronda 1, U05 jugó con el apodo U08 y sus partidas no deben mezclarse con las del U08 de esta ronda.
 
+### Cuestionario de la ronda 2
+
+[cuestionario-ronda-2.csv](cuestionario-ronda-2.csv) tiene las respuestas de las tres personas, con las mismas columnas que el de la ronda 1.
+
+| Código | SUS | Satisfacción | Rapidez | Claridad del conteo | Entendió el rechazo |
+|---|---|---|---|---|---|
+| U06 | 65 | 4 | 5 | 2 | 5 |
+| U07 | 60 | 5 | 5 | 4 | 2 |
+| U08 | 92,5 | 5 | 5 | 5 | 4 |
+| **Promedio** | **72,5** | **4,7** | **5** | **3,7** | **3,7** |
+
 ### Bitácora de la ronda 2
 
 | Archivo | Contenido |
@@ -119,3 +130,5 @@ Las consultas de la ronda 2 filtran desde el 25 de noviembre. En la ronda 1, U05
 |---|---|
 | [1-fin-ronda-2.jpg](U06/1-fin-ronda-2.jpg) | Fin de la segunda ronda: U07 cierra con cierre clásico y U06 llega a 97 puntos. |
 | [2-perfil-U08.jpg](U06/2-perfil-U08.jpg) | Perfil de la cuenta de U08 al terminar la partida: una partida ganada, cuatro rondas ganadas, dos cierres por apuntado y un bote de 1500 fichas. |
+| [3-reconectando.jpg](U06/3-reconectando.jpg) | En el celular, durante su turno de la ronda 2 (7:12 p. m.), aparece el aviso «Reconectando con el servidor». El turno se completó: la bitácora registra su descarte a las 19:12:20. |
+| [4-mesa-ya-empezo.jpg](U06/4-mesa-ya-empezo.jpg) | Ya eliminado (7:20 p. m.), intenta volver a la mesa con el código y el juego responde «La partida de esta mesa ya empezó». |
