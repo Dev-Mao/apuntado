@@ -97,8 +97,9 @@ Las consultas de la ronda 2 filtran desde el 25 de noviembre. En la ronda 1, U05
 | [partidas-ronda-2.csv](bitacora/partidas-ronda-2.csv) | Partidas de U06, U07 y U08 desde el 25 de noviembre: modalidad, rondas y cierres válidos. |
 | [tiempos-por-turno-ronda-2.csv](bitacora/tiempos-por-turno-ronda-2.csv) | Turnos jugados, segundos promedio por turno (sin contar los vencidos) y turnos vencidos. |
 
-- Los tres jugaron juntos la partida a983dec7, de 7 rondas: U08 cerró 4 (clásico y apuntado) y U07 cerró 3 (clásico).
-- U06 jugó además una segunda partida de una ronda a las 19:27. Sus 22 turnos suman las dos partidas.
+- Los tres jugaron juntos la partida a983dec7, de 7 rondas entre las 19:00 y las 19:35. U08 cerró las rondas 1, 4, 5 y 7 (clásico y apuntado) y U07 las rondas 2, 3 y 6 (clásico). U08 ganó la partida.
+- U06 quedó eliminado al terminar la ronda 3: desde la ronda 4 solo juegan U07 y U08.
+- U06 jugó después una partida contra la máquina a las 19:27. De sus 22 turnos, 20 son de la partida de tres y 2 de la partida contra la máquina, donde está su único turno vencido.
 
 ### U08
 
