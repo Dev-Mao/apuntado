@@ -2,6 +2,8 @@
 
 Cada participante aparece solo con su código. No se guardan nombres, correos ni otros datos personales.
 
+Hubo dos rondas con el mismo protocolo. La ronda 1 (U01 a U05, del 18 al 21 de noviembre) usó la primera versión del juego. La ronda 2 (U06 a U08, desde el 25 de noviembre) usa la versión con las mejoras que salieron de la ronda 1, y está al final de este documento.
+
 ## Participantes
 
 | Código | Fecha | Dispositivo | Evidencias |
@@ -48,6 +50,8 @@ Extraída de la base de datos del despliegue (tablas `partida`, `ronda` y `turno
 - U01 jugó en una copia local y U04 no tiene partidas en producción, así que ninguno de los dos aparece.
 - Las partidas con el apodo U02 entre el 17 y el 19 de noviembre no corresponden a ningún participante y se dejaron fuera.
 
+Las consultas SQL que produjeron estos archivos están en [consultas-ronda-1.sql](bitacora/consultas-ronda-1.sql). Las de la ronda 2 están en [consultas-ronda-2.sql](bitacora/consultas-ronda-2.sql).
+
 ## U01
 
 Computador, partidas Clásicas contra un bot.
@@ -79,3 +83,21 @@ Celular, Chrome, en https://apuntado.onrender.com. Partida Clásica contra tres 
 | [1-inicio.jpg](U03/1-inicio.jpg) | Crea la mesa con el apodo U03 y la modalidad Clásica. |
 | [2-cierre-rechazado.jpg](U03/2-cierre-rechazado.jpg) | Declara un cierre con cartas sin asignar y el servidor lo rechaza: «Las cartas declaradas no coinciden con su mano». |
 | [3-resultado.jpg](U03/3-resultado.jpg) | Gana la partida con un cierre clásico (4-3-3). |
+
+## Ronda 2
+
+Mismo guion, mismo cuestionario y mismas consultas a la bitácora, con la versión actual del juego, que en pantalla se llama La Terna. Los participantes son personas distintas a las de la ronda 1.
+
+Las consultas de la ronda 2 filtran desde el 25 de noviembre. En la ronda 1, U05 jugó con el apodo U08 y sus partidas no deben mezclarse con las del U08 de esta ronda.
+
+### U08
+
+25 de noviembre de 2026, computador, en https://apuntado.onrender.com. A diferencia de la ronda 1, U08 entró con una cuenta registrada y jugó en la misma mesa con U06 y U07, no contra la máquina. La mesa usó la modalidad Ambas, eliminación a 101 puntos, turnos de 120 segundos y una apuesta de 500 fichas por jugador.
+
+| Captura | Qué muestra |
+|---|---|
+| [1-ajustes.jpg](U08/1-ajustes.jpg) | Ajusta la mesa: eliminación a 101, turnos de 120 segundos y apuesta de 500 fichas, con un saldo de 1000. |
+| [2-sala.jpg](U08/2-sala.jpg) | Sala de espera como anfitrión, con U07 sentado. La máquina no se ofrece porque la mesa tiene apuesta. |
+| [3-mesa.jpg](U08/3-mesa.jpg) | Primera ronda con U06 y U07. |
+| [4-fin-ronda-2.jpg](U08/4-fin-ronda-2.jpg) | Fin de la segunda ronda: U07 cierra con cierre clásico y U08 suma 14 puntos. |
+| [5-perfil.jpg](U08/5-perfil.jpg) | Perfil al terminar: una partida ganada, cuatro rondas ganadas, dos cierres por apuntado y un bote de 1500 fichas. |
